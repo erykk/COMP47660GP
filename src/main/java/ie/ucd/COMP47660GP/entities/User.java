@@ -24,6 +24,7 @@ public class User {
     private String address;
     @Column(name = "phone_num")
     private String phoneNum;
+    @Column(name = "is_exec")
     private Boolean exec;
 
     public User(String firstName,String lastName, String email, String address, String phoneNum) {
@@ -33,6 +34,7 @@ public class User {
         this.email = email;
         this.address = address;
         this.phoneNum = phoneNum;
+        this.exec = false;
     }
 
     public User() {
@@ -41,6 +43,7 @@ public class User {
         this.email = "test";
         this.address = "test";
         this.phoneNum = "test";
+        this.exec = false;
     }
 
     public int getId() {
