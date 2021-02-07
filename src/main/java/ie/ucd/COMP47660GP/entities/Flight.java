@@ -1,24 +1,48 @@
-package src.main.java.entites;
+package ie.ucd.COMP47660GP.entities;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Column;
+
+@Entity
+@Table(name = "flights")
 public class Flight {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "flight_id")
     private int id;
+    @Column(name = "source")
     private String source;
+    @Column(name = "destination")
     private String destination;
-    private LocalDateTime time;
+    @Column(name = "date_time")
+    private LocalDateTime dateTime;
+    @Column(name = "flightNum")
     private String flightNum;
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy h:mma");
+    //private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy h:mma");
 
-    public Flight(int id, String source, String destination, String timeString, String flightNum) {
-        this.id = id;
+    public Flight(String source, String destination, LocalDateTime dateTime, String flightNum) {
+        // ID auto gen
         this.source = source;
         this.destination = destination;
-        this.time = LocalDateTime.parse(timeString, formatter);
+        this.dateTime = dateTime;
         this.flightNum = flightNum;
     }
+
+    public Flight(){
+        this.source = "test";
+        this.destination = "test";
+        this.dateTime = LocalDateTime.now();
+        this.flightNum = "test";
+    }
+
 
     public int getId() {
 		return id;
@@ -44,12 +68,12 @@ public class Flight {
         this.destination = destination;
     }
     
-    public LocalDateTime getTime() {
-		return time;
+    public LocalDateTime getDateTime() {
+		return dateTime;
 	}
 
-	public void setTime(LocalDateTime time) {
-        this.time = time;
+	public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
     
     public String getFlightNum() {

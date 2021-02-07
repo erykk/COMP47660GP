@@ -1,18 +1,45 @@
-package src.main.java.entites;
+package ie.ucd.COMP47660GP.entities;
 
-import src.main.java.entites.Flight;
-import src.main.java.entites.User;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.OneToOne;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 
+
+@Entity
+@Table(name = "reservations")
 public class Reservation {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "reservation_id")
     private int id;
+    @Column(name = "flight_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "flight_id")
     private Flight flight;
+    @Column(name = "user_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
+    @Column(name = "cancelled")
     private Boolean cancelled;
 
     public Reservation(int id, Flight flight, User user) {
-        this.id = id;
+        // ID auto gen
         this.flight = flight;
         this.user = user;
+        this.cancelled = false;
+    }
+
+    public Reservation() {
+        this.flight = new Flight();
+        this.user = new User();
+        this.cancelled = false;
     }
 
     public int getId() {
@@ -38,4 +65,8 @@ public class Reservation {
 	public void setUser(User user) {
         this.user = user;
     }
+
+    public Boolean getCancelled() { return this.cancelled; }
+
+    public void setCancelled(Boolean status) { this.cancelled = status; }
 }
