@@ -18,11 +18,11 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "reservation_id")
     private int id;
-    @Column(name = "flight_id", nullable = false)
+    //@Column(name = "flight_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "flight_id")
     private Flight flight;
-    @Column(name = "user_id", nullable = false)
+    //@Column(name = "user_id", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
