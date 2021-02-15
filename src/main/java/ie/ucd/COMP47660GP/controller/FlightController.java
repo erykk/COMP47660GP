@@ -54,6 +54,23 @@ public class FlightController{
         return flights.get(1);
     }
 
+    // POST Request for Flight, returns the flights found with the given userInfo
+    @RequestMapping(value="/flights", method= RequestMethod.POST)
+    public ResponseEntity<String> createFlightRequest(@RequestBody String userInfo) throws URISyntaxException {
+
+        // search for flights matching userInfo and then post each flight (currently only one uri being created per POST request)
+
+        String path = ServletUriComponentsBuilder.fromCurrentContextPath().
+                build().toUriString()+ "/flights/"+referenceNumber++;  // Create new URI for this newly created flight-request
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(new URI(path));
+        // return value will actually be all the flights found
+        return new ResponseEntity<>("Tuesday at 10am, check in 8am", headers, HttpStatus.CREATED);  // return info back to client class
+    }
+
+
+
+
 
 
 }
