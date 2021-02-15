@@ -89,6 +89,76 @@ public class FlightController{
         return new ResponseEntity<>("New Profile Created", headers, HttpStatus.CREATED);  // return info back to client class
     }
 
+    // GET Request to check if email is unique
+    // Not sure how we should design this functionality exactly. We need to talk about this. Should we use a uri emails?
+    @RequestMapping(value="/executive-club-members/",method=RequestMethod.GET)
+    @ResponseStatus(value=HttpStatus.OK)
+    public String getExecutiveClubMembers() {
+//        if there are no members then throw new NoSuchMemberException();  // If no member exists then throw an exception
+
+        // iterate through the list of executive club members and determine if the email is valid or not
+        // return "Valid" or "Invalid"
+        // Or we just return all the executive member info and let client deal with it. We might need to do this as this method may be needed for other functionality
+        return "Email Valid";
+    }
+
+    // POST Request for Executive Club Members
+    @RequestMapping(value="/executive-club-members", method= RequestMethod.POST)
+    public ResponseEntity<String> createMember(@RequestBody String userDetails) throws URISyntaxException {
+
+        String path = ServletUriComponentsBuilder.fromCurrentContextPath().
+                build().toUriString()+ "/executive-club-members/"+767;  // Create new URI for this newly created executive member
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(new URI(path));
+
+        return new ResponseEntity<>("New Executive Club Member Created", headers, HttpStatus.CREATED);  // return info back to client class
+    }
+
+    // POST Request /guest ???
+
+    // If there is no flight listed with the given reference after calling GET method (for single instance) then throw this exception
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public class NoSuchFlightException extends RuntimeException {
+        static final long serialVersionUID = -6516152229878843037L;
+    }
+
+    // If there is no booking listed with the given reference after calling GET method (for single instance) then throw this exception
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public class NoSuchBookingException extends RuntimeException {
+        static final long serialVersionUID = -6516152229878843037L;
+    }
+
+    // PUT Request used to update personal info, credit card details etc. for members
+    @RequestMapping(value="/executive-club-members/{referenceNumber}", method=RequestMethod.PUT)
+    public ResponseEntity<String> updateMember(@PathVariable int referenceNumber, @RequestBody String memberInfo) throws URISyntaxException  {
+
+        //  if no member exists with that ref number then throw new NoSuchMemberException();
+
+        // update member info
+        ResponseEntity<String> update;
+        System.out.println("\nPUT Request\n");
+        String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/executive-club-members/"+referenceNumber;
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Location", path);
+        return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
+    }
+
+    // DELETE Request used to delete executive members registration
+    @RequestMapping(value="/executive-club-members/{referenceNumber}", method=RequestMethod.DELETE)
+    @ResponseStatus(value=HttpStatus.NO_CONTENT)
+    public void deleteMember(@PathVariable int referenceNumber) {
+        //if no such member exists then throw new NoSuchMemberException();
+        // Find member and then delete
+        System.out.println("\nDELETE Test\n");
+    }
+
+
+    @RequestMapping("/")
+    public String index() {
+        return "Greetings from Spring Boot!";
+    }
+
+
 
 
 
