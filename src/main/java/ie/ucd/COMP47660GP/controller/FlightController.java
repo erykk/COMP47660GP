@@ -114,6 +114,21 @@ public class FlightController{
         return new ResponseEntity<>("New Executive Club Member Created", headers, HttpStatus.CREATED);  // return info back to client class
     }
 
+    // POST Request /guest ???
+
+    // If there is no flight listed with the given reference after calling GET method (for single instance) then throw this exception
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public class NoSuchFlightException extends RuntimeException {
+        static final long serialVersionUID = -6516152229878843037L;
+    }
+
+    // If there is no booking listed with the given reference after calling GET method (for single instance) then throw this exception
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public class NoSuchBookingException extends RuntimeException {
+        static final long serialVersionUID = -6516152229878843037L;
+    }
+
+
 
 
 
