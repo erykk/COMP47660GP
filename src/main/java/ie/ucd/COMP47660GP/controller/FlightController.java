@@ -89,6 +89,21 @@ public class FlightController{
         return new ResponseEntity<>("New Profile Created", headers, HttpStatus.CREATED);  // return info back to client class
     }
 
+    // GET Request to check if email is unique
+    // Not sure how we should design this functionality exactly. We need to talk about this. Should we use a uri emails?
+    @RequestMapping(value="/executive-club-members/",method=RequestMethod.GET)
+    @ResponseStatus(value=HttpStatus.OK)
+    public String getExecutiveClubMembers() {
+//        if there are no members then throw new NoSuchMemberException();  // If no member exists then throw an exception
+
+        // iterate through the list of executive club members and determine if the email is valid or not
+        // return "Valid" or "Invalid"
+        // Or we just return all the executive member info and let client deal with it. We might need to do this as this method may be needed for other functionality
+        return "Email Valid";
+    }
+
+
+
 
 
 
