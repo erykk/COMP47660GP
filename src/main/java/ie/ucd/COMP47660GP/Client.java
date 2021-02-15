@@ -1,11 +1,7 @@
 package ie.ucd.COMP47660GP;
 
-import java.text.NumberFormat;
-import java.util.List;
-import java.util.LinkedList;
-
-import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpEntity;
+import org.springframework.web.client.RestTemplate;
 
 public class Client {
 
