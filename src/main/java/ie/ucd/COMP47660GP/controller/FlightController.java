@@ -102,7 +102,17 @@ public class FlightController{
         return "Email Valid";
     }
 
+    // POST Request for Executive Club Members
+    @RequestMapping(value="/executive-club-members", method= RequestMethod.POST)
+    public ResponseEntity<String> createMember(@RequestBody String userDetails) throws URISyntaxException {
 
+        String path = ServletUriComponentsBuilder.fromCurrentContextPath().
+                build().toUriString()+ "/executive-club-members/"+767;  // Create new URI for this newly created executive member
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(new URI(path));
+
+        return new ResponseEntity<>("New Executive Club Member Created", headers, HttpStatus.CREATED);  // return info back to client class
+    }
 
 
 
