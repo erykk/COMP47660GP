@@ -143,5 +143,24 @@ public class FlightController{
         return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }
 
+    // DELETE Request used to delete executive members registration
+    @RequestMapping(value="/executive-club-members/{referenceNumber}", method=RequestMethod.DELETE)
+    @ResponseStatus(value=HttpStatus.NO_CONTENT)
+    public void deleteMember(@PathVariable int referenceNumber) {
+        //if no such member exists then throw new NoSuchMemberException();
+        // Find member and then delete
+        System.out.println("\nDELETE Test\n");
+    }
+
+
+    @RequestMapping("/")
+    public String index() {
+        return "Greetings from Spring Boot!";
+    }
+
+
+
+
+
 
 }
