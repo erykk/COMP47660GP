@@ -46,5 +46,14 @@ public class FlightController{
         return flights.get(1);
     }
 
+    // GET Request for Booking, returns the booking with the given reference i.e. users retrieve their past reservations
+    @RequestMapping(value="/bookings/{ref}",method=RequestMethod.GET)
+    @ResponseStatus(value=HttpStatus.OK)
+    public String getBooking(@PathVariable int ref) {
+//        if (flights.get(location) == null) throw new NoSuchFlightException();  // If no flight exists matching this reference then throw an exception
+        return flights.get(1);
+    }
+
+
 
 }
