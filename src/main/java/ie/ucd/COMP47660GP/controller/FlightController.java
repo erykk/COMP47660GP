@@ -79,6 +79,16 @@ public class FlightController{
         return new ResponseEntity<>("Oasis", headers, HttpStatus.CREATED);  // return info back to client class
     }
 
+    // POST Request for Profile
+    @RequestMapping(value="/profiles", method= RequestMethod.POST)
+    public ResponseEntity<String> createProfile(@RequestBody String userDetails) throws URISyntaxException {
+        String path = ServletUriComponentsBuilder.fromCurrentContextPath().
+                build().toUriString()+ "/profiles/"+referenceNumber++;  // Create new URI for this newly created profile
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(new URI(path));
+        return new ResponseEntity<>("New Profile Created", headers, HttpStatus.CREATED);  // return info back to client class
+    }
+
 
 
 
