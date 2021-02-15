@@ -1,14 +1,7 @@
 package ie.ucd.COMP47660GP.entities;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Column;
 
 @Entity
 @Table(name = "flights")

@@ -13,12 +13,14 @@ import javax.persistence.OneToOne;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 
+@Entity
+@Table(name = "creditcards")
 public class CreditCard {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "card_id")
     private int id;
-    @Column(name = "user_id")
+    //@Column(name = "user_id")
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
