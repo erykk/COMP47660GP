@@ -128,9 +128,20 @@ public class FlightController{
         static final long serialVersionUID = -6516152229878843037L;
     }
 
+    // PUT Request used to update personal info, credit card details etc. for members
+    @RequestMapping(value="/executive-club-members/{referenceNumber}", method=RequestMethod.PUT)
+    public ResponseEntity<String> updateMember(@PathVariable int referenceNumber, @RequestBody String memberInfo) throws URISyntaxException  {
 
+        //  if no member exists with that ref number then throw new NoSuchMemberException();
 
-
+        // update member info
+        ResponseEntity<String> update;
+        System.out.println("\nPUT Request\n");
+        String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/executive-club-members/"+referenceNumber;
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Location", path);
+        return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
+    }
 
 
 }
