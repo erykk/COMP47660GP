@@ -38,5 +38,13 @@ public class FlightController{
         flights.put(3,"New York");
     }
 
+    // GET Request for Flight, returns the flight (not booking) with the given reference
+    @RequestMapping(value="/flights/{ref}",method=RequestMethod.GET)
+    @ResponseStatus(value=HttpStatus.OK)
+    public String getFlight(@PathVariable int ref) {
+//        if (flights.get(location) == null) throw new NoSuchFlightException();  // If no flight exists matching this reference then throw an exception
+        return flights.get(1);
+    }
+
 
 }
