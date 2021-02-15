@@ -39,6 +39,14 @@ public class Client {
         String response5 = restTemplate.getForObject("http://localhost:8080/executive-club-members/",String.class);
         System.out.println("\nGET: "+response5+"\n");
 
+        // PUT update member info
+        HttpEntity<String> request7 = new HttpEntity<>("updated member info");
+        restTemplate.put("http://localhost:8080/executive-club-members/767",request7);
+
+        // DELETE member
+        System.out.println();
+        restTemplate.delete("http://localhost:8080/executive-club-members/767");
+
 
     }
 }
