@@ -30,6 +30,14 @@ public class Client {
         String response3 = restTemplate.getForObject("http://localhost:8080/flights/1",String.class);
         System.out.println("\n"+response2+"\n");
 
+        // POST Register an Executive club member
+        HttpEntity<String> request4 = new HttpEntity<>("John");
+        String response4 = restTemplate.postForObject("http://localhost:8080/executive-club-members",request4,String.class);
+        System.out.println("\n"+response4+"\n");
+
+        // GET email info by getting all members info
+        String response5 = restTemplate.getForObject("http://localhost:8080/executive-club-members/",String.class);
+        System.out.println("\nGET: "+response5+"\n");
 
 
     }
