@@ -68,6 +68,16 @@ public class FlightController{
         return new ResponseEntity<>("Tuesday at 10am, check in 8am", headers, HttpStatus.CREATED);  // return info back to client class
     }
 
+    // POST Request for Booking, returns a booking confirmation based on the given flight/userInfo
+    @RequestMapping(value="/bookings", method= RequestMethod.POST)
+    public ResponseEntity<String> createBooking(@RequestBody String flight) throws URISyntaxException {
+        String path = ServletUriComponentsBuilder.fromCurrentContextPath().
+                build().toUriString()+ "/bookings/"+referenceNumber++;  // Create new URI for this newly created flight
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(new URI(path));
+        // return value will be a booking confirmation (Booking.java if needed)
+        return new ResponseEntity<>("Oasis", headers, HttpStatus.CREATED);  // return info back to client class
+    }
 
 
 
