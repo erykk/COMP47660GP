@@ -77,18 +77,15 @@ public class FlightController{
         return flightRepository.save(flight);
     }
 
-    @RequestMapping(value="/users/{id}",method=RequestMethod.GET)
+    @RequestMapping(value="/user/{id}",method=RequestMethod.GET)
     @ResponseStatus(value=HttpStatus.OK)
     public User getUser(@PathVariable String id) {
 //
         return userRepository.findUser(id);
     }
 
-    // POST Request for Flight, returns the flights found with the given userInfo
-    @RequestMapping(value="/flights", method= RequestMethod.POST)
-    public ResponseEntity<String> createFlightRequest(@RequestBody String userInfo) throws URISyntaxException {
-
-        // search for flights matching userInfo and then post each flight (currently only one uri being created per POST request)
+    @RequestMapping(value="/reservation", method= RequestMethod.POST)
+    public ResponseEntity<String> createFlight(@RequestBody Flight flight) throws URISyntaxException {
 
         String path = ServletUriComponentsBuilder.fromCurrentContextPath().
                 build().toUriString()+ "/flights/"+referenceNumber++;  // Create new URI for this newly created flight-request
