@@ -11,4 +11,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     List<Reservation> findAll();
 
     void createReservation(String name, String surname, String address, String phone, String email);
+
+    List<Reservation> findReservations(String user_id);
 }

@@ -1,6 +1,7 @@
 package ie.ucd.COMP47660GP.controller;
 
 import ie.ucd.COMP47660GP.entities.Flight;
+import ie.ucd.COMP47660GP.entities.Reservation;
 import ie.ucd.COMP47660GP.entities.User;
 import ie.ucd.COMP47660GP.repositories.FlightRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
@@ -42,6 +43,13 @@ public class ReservationController {
         headers.setLocation(new URI(path));
 
         return new ResponseEntity<>("TEST", headers, HttpStatus.CREATED);  // return info back to client class
+    }
+
+    // GET all reservations for given user id
+    @GetMapping(value = "/reservation", params = {"user_id"})
+    public List<Reservation> getFlights(@RequestParam(value = "user_id") String user_id) {
+
+        return reservationRepository.findReservations(user_id);
     }
 
 }
