@@ -1,26 +1,22 @@
 package ie.ucd.COMP47660GP.controller;
 
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import ie.ucd.COMP47660GP.entities.Flight;
+import ie.ucd.COMP47660GP.repositories.CreditCardRepository;
+import ie.ucd.COMP47660GP.repositories.FlightRepository;
+import ie.ucd.COMP47660GP.repositories.ReservationRepository;
+import ie.ucd.COMP47660GP.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import org.springframework.web.client.RestTemplate;
-import org.springframework.http.HttpEntity;
-
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -32,10 +28,47 @@ public class FlightController{
     private static Map<Integer, String> flights = new TreeMap<>();    // Temp for testing purposes
     private static String [] emails =  new String[5];               // Temp for testing purposes
 
+    @Autowired
+    CreditCardRepository creditCardRepository;
+
+    @Autowired
+    FlightRepository flightRepository;
+
+    @Autowired
+    ReservationRepository reservationRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
     static {   // Temp for testing purposes
         flights.put(1,"Paris");
         flights.put(2,"Madrid");
         flights.put(3,"New York");
+    }
+
+    // GET all flights
+    @GetMapping("/flight")
+    public List<Flight> getFlights() {
+        return flightRepository.findAll();
+    }
+
+    // GET all flights for given airports and between now and given date.
+    @GetMapping(value = "/flight", params = {"origin", "dest", "date"})
+    public List<Flight> getFlights(@RequestParam(value = "origin") String origin,
+                             @RequestParam(value = "dest") String dest,
+                             @RequestParam(value = "date") String dateStr) {
+        LocalDateTime now = LocalDateTime.now();
+        // Add one day to include all flights of selected date
+        LocalDate date = LocalDate.parse(dateStr).plusDays(1);
+        // TODO: Consider order descending by date
+        return flightRepository.findFlightsByRouteAndDate(origin, dest, now, date.atStartOfDay());
+    }
+
+    // Add flight to DB
+    // TODO: Considering removing, or at least securing to admin only
+    @PostMapping("/flight")
+    public Flight addFlight(@RequestBody() Flight flight) {
+        return flightRepository.save(flight);
     }
 
     // GET Request for Flight, returns the flight (not booking) with the given reference
@@ -115,18 +148,6 @@ public class FlightController{
     }
 
     // POST Request /guest ???
-
-    // If there is no flight listed with the given reference after calling GET method (for single instance) then throw this exception
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public class NoSuchFlightException extends RuntimeException {
-        static final long serialVersionUID = -6516152229878843037L;
-    }
-
-    // If there is no booking listed with the given reference after calling GET method (for single instance) then throw this exception
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public class NoSuchBookingException extends RuntimeException {
-        static final long serialVersionUID = -6516152229878843037L;
-    }
 
     // PUT Request used to update personal info, credit card details etc. for members
     @RequestMapping(value="/executive-club-members/{referenceNumber}", method=RequestMethod.PUT)
