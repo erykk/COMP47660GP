@@ -26,7 +26,23 @@ public class ReservationController {
     @Autowired
     ReservationRepository reservationRepository;
 
-    
+    int ref;   // Testing purposes
+
+    // POST a reservation for the given flight and user id
+    // TODO: id params when creating URI
+    @PostMapping(value="/bookFlight", params = {"name", "surname", "address", "phone", "email"})
+    public ResponseEntity<String> createReservation(@RequestParam(value = "name") String name, @RequestParam(value = "surname") String surname,
+                                                    @RequestParam(value = "address") String address, @RequestParam(value = "phone") String phone,
+                                                    @RequestParam(value = "email") String email, @RequestBody String flight) throws URISyntaxException {
+
+        reservationRepository.createReservation(name, surname, address, phone, email);
+        String path = ServletUriComponentsBuilder.fromCurrentContextPath().
+                build().toUriString()+ "/user/{user_id}/reservations/{reservation_id}"+ref++;  // Create new URI for reservation
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(new URI(path));
+
+        return new ResponseEntity<>("TEST", headers, HttpStatus.CREATED);  // return info back to client class
+    }
 
 }
 
