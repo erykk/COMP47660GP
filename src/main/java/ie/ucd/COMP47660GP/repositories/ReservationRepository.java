@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Integer>{
     List<Reservation> findAll();
+
+    void createReservation(String name, String surname, String address, String phone, String email);
 }

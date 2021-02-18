@@ -21,16 +21,12 @@ import java.util.Map;
 import java.util.TreeMap;
 
 @RestController
-public class UserController {
+public class ReservationController {
 
     @Autowired
-    UserRepository userRepository;
+    ReservationRepository reservationRepository;
 
-    @RequestMapping(value="/user/{id}",method=RequestMethod.GET)
-    @ResponseStatus(value=HttpStatus.OK)
-    public User getUser(@PathVariable String id) {
-//
-        return userRepository.findUser(id);
-    }
+    
+
 }
 

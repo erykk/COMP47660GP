@@ -15,4 +15,6 @@ public interface UserRepository extends JpaRepository<User, Integer>{
     List<User> findAll();
 
     User findUser(String id) throws NoSuchFlightException;
+
+    void createUser();
 }

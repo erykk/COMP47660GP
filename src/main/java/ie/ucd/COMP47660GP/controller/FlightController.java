@@ -77,13 +77,6 @@ public class FlightController{
         return flightRepository.save(flight);
     }
 
-    @RequestMapping(value="/user/{id}",method=RequestMethod.GET)
-    @ResponseStatus(value=HttpStatus.OK)
-    public User getUser(@PathVariable String id) {
-//
-        return userRepository.findUser(id);
-    }
-
     @RequestMapping(value="/reservation", method= RequestMethod.POST)
     public ResponseEntity<String> createFlight(@RequestBody Flight flight) throws URISyntaxException {
 
@@ -113,16 +106,7 @@ public class FlightController{
 
 
 
-    // POST Request for Booking, returns a booking confirmation based on the given flight/userInfo
-    @RequestMapping(value="/bookings", method= RequestMethod.POST)
-    public ResponseEntity<String> createBooking(@RequestBody String flight) throws URISyntaxException {
-        String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-                build().toUriString()+ "/bookings/"+referenceNumber++;  // Create new URI for this newly created flight
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(new URI(path));
-        // return value will be a booking confirmation (Booking.java if needed)
-        return new ResponseEntity<>("Oasis", headers, HttpStatus.CREATED);  // return info back to client class
-    }
+
 
     // POST Request for Profile
     @RequestMapping(value="/profiles", method= RequestMethod.POST)
