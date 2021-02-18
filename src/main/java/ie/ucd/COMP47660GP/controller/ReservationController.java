@@ -45,9 +45,11 @@ public class ReservationController {
         return new ResponseEntity<>("TEST", headers, HttpStatus.CREATED);  // return info back to client class
     }
 
-    // GET all reservations for given user id
+
+
+    // GET all reservations associated with given user id
     @GetMapping(value = "/reservation", params = {"user_id"})
-    public List<Reservation> getFlights(@RequestParam(value = "user_id") String user_id) {
+    public List<Reservation> getReservations(@RequestParam(value = "user_id") String user_id) {
 
         return reservationRepository.findReservations(user_id);
     }
