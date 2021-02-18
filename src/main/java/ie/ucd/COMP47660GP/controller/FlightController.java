@@ -1,6 +1,7 @@
 package ie.ucd.COMP47660GP.controller;
 
 import ie.ucd.COMP47660GP.entities.Flight;
+import ie.ucd.COMP47660GP.entities.User;
 import ie.ucd.COMP47660GP.repositories.CreditCardRepository;
 import ie.ucd.COMP47660GP.repositories.FlightRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
@@ -76,17 +77,25 @@ public class FlightController{
         return flightRepository.save(flight);
     }
 
-    // GET Request to check if email is unique
-    // Not sure how we should design this functionality exactly. We need to talk about this. Should we use a uri emails?
     @RequestMapping(value="/users/{id}",method=RequestMethod.GET)
     @ResponseStatus(value=HttpStatus.OK)
-    public String getExecutiveClubMembers(@PathVariable int id) {
-//        if there are no members then throw new NoSuchMemberException();  // If no member exists then throw an exception
+    public User getUser(@PathVariable String id) {
+//
+        return userRepository.findUser(id);
+    }
 
-        // iterate through the list of executive club members and determine if the email is valid or not
-        // return "Valid" or "Invalid"
-        // Or we just return all the executive member info and let client deal with it. We might need to do this as this method may be needed for other functionality
-        return "Email Valid";
+    // POST Request for Flight, returns the flights found with the given userInfo
+    @RequestMapping(value="/flights", method= RequestMethod.POST)
+    public ResponseEntity<String> createFlightRequest(@RequestBody String userInfo) throws URISyntaxException {
+
+        // search for flights matching userInfo and then post each flight (currently only one uri being created per POST request)
+
+        String path = ServletUriComponentsBuilder.fromCurrentContextPath().
+                build().toUriString()+ "/flights/"+referenceNumber++;  // Create new URI for this newly created flight-request
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(new URI(path));
+        // return value will actually be all the flights found
+        return new ResponseEntity<>("Tuesday at 10am, check in 8am", headers, HttpStatus.CREATED);  // return info back to client class
     }
 
     // GET Request for Flight, returns the flight (not booking) with the given reference
@@ -105,19 +114,7 @@ public class FlightController{
         return flights.get(1);
     }
 
-    // POST Request for Flight, returns the flights found with the given userInfo
-    @RequestMapping(value="/flights", method= RequestMethod.POST)
-    public ResponseEntity<String> createFlightRequest(@RequestBody String userInfo) throws URISyntaxException {
 
-        // search for flights matching userInfo and then post each flight (currently only one uri being created per POST request)
-
-        String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-                build().toUriString()+ "/flights/"+referenceNumber++;  // Create new URI for this newly created flight-request
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(new URI(path));
-        // return value will actually be all the flights found
-        return new ResponseEntity<>("Tuesday at 10am, check in 8am", headers, HttpStatus.CREATED);  // return info back to client class
-    }
 
     // POST Request for Booking, returns a booking confirmation based on the given flight/userInfo
     @RequestMapping(value="/bookings", method= RequestMethod.POST)
