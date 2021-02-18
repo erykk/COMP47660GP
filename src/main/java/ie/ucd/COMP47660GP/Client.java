@@ -17,9 +17,10 @@ public class Client {
         RestTemplate restTemplate = new RestTemplate();
 
         // POST booking
-        HttpEntity<String> request = new HttpEntity<>("Noel Gallagher");
-        String response = restTemplate.postForObject("http://localhost:8080/bookings",request,String.class);
-        System.out.println("\n"+response+"\n");
+
+            HttpEntity<String> request = new HttpEntity<>("Noel Gallagher");
+            String response = restTemplate.postForObject("http://localhost:8080/bookings",request,String.class);
+            System.out.println("\n"+response+"\n");
 
         // POST profiles
         HttpEntity<String> request2 = new HttpEntity<>("John");
