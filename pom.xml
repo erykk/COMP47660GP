@@ -6,7 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.4.2</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>ie.ucd</groupId>
 	<artifactId>comp47660gp</artifactId>
@@ -57,27 +57,27 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>javax.persistence</groupId>-->
-<!--			<artifactId>javax.persistence-api</artifactId>-->
-<!--			<version>2.0.1</version>-->
-<!--		</dependency>-->
-		<dependency>
-			<groupId>org.hibernate.javax.persistence</groupId>
-			<artifactId>hibernate-jpa-2.1-api</artifactId>
-			<version>1.0.0.Final</version>
-		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>org.hibernate</groupId>-->
-<!--			<artifactId>hibernate-core</artifactId>-->
-<!--			<version>4.3.9.Final</version>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>org.hibernate.javax.persistence</groupId>-->
-<!--			<artifactId>hibernate-jpa-api-parent</artifactId>-->
-<!--			<version>1.0.0.Beta1</version>-->
-<!--			<type>pom</type>-->
-<!--		</dependency>-->
+		<dependency>  
+		<groupId>javax.persistence</groupId>  
+ 			<artifactId>javax.persistence-api</artifactId>  
+ 			<version>2.0.1</version>  
+ 		</dependency>  
+ 		<dependency>  
+ 			<groupId>org.hibernate.javax.persistence</groupId>  
+ 			<artifactId>hibernate-jpa-2.1-api</artifactId>  
+ 			<version>1.0.0.Final</version>  
+ 		</dependency>  
+ 		<dependency>  
+ 			<groupId>org.hibernate</groupId>  
+ 			<artifactId>hibernate-core</artifactId>  
+ 			<version>4.3.9.Final</version>  
+ 		</dependency>  
+ 		<dependency>  
+ 			<groupId>org.hibernate.javax.persistence</groupId>  
+ 			<artifactId>hibernate-jpa-api-parent</artifactId>  
+ 			<version>1.0.0.Beta1</version>  
+ 			<type>pom</type>  
+ 		</dependency>  
 	</dependencies>
 
 	<build>
@@ -91,3 +91,7 @@
 	</build>
 
 </project>
+
+
+
+

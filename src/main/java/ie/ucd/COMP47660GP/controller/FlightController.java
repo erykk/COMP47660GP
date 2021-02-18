@@ -5,12 +5,17 @@ import ie.ucd.COMP47660GP.repositories.CreditCardRepository;
 import ie.ucd.COMP47660GP.repositories.FlightRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -28,9 +33,9 @@ public class FlightController{
     private static Map<Integer, String> flights = new TreeMap<>();    // Temp for testing purposes
     private static String [] emails =  new String[5];               // Temp for testing purposes
 
-    @Autowired
-    CreditCardRepository creditCardRepository;
-
+//    @Autowired
+//    CreditCardRepository creditCardRepository;
+//
     @Autowired
     FlightRepository flightRepository;
 
