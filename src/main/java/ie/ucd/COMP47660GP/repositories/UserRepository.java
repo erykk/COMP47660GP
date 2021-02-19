@@ -15,7 +15,7 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Integer>{
     List<User> findAll();
 
-    User findUser(String id) throws NoSuchUserException;
-
-    void createMember(String name, String surname, String address, String phone, String email);
+//    User findUser(String id) throws NoSuchUserException;
+//
+//    void createMember(String name, String surname, String address, String phone, String email);
 }

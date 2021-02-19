@@ -36,7 +36,7 @@ public class ReservationController {
                                                     @RequestParam(value = "address") String address, @RequestParam(value = "phone") String phone,
                                                     @RequestParam(value = "email") String email, @RequestBody String flight) throws URISyntaxException {
 
-        reservationRepository.createReservation(name, surname, address, phone, email);
+        //reservationRepository.createReservation(name, surname, address, phone, email);
         String path = ServletUriComponentsBuilder.fromCurrentContextPath().
                 build().toUriString()+ "/user/{user_id}/reservations/{reservation_id}"+ref++;  // Create new URI for reservation
         HttpHeaders headers = new HttpHeaders();
@@ -49,7 +49,7 @@ public class ReservationController {
 
     // GET all reservations associated with given user id
     @GetMapping(value = "/reservation", params = {"user_id"})
-    public List<Reservation> getReservations(@RequestParam(value = "user_id") String user_id) {
+    public List<Reservation> getReservations(@RequestParam(value = "user_id") int user_id) {
 
         return reservationRepository.findReservations(user_id);
     }
