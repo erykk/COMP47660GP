@@ -13,13 +13,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,7 +30,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 
-@RestController
+@Controller
 public class FlightController{
 
     static int referenceNumber;    // Temp for testing purposes
@@ -54,20 +57,27 @@ public class FlightController{
 
     // GET all flights
     @GetMapping("/flight")
-    public List<Flight> getFlights() {
-        return flightRepository.findAll();
+    public String getFlights(Model model) {
+        List<Flight> flights = flightRepository.findAll();
+        model.addAttribute("flights", flights);
+
+        return "flight/flightslist";
     }
 
     // GET all flights for given airports and between now and given date.
     @GetMapping(value = "/flight", params = {"origin", "dest", "date"})
-    public List<Flight> getFlights(@RequestParam(value = "origin") String origin,
+    public String getFlights(@RequestParam("origin") String origin,
                              @RequestParam(value = "dest") String dest,
-                             @RequestParam(value = "date") String dateStr) {
+                             @RequestParam(value = "date") String dateStr,
+                             Model model) {
         LocalDateTime now = LocalDateTime.now();
         // Add one day to include all flights of selected date
         LocalDate date = LocalDate.parse(dateStr).plusDays(1);
         // TODO: Consider order descending by date
-        return flightRepository.findFlightsByRouteAndDate(origin, dest, now, date.atStartOfDay());
+        List<Flight> flights = flightRepository.findFlightsByRouteAndDate(origin, dest, now, date.atStartOfDay());
+        model.addAttribute("flights", flights);
+
+        return "flight/flightslist";
     }
 
     // Add flight to DB
