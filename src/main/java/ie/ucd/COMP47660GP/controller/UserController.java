@@ -36,7 +36,7 @@ public class UserController {
                                                     @RequestParam(value = "address") String address, @RequestParam(value = "phone") String phone,
                                                     @RequestParam(value = "email") String email) throws URISyntaxException {
 
-        userRepository.createMember(name, surname, address, phone, email);
+//        userRepository.createMember(name, surname, address, phone, email);
         String path = ServletUriComponentsBuilder.fromCurrentContextPath().
                 build().toUriString()+ "/member/"+ref;  // Create new URI for reservation
         HttpHeaders headers = new HttpHeaders();
@@ -49,7 +49,8 @@ public class UserController {
     @ResponseStatus(value=HttpStatus.OK)
     public User getUser(@PathVariable String id) {
 //
-        return userRepository.findUser(id);
+//        return userRepository.findUser(id);
+        return null;
     }
 
 }
