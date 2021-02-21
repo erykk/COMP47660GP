@@ -3,6 +3,7 @@ package ie.ucd.COMP47660GP.controller;
 import ie.ucd.COMP47660GP.entities.Flight;
 import ie.ucd.COMP47660GP.entities.Reservation;
 import ie.ucd.COMP47660GP.entities.User;
+import ie.ucd.COMP47660GP.exception.NoSuchBookingException;
 import ie.ucd.COMP47660GP.repositories.FlightRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
@@ -52,6 +53,17 @@ public class ReservationController {
     public List<Reservation> getReservations(@RequestParam(value = "user_id") int user_id) {
 
         return reservationRepository.findReservations(user_id);
+    }
+
+    @PatchMapping("/reservation/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public String cancelReservation(@PathVariable("id") int id) {
+        Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new NoSuchBookingException(id));
+        reservation.setCancelled(true);
+        reservationRepository.save(reservation);
+
+        // Update to page of where request came from
+        return "redirect:/somehwere";
     }
 
 }

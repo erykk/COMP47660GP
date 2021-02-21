@@ -115,9 +115,6 @@ public class FlightController{
     }
 
 
-
-
-
     // POST Request for Profile
     @RequestMapping(value="/profiles", method= RequestMethod.POST)
     public ResponseEntity<String> createProfile(@RequestBody String userDetails) throws URISyntaxException {
