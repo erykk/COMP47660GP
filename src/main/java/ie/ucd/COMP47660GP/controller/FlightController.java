@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import javax.validation.Valid;
 
 
 import java.net.URI;
@@ -83,8 +84,9 @@ public class FlightController{
     // Add flight to DB
     // TODO: Considering removing, or at least securing to admin only
     @PostMapping("/flight")
-    public Flight addFlight(@RequestBody() Flight flight) {
-        return flightRepository.save(flight);
+    public ResponseEntity addFlight(@Valid @RequestBody Flight flight) throws URISyntaxException  {
+        flightRepository.save(flight);
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 
     @RequestMapping(value="/reservation", method= RequestMethod.POST)
@@ -126,16 +128,16 @@ public class FlightController{
     }
 
     // POST Request for Executive Club Members
-    @RequestMapping(value="/executive-club-members", method= RequestMethod.POST)
-    public ResponseEntity<String> createMember(@RequestBody String userDetails) throws URISyntaxException {
-
-        String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-                build().toUriString()+ "/executive-club-members/"+767;  // Create new URI for this newly created executive member
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(new URI(path));
-
-        return new ResponseEntity<>("New Executive Club Member Created", headers, HttpStatus.CREATED);  // return info back to client class
-    }
+//    @RequestMapping(value="/executive-club-members", method= RequestMethod.POST)
+//    public ResponseEntity<String> createMember(@RequestBody String userDetails) throws URISyntaxException {
+//
+//        String path = ServletUriComponentsBuilder.fromCurrentContextPath().
+//                build().toUriString()+ "/executive-club-members/"+767;  // Create new URI for this newly created executive member
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setLocation(new URI(path));
+//
+//        return new ResponseEntity<>("New Executive Club Member Created", headers, HttpStatus.CREATED);  // return info back to client class
+//    }
 
     // POST Request /guest ???
 

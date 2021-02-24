@@ -17,5 +17,5 @@ public interface UserRepository extends JpaRepository<User, Integer>{
 
 //    User findUser(String id) throws NoSuchUserException;
 //
-//    void createMember(String name, String surname, String address, String phone, String email);
+//
 }
