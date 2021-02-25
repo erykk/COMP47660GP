@@ -2,10 +2,13 @@ package ie.ucd.COMP47660GP.controller;
 
 import ie.ucd.COMP47660GP.entities.User;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
+import ie.ucd.COMP47660GP.service.LoginService;
+import ie.ucd.COMP47660GP.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -16,7 +19,11 @@ import java.net.URISyntaxException;
 public class UserController {
 
     @Autowired
+    UserService userService;
+    @Autowired
     UserRepository userRepository;
+    @Autowired
+    LoginService loginService;
 
     int ref;   // Testing purposes
 
@@ -43,6 +50,24 @@ public class UserController {
 //        return userRepository.findUser(id);
         return null;
     }
+
+    @GetMapping("/register")
+    public String register(Model model){
+        model.addAttribute("userCredentials", new User());
+
+        return "register";
+    }
+
+    @RequestMapping(value="/register", method=RequestMethod.POST)
+    public String register(User userCredentials, BindingResult bindingResult, Model model){
+        userService.save(userCredentials);
+
+        loginService.autoLogin(userCredentials.getEmail(), userCredentials.getPassword());
+
+        return "success";
+
+    }
+
 
 }
 
