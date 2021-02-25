@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface FlightRepository extends JpaRepository<Flight, Integer> {
 
     List<Flight> findAll();
 
-    @Query("select f from Flight f where f.source = :origin and f.destination = :dest and f.dateTime between :startDate and :endDate")
+    @Query("select f from Flight f where f.source = ?1 and f.destination = ?2 and f.dateTime between ?3 and ?4")
     List<Flight> findFlightsByRouteAndDate(String origin, String dest, LocalDateTime startDate, LocalDateTime
             endDate) throws NoSuchFlightException;
 }
