@@ -6,6 +6,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Column;
+import javax.persistence.ManyToMany;
+import org.springframework.data.annotation.Transient;
+
+import java.util.Set;
 
 @Entity
 @Table( name = "users")
@@ -27,6 +31,15 @@ public class User {
     @Column(name = "is_exec")
     private Boolean exec;
 
+    private String password;
+    @Transient
+    private String verifyPassword;
+
+    @ManyToMany
+    private Set<Role> roles;
+
+
+    /*
     public User(String firstName,String lastName, String email, String address, String phoneNum) {
         // ID auto generated
         this.firstName = firstName;
@@ -45,6 +58,8 @@ public class User {
         this.phoneNum = "test";
         this.exec = false;
     }
+
+    */
 
     public int getId() {
 		return id;
@@ -92,5 +107,37 @@ public class User {
 
 	public void setPhoneNum(String phoneNum) {
         this.phoneNum = phoneNum;
+    }
+
+    public Boolean getExec() {
+        return exec;
+    }
+
+    public void setExec(Boolean exec) {
+        this.exec = exec;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getVerifyPassword() {
+        return verifyPassword;
+    }
+
+    public void setVerifyPassword(String verifyPassword) {
+        this.verifyPassword = verifyPassword;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }
