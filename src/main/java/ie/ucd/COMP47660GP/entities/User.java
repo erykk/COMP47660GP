@@ -10,6 +10,7 @@ import javax.persistence.ManyToMany;
 import org.springframework.data.annotation.Transient;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -17,7 +18,7 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    //@Column(name = "user_id")
+    @Column(name = "user_id")
     private int id;
     //@Column(name = "first_name")
     private String firstName;

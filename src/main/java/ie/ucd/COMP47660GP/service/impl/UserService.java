@@ -23,6 +23,7 @@ public class UserService {
     private void save(User user){
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRoles(new HashSet<Role>(roleRepository.findAll()));
+        userRepository.save(user);
     }
 
     public User findByEmail(String email){
@@ -38,6 +39,7 @@ public class UserService {
             user.setExec(true);
             save(user);
         }
+        save(user);
     }
 
     public void saveGuestUser(User user){

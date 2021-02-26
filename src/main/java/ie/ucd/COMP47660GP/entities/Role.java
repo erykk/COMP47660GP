@@ -1,6 +1,7 @@
 package ie.ucd.COMP47660GP.entities;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
 
@@ -9,6 +10,7 @@ import javax.persistence.*;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "role_id")
     private int id;
     private String name;
     @ManyToMany(mappedBy = "roles")

@@ -4,6 +4,7 @@ import ie.ucd.COMP47660GP.entities.User;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
 import ie.ucd.COMP47660GP.service.LoginService;
 import ie.ucd.COMP47660GP.service.impl.LoginServiceImpl;
+import ie.ucd.COMP47660GP.service.impl.SecurityService;
 import ie.ucd.COMP47660GP.service.impl.UserService;
 import ie.ucd.COMP47660GP.validator.LoginValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,8 @@ public class UserController {
     @Autowired
     @Qualifier("loginServiceImpl")
     LoginService loginService;
+    @Autowired
+    SecurityService securityService;
 
     int ref;   // Testing purposes
 
@@ -68,7 +71,7 @@ public class UserController {
         return "register";
     }
 
-    @RequestMapping(value="/register", method=RequestMethod.POST)
+    @RequestMapping(value="/secureRegister", method=RequestMethod.POST)
     public String register(@ModelAttribute("userCredentials") User userCredentials, BindingResult bindingResult, Model model){
         loginValidator.validate(userCredentials, bindingResult);
 
@@ -77,12 +80,11 @@ public class UserController {
         }
 
         SecurityContext context = SecurityContextHolder.getContext();
-
         model.addAttribute("currentUser", context.getAuthentication().getName());
 
         userService.saveExecUser(userCredentials);
 
-        loginService.autoLogin(userCredentials.getEmail(), userCredentials.getPassword());
+        //loginService.autoLogin(userCredentials.getEmail(), userCredentials.getPassword());
 
         model.addAttribute("userCredentials", userCredentials);
 
@@ -92,6 +94,19 @@ public class UserController {
 
     @GetMapping("/login")
     public String login(Model model){
+        return "login";
+    }
+
+    @RequestMapping(value = "/secureLogin", method = RequestMethod.POST)
+    public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model){
+        boolean exists = securityService.login(email, password);
+
+        if (exists){
+            return "success";
+        } else {
+            model.addAttribute("msg", "login failed");
+        }
+
         return "login";
     }
 }

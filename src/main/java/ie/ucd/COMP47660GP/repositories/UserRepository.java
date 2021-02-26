@@ -1,5 +1,6 @@
 package ie.ucd.COMP47660GP.repositories;
 
+import org.springframework.data.jpa.repository.Query;
 import ie.ucd.COMP47660GP.entities.User;
 import ie.ucd.COMP47660GP.exception.NoSuchUserException;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,6 +15,7 @@ import java.util.List;
 public interface UserRepository extends JpaRepository<User, Integer>{
     List<User> findAll();
 
+    @Query("SELECT u FROM User u WHERE u.email = ?1")
     User findByEmail(String email);
 
 //    User findUser(String id) throws NoSuchUserException;

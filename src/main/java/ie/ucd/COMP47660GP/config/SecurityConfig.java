@@ -53,24 +53,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //web.ignoring().antMatchers("/**");
 
 
-        http
-                .authorizeRequests()
-                .antMatchers("/", "/register").permitAll()
+        http.authorizeRequests().antMatchers("/register","/","/login", "/secureRegister", "/secureLogin").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .loginProcessingUrl("/secureLogin")
-                .defaultSuccessUrl("/", true)
-                .permitAll()
-                .usernameParameter("email").passwordParameter("password")
-                .and()
-                .csrf().disable()
-                .logout()
-                .permitAll();
-
-
-
+                .loginProcessingUrl("/loginSecure")
+                .usernameParameter("email")
+                .passwordParameter("password")
+                .and().csrf().disable();
 
 
     }
