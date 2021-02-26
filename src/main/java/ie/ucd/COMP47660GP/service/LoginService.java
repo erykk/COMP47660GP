@@ -1,5 +1,8 @@
 package ie.ucd.COMP47660GP.service;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public interface LoginService {
     String currentLoggedInEmail();
 

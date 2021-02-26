@@ -4,6 +4,7 @@ import ie.ucd.COMP47660GP.entities.Role;
 import ie.ucd.COMP47660GP.entities.User;
 import ie.ucd.COMP47660GP.exception.NoSuchUserException;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;

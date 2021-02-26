@@ -1,9 +1,7 @@
 package ie.ucd.COMP47660GP.entities;
 
 import java.util.Set;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "roles")

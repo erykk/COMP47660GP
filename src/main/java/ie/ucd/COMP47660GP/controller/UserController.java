@@ -3,11 +3,16 @@ package ie.ucd.COMP47660GP.controller;
 import ie.ucd.COMP47660GP.entities.User;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
 import ie.ucd.COMP47660GP.service.LoginService;
+import ie.ucd.COMP47660GP.service.impl.LoginServiceImpl;
 import ie.ucd.COMP47660GP.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -15,7 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-@RestController
+@Controller
 public class UserController {
 
     @Autowired
@@ -23,6 +28,7 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
     @Autowired
+    @Qualifier("loginService")
     LoginService loginService;
 
     int ref;   // Testing purposes
@@ -67,7 +73,5 @@ public class UserController {
         return "success";
 
     }
-
-
 }
 
