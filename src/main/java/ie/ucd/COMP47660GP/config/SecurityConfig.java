@@ -25,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     UserDetailsService userDetailsService;
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(HttpSecurity http) throws Exception {
         /*
         http.authorizeRequests()
                 .antMatchers("/", "/login", "/register", "/flight").permitAll()
@@ -34,10 +34,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
          */
 
-        /*
+
         http
             .authorizeRequests()
-            .antMatchers("/resources/**","/", "/register", "/flight").permitAll()
+            .antMatchers("/", "/register", "/flight").permitAll()
             .anyRequest().authenticated()
             .and()
             .formLogin()
@@ -47,9 +47,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .logout()
             .permitAll();
 
-        */
 
-        web.ignoring().antMatchers("/**");
+        //web.ignoring().antMatchers("/**");
 
 
 
