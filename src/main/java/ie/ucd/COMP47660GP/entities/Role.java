@@ -1,5 +1,6 @@
 package ie.ucd.COMP47660GP.entities;
 
+import java.util.Collection;
 import java.util.Set;
 import javax.persistence.*;
 
@@ -11,10 +12,10 @@ public class Role {
     private int id;
     private String name;
     @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
+    private Collection<User> users;
 
     @ManyToMany
-    private Set<Privilege> privileges;
+    private Collection<Privilege> privileges;
 
     public int getId() {
         return id;
@@ -32,11 +33,11 @@ public class Role {
         this.name = name;
     }
 
-    public Set<User> getUsers() {
+    public Collection<User> getUsers() {
         return users;
     }
 
-    public void setUsers(Set<User> users) {
+    public void setUsers(Collection<User> users) {
         this.users = users;
     }
 }

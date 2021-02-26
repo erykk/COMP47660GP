@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.ManyToMany;
 import org.springframework.data.annotation.Transient;
 
+import java.util.Collection;
 import java.util.Set;
 
 @Entity
@@ -36,7 +37,7 @@ public class User {
     private String verifyPassword;
 
     @ManyToMany
-    private Set<Role> roles;
+    private Collection<Role> roles;
 
 
     /*
@@ -133,11 +134,11 @@ public class User {
         this.verifyPassword = verifyPassword;
     }
 
-    public Set<Role> getRoles() {
+    public Collection<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(Collection<Role> roles) {
         this.roles = roles;
     }
 }

@@ -1,18 +1,18 @@
 package ie.ucd.COMP47660GP.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Collection;
 import java.util.Set;
 
 @Entity
+@Table(name = "privileges")
 public class Privilege {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
-    private Set<Role> roles;
+    @ManyToMany(mappedBy = "privileges")
+    private Collection<Role> roles;
 
     public int getId() {
         return id;
@@ -30,11 +30,11 @@ public class Privilege {
         this.name = name;
     }
 
-    public Set<Role> getRoles() {
+    public Collection<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(Collection<Role> roles) {
         this.roles = roles;
     }
 }
