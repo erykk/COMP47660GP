@@ -4,7 +4,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
-    <title>Register</title>
+    <title>Login</title>
 </head>
 <body>
     <header>
@@ -17,11 +17,11 @@
         </nav>
     </header>
 <div style="text-align: center;">
-    <h1>Register Account</h1>
+    <h1>Login</h1>
     <h2>
         <a href="${pageContext.request.contextPath}/">Home</a>
         &nbsp;&nbsp;&nbsp;
-        <a href="${pageContext.request.contextPath}/login">Login</a>
+        <a href="${pageContext.request.contextPath}/register">Register</a>
         &nbsp;&nbsp;&nbsp;
     </h2>
 </div>
@@ -29,36 +29,16 @@
     <form method="get" action="${pageContext.request.contextPath}/flight" >
         <table style="margin-left: auto; margin-right: auto; border: 1px solid black">
             <tr>
-                <td><label for="first_name">First Name:</label></td>
-                <td><input type="text" id="first_name" name="first_name"/></td>
-            </tr>
-            <tr>
-                <td><label for="last_name">Last Name:</label></td>
-                <td><input type="text" id="last_name" name="last_name"/></td>
-            </tr>
-            <tr>
                 <td><label for="email">Email:</label></td>
                 <td><input type="text" id="email" name="email"/></td>
-            </tr>
-            <tr>
-                <td><label for="address">Address:</label></td>
-                <td><input type="text" id="address" name="address"/></td>
-            </tr>
-            <tr>
-                <td><label for="phone_num">Phone Number:</label></td>
-                <td><input type="text" id="phone_num" name="phone_num"/></td>
             </tr>
             <tr>
                 <td><label for="password">Password:</label></td>
                 <td><input type="password" id="password" name="password"/></td>
             </tr>
-            <tr>
-                <td><label for="password">Confirm Password:</label></td>
-                <td><input type="password" id="password" name="password"/></td>
-            </tr>
 
             <tr>
-                <td><input type="submit" value="Register"/></td>
+                <td><input type="submit" value="Login"/></td>
             </tr>
         </table>
     </form>
