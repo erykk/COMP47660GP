@@ -60,6 +60,17 @@ public class UserController {
         return "Valid: email does not exist";
     }
 
+    @PutMapping("/editMemberPersonalInfo")
+    @ResponseBody
+    public void updatePersonalInfo(@RequestBody User updatedUser) {
+        User user = userRepository.findUser(updatedUser.getId());
+        System.out.println(user.getLastName());
+        int updated_id = user.getId();
+        int current_id = updatedUser.getId();
+        userRepository.delete(user);
+        userRepository.save(updatedUser);
+        userRepository.updateUserId(current_id,updated_id);  // does not work!!!
+    }
 
 }
 
