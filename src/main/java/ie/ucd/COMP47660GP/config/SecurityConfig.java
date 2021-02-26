@@ -61,6 +61,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/loginSecure")
                 .usernameParameter("email")
                 .passwordParameter("password")
+                .and()
+                .logout().logoutSuccessUrl("/success").permitAll()
                 .and().csrf().disable();
 
 
