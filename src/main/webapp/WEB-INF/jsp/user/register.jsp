@@ -14,7 +14,6 @@
         &nbsp;&nbsp;&nbsp;
         <a href="${pageContext.request.contextPath}/login">Login</a>
         &nbsp;&nbsp;&nbsp;
-
     </h2>
 </div>
 <div style="text-align: center;">
@@ -22,23 +21,23 @@
         <table style="margin-left: auto; margin-right: auto; border: 1px solid black">
             <tr>
                 <td><label for="first_name">First Name:</label></td>
-                <td><input id="first_name" name="first_name"/></td>
+                <td><input type="text" id="first_name" name="first_name"/></td>
             </tr>
             <tr>
-                <td><label for="dest">Last Name:</label></td>
-                <td><input id="dest" name="dest"/></td>
+                <td><label for="last_name">Last Name:</label></td>
+                <td><input type="text" id="last_name" name="last_name"/></td>
             </tr>
             <tr>
                 <td><label for="email">Email:</label></td>
-                <td><input type="email" id="date" name="email"/></td>
+                <td><input type="text" id="email" name="email"/></td>
             </tr>
             <tr>
                 <td><label for="address">Address:</label></td>
-                <td><input type="address" id="date" name="address"/></td>
+                <td><input type="text" id="address" name="address"/></td>
             </tr>
             <tr>
                 <td><label for="phone_num">Phone Number:</label></td>
-                <td><input type="phone_num" id="date" name="phone_num"/></td>
+                <td><input type="text" id="phone_num" name="phone_num"/></td>
             </tr>
 
             <tr>
