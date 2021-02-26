@@ -17,7 +17,7 @@
 
 <div class="container">
 
-    <form:form method="POST" modelAttribute="userCredentials" class="form-signin">
+    <form:form method="POST" action="${contexPath}/register" modelAttribute="userCredentials" class="form-signin">
         <h2 class="form-signin-heading">Create your account</h2>
         <spring:bind path="email">
             <div class="form-group ${status.error ? 'has-error' : ''}">
