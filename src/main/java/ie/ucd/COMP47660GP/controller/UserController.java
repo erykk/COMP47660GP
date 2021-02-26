@@ -1,8 +1,10 @@
 package ie.ucd.COMP47660GP.controller;
 
+import com.fasterxml.jackson.core.util.JsonParserSequence;
 import ie.ucd.COMP47660GP.entities.Flight;
 import ie.ucd.COMP47660GP.entities.Reservation;
 import ie.ucd.COMP47660GP.entities.User;
+
 import ie.ucd.COMP47660GP.repositories.FlightRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
@@ -47,6 +49,17 @@ public class UserController {
         User user = userRepository.findUser(id);
         return user;
     }
+
+    @GetMapping("getEmail/{email}")
+    @ResponseBody
+    public String checkIfEmailIsValid(@PathVariable String email) {
+        User user = userRepository.findEmail(email);
+        if (user == null) {
+            return "Invalid: Email already exists";
+        }
+        return "Valid: email does not exist";
+    }
+
 
 }
 

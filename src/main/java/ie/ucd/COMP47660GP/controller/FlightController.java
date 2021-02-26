@@ -149,8 +149,6 @@ public class FlightController{
         return new ResponseEntity<>("New Executive Club Member Created", headers, HttpStatus.CREATED);  // return info back to client class
     }
 
-    // POST Request /guest ???
-
     // PUT Request used to update personal info, credit card details etc. for members
     @RequestMapping(value="/executive-club-members/{referenceNumber}", method=RequestMethod.PUT)
     public ResponseEntity<String> updateMember(@PathVariable int referenceNumber, @RequestBody String memberInfo) throws URISyntaxException  {

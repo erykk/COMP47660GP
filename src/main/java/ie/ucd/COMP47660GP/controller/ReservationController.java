@@ -7,6 +7,7 @@ import ie.ucd.COMP47660GP.exception.NoSuchBookingException;
 import ie.ucd.COMP47660GP.repositories.FlightRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ import java.util.TreeMap;
 
 import javax.validation.Valid;
 
-@RestController
+@Controller
 public class ReservationController {
 
     @Autowired
