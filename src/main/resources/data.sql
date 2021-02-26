@@ -1,4 +1,6 @@
-use flightreservations;
+-- This config doesn't work
+
+use db;
 
 
 INSERT INTO flights (flight_id, source, destination, date_time, flight_num)
