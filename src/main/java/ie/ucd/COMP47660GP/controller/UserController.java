@@ -28,7 +28,7 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    @Qualifier("loginService")
+    @Qualifier("loginServiceImpl")
     LoginService loginService;
 
     int ref;   // Testing purposes
