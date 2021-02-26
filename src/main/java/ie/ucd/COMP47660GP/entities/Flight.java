@@ -14,7 +14,7 @@ public class Flight {
     private String source;
     @Column(name = "destination")
     private String destination;
-    @Column(name = "date_time")
+    @Column(name = "date_time", columnDefinition = "TIMESTAMP")
     private LocalDateTime dateTime;
     @Column(name = "flightNum")
     private String flightNum;

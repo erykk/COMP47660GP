@@ -1,31 +1,23 @@
 package ie.ucd.COMP47660GP.controller;
 
 import ie.ucd.COMP47660GP.entities.Flight;
-import ie.ucd.COMP47660GP.entities.User;
-import ie.ucd.COMP47660GP.repositories.CreditCardRepository;
 import ie.ucd.COMP47660GP.repositories.FlightRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import javax.validation.Valid;
-
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -37,6 +29,9 @@ public class FlightController{
     static int referenceNumber;    // Temp for testing purposes
     private static Map<Integer, String> flights = new TreeMap<>();    // Temp for testing purposes
     private static String [] emails =  new String[5];               // Temp for testing purposes
+
+    private static List<String> origins = new LinkedList<>();
+    private static List<String> destinations = new LinkedList<>();
 
 //    @Autowired
 //    CreditCardRepository creditCardRepository;
@@ -54,6 +49,12 @@ public class FlightController{
         flights.put(1,"Paris");
         flights.put(2,"Madrid");
         flights.put(3,"New York");
+
+        origins.add("Dublin");
+        destinations.add("London");
+        destinations.add("Paris");
+        destinations.add("Madrid");
+        destinations.add("New York");
     }
 
     // GET all flights
@@ -61,15 +62,20 @@ public class FlightController{
     public String getFlights(Model model) {
         List<Flight> flights = flightRepository.findAll();
         model.addAttribute("flights", flights);
+        model.addAttribute("origins", origins);
+        model.addAttribute("destinations", destinations);
+
+        Flight flight = new Flight();
+        model.addAttribute("flight", flight);
 
         return "flight/flightslist";
     }
 
     // GET all flights for given airports and between now and given date.
-    @GetMapping(value = "/flight", params = {"origin", "dest", "date"})
-    public List<Flight> getFlights(@RequestParam("origin") String origin,
-                             @RequestParam(value = "dest") String dest,
-                             @RequestParam(value = "date") String dateStr,
+    @GetMapping(value = "/flight", params = {"source", "destination", "dateTime"})
+    public String getFlights(@RequestParam("source") String origin,
+                             @RequestParam(value = "destination") String dest,
+                             @RequestParam(value = "dateTime") String dateStr,
                              Model model) {
         LocalDateTime now = LocalDateTime.now();
         // Add one day to include all flights of selected date
@@ -77,16 +83,20 @@ public class FlightController{
         // TODO: Consider order descending by date
         List<Flight> flights = flightRepository.findFlightsByRouteAndDate(origin, dest, now, date.atStartOfDay());
         model.addAttribute("flights", flights);
+        model.addAttribute("origins", origins);
+        model.addAttribute("destinations", destinations);
 
-        return flights;
+        Flight flight = new Flight();
+        model.addAttribute("flight", flight);
+
+        return "flight/flightslist";
     }
 
     // Add flight to DB
     // TODO: Considering removing, or at least securing to admin only
     @PostMapping("/flight")
-    public ResponseEntity addFlight(@Valid @RequestBody Flight flight) throws URISyntaxException  {
-        flightRepository.save(flight);
-        return new ResponseEntity(HttpStatus.CREATED);
+    public Flight addFlight(@RequestBody() Flight flight) {
+        return flightRepository.save(flight);
     }
 
     @RequestMapping(value="/reservation", method= RequestMethod.POST)
@@ -101,7 +111,7 @@ public class FlightController{
     }
 
     // GET Request for Flight, returns the flight (not booking) with the given reference
-    @RequestMapping(value="/flightss/{ref}",method=RequestMethod.GET)
+    @RequestMapping(value="/flights/{ref}",method=RequestMethod.GET)
     @ResponseStatus(value=HttpStatus.OK)
     public String getFlight(@PathVariable int ref) {
 //        if (flights.get(location) == null) throw new NoSuchFlightException();  // If no flight exists matching this reference then throw an exception
@@ -128,16 +138,16 @@ public class FlightController{
     }
 
     // POST Request for Executive Club Members
-//    @RequestMapping(value="/executive-club-members", method= RequestMethod.POST)
-//    public ResponseEntity<String> createMember(@RequestBody String userDetails) throws URISyntaxException {
-//
-//        String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-//                build().toUriString()+ "/executive-club-members/"+767;  // Create new URI for this newly created executive member
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setLocation(new URI(path));
-//
-//        return new ResponseEntity<>("New Executive Club Member Created", headers, HttpStatus.CREATED);  // return info back to client class
-//    }
+    @RequestMapping(value="/executive-club-members", method= RequestMethod.POST)
+    public ResponseEntity<String> createMember(@RequestBody String userDetails) throws URISyntaxException {
+
+        String path = ServletUriComponentsBuilder.fromCurrentContextPath().
+                build().toUriString()+ "/executive-club-members/"+767;  // Create new URI for this newly created executive member
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(new URI(path));
+
+        return new ResponseEntity<>("New Executive Club Member Created", headers, HttpStatus.CREATED);  // return info back to client class
+    }
 
     // POST Request /guest ???
 
