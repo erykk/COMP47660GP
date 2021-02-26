@@ -63,7 +63,6 @@ public class UserController {
     @GetMapping("/register")
     public String register(Model model){
         model.addAttribute("userCredentials", new User());
-
         return "register";
     }
 
@@ -78,6 +77,8 @@ public class UserController {
         userService.saveExecUser(userCredentials);
 
         loginService.autoLogin(userCredentials.getEmail(), userCredentials.getPassword());
+
+        model.addAttribute("userCredentials", userCredentials);
 
         return "success";
 

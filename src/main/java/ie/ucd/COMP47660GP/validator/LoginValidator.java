@@ -30,15 +30,15 @@ public class LoginValidator implements Validator {
         User existingUser = userService.findByEmail(user.getEmail());
         // Exec user exists, allow
         if (existingUser != null && existingUser.getExec()){
-            errors.reject("email");
+            errors.rejectValue("email", "userCredentials.email", "Account exists already");
         }
 
         if(user.getPassword().length() < 6) {
-            errors.reject("password" );
+            errors.rejectValue("password", "userCredentials.password", "Password too short" );
         }
 
         if(!user.getPassword().equals(user.getVerifyPassword())){
-            errors.rejectValue("password", "Diff.userCredentials.password");
+            errors.rejectValue("password", "userCredentials.password", "Passwords don't match");
         }
 
     }
