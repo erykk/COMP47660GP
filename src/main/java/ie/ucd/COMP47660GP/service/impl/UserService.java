@@ -20,13 +20,17 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public void save(User user){
+    private void save(User user){
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRoles(new HashSet<Role>(roleRepository.findAll()));
     }
 
     public User findByEmail(String email){
         return userRepository.findByEmail(email);
+    }
+
+    public void saveExecUser(User user){
+        save(user);
     }
 
     /*

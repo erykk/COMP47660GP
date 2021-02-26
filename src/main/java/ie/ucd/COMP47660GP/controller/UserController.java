@@ -5,6 +5,7 @@ import ie.ucd.COMP47660GP.repositories.UserRepository;
 import ie.ucd.COMP47660GP.service.LoginService;
 import ie.ucd.COMP47660GP.service.impl.LoginServiceImpl;
 import ie.ucd.COMP47660GP.service.impl.UserService;
+import ie.ucd.COMP47660GP.validator.LoginValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.ComponentScan;
@@ -23,6 +24,8 @@ import java.net.URISyntaxException;
 @Controller
 public class UserController {
 
+    @Autowired
+    LoginValidator loginValidator;
     @Autowired
     UserService userService;
     @Autowired
@@ -66,6 +69,8 @@ public class UserController {
 
     @RequestMapping(value="/register", method=RequestMethod.POST)
     public String register(User userCredentials, BindingResult bindingResult, Model model){
+        loginValidator.validate(userCredentials, bindingResult);
+
         userService.save(userCredentials);
 
         loginService.autoLogin(userCredentials.getEmail(), userCredentials.getPassword());

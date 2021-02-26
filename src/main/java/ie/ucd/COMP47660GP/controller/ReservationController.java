@@ -3,6 +3,7 @@ package ie.ucd.COMP47660GP.controller;
 import ie.ucd.COMP47660GP.entities.Reservation;
 import ie.ucd.COMP47660GP.exception.NoSuchBookingException;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
+import ie.ucd.COMP47660GP.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,8 @@ public class ReservationController {
 
     @Autowired
     ReservationRepository reservationRepository;
+    @Autowired
+    UserService userService;
 
     int ref;   // Testing purposes
 
