@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -26,36 +27,25 @@ public class UserController {
 
     @Autowired
     UserRepository userRepository;
-    Random random = new Random();
-    List<Integer> referenceNumbers = new ArrayList<>();
 
     // POST new executive club member
-    @PostMapping("/executive-club-member")
+    @PostMapping("/createMember")
     public ResponseEntity addMember(@Valid @RequestBody User user) throws URISyntaxException  {
         System.out.println("TESTING MEMBER");
         userRepository.save(user);
-        int ref = 0;
-//        do{
-//            ref = random.nextInt(100000);
-//        } while (referenceNumbers.contains(ref));
-
-        referenceNumbers.add(ref);
-        System.out.println("REF: "+ref);
+        System.out.println("User id: "+user.getId());
         String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-                build().toUriString()+ "/member/"+ref++;  // Create new URI for this newly created profile
+                build().toUriString()+ "/member/"+user.getId();  // Create new URI for new member
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(new URI(path));
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
-
-
-    @RequestMapping(value="/user/{id}",method=RequestMethod.GET)
-    @ResponseStatus(value=HttpStatus.OK)
-    public User getUser(@PathVariable String id) {
-//
-//        return userRepository.findUser(id);
-        return null;
+    @GetMapping("/member/{id}")
+    @ResponseBody
+    public User getMember(@PathVariable int id){
+        User user = userRepository.findUser(id);
+        return user;
     }
 
 }

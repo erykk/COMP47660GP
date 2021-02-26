@@ -67,7 +67,7 @@ public class FlightController{
 
     // GET all flights for given airports and between now and given date.
     @GetMapping(value = "/flight", params = {"origin", "dest", "date"})
-    public String getFlights(@RequestParam("origin") String origin,
+    public List<Flight> getFlights(@RequestParam("origin") String origin,
                              @RequestParam(value = "dest") String dest,
                              @RequestParam(value = "date") String dateStr,
                              Model model) {
@@ -78,7 +78,7 @@ public class FlightController{
         List<Flight> flights = flightRepository.findFlightsByRouteAndDate(origin, dest, now, date.atStartOfDay());
         model.addAttribute("flights", flights);
 
-        return "flight/flightslist";
+        return flights;
     }
 
     // Add flight to DB
@@ -101,7 +101,7 @@ public class FlightController{
     }
 
     // GET Request for Flight, returns the flight (not booking) with the given reference
-    @RequestMapping(value="/flights/{ref}",method=RequestMethod.GET)
+    @RequestMapping(value="/flightss/{ref}",method=RequestMethod.GET)
     @ResponseStatus(value=HttpStatus.OK)
     public String getFlight(@PathVariable int ref) {
 //        if (flights.get(location) == null) throw new NoSuchFlightException();  // If no flight exists matching this reference then throw an exception

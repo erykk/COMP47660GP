@@ -52,24 +52,12 @@ public class ReservationController {
 //        return new ResponseEntity<>("Reservation Booked Successfully", headers, HttpStatus.CREATED);  // return info back to client class
 //    }
 
-    // TODO: id params when creating URI
-    // POST Request for Profile
-
-    @PostMapping("/bookFlight")
-    public Reservation createReservation(@Valid @RequestBody() Reservation reservation) throws URISyntaxException {
-
-        return reservationRepository.save(reservation);
-
-//        System.out.println(reservation.getFlight().getFlightNum());
-//        //reservationRepository.createReservation(name, surname, address, phone, email);
-//        String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-//                build().toUriString()+ "/reservations/"+ref++;  // Create new URI for reservation
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setLocation(new URI(path));
-//
-//        return new ResponseEntity<>("Reservation Booked Successfully", headers, HttpStatus.CREATED);  // return info back to client class
+    @PostMapping("/createReservation")
+    public ResponseEntity addReservation(@Valid @RequestBody Reservation reservation) throws URISyntaxException  {
+        System.out.println("TESTING reservation");
+        reservationRepository.save(reservation);
+        return new ResponseEntity(HttpStatus.CREATED);
     }
-
 
     // GET all reservations associated with given user id
     @GetMapping(value = "/reservation", params = {"user_id"})

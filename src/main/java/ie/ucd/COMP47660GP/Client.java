@@ -30,24 +30,17 @@ public class Client {
         LocalDateTime ldt = LocalDateTime.of(localDate,localTime);
         Flight flight = new Flight("Dublin","Paris",ldt,"GE5678");
         flight.setId(111);
-        User user = new User("Barry", "Murphy","bb@gmail.com","46 Hillside", "0845637893");
-        System.out.println(flight.getDestination() + "  : " + flight.getId());
-        Reservation reservation = new Reservation(12,flight, user);
-        Flight flight2 = new Flight("Dublin","Zurich",ldt,"GE5678");
-        System.out.println(flight2.getDestination() + "  : " + flight2.getId());
-        // POST Flight
-        HttpEntity<Flight> requestFlight = new HttpEntity<>(flight);
-        ResponseEntity responseFlight = restTemplate.postForEntity("http://localhost:8080/flight",requestFlight,String.class);
-        System.out.println("\n"+responseFlight+"\n");
-        // POST User
-        HttpEntity<User> requestUser = new HttpEntity<>(user);
-        ResponseEntity responseUser = restTemplate.postForEntity("http://localhost:8080/executive-club-member",requestUser,String.class);
-        System.out.println("\nPOST USER: "+responseUser+"\n");
 
-        // POST Reservation
-//        HttpEntity<Reservation> request = new HttpEntity<>(reservation);
-//        Reservation response = restTemplate.postForObject("http://localhost:8080/bookFlight",request,Reservation.class);
-//        System.out.println("\n"+response+"\n");
+        Flight flight2 = new Flight("Dublin","Eindhoven",ldt,"GE5678");
+        System.out.println(flight2.getDestination() + "  : " + flight2.getId());
+
+        // POST User
+//        HttpEntity<User> requestUser = new HttpEntity<>(user);
+//        ResponseEntity responseUser = restTemplate.postForEntity("http://localhost:8080/createMember",requestUser,String.class);
+//        System.out.println("\nPOST USER: "+responseUser+"\n");
+
+
+
 //
 //        // POST Register an Executive club member
 //        HttpEntity<String> request4 = new HttpEntity<>("John");
@@ -63,10 +56,22 @@ public class Client {
 //        restTemplate.delete("http://localhost:8080/executive-club-members/767");
 //
 //        // GET email info by getting all members info
-//        String response5 = restTemplate.getForObject("http://localhost:8080/executive-club-members/",String.class);
+//        String response5 = restTemplate.getForObject("http://localhost:8080/member?id=32&email=bb@gmail.com",String.class);
 //        System.out.println("\nGET: "+response5+"\n");
 
+          User response5 = restTemplate.getForObject("http://localhost:8080/member/32",User.class);
+         System.out.println("\nGET: "+response5.getAddress()+"\n");
 
+          Reservation reservation = new Reservation(12,flight, response5);
+
+        // POST Reservation
+//        HttpEntity<Reservation> request = new HttpEntity<>(reservation);
+//        Reservation response = restTemplate.postForObject("http://localhost:8080/addReservation",request,Reservation.class);
+//        System.out.println("\n"+response+"\n");
+
+
+//        String response5 = restTemplate.getForObject("http://localhost:8080/flight?",String.class);
+//        System.out.println("\nGET: "+response5+"\n");
     }
 }
 
