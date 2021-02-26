@@ -1,11 +1,8 @@
 package ie.ucd.COMP47660GP.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Column;
+import javax.persistence.*;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table( name = "users")
@@ -14,18 +11,15 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
     private int id;
-    @Column(name = "first_name")
     private String firstName;
-    @Column(name = "last_name")
     private String lastName;
-    @Column(name = "email", unique = true, nullable = false)
     private String email;
-    @Column(name = "address")
     private String address;
-    @Column(name = "phone_num")
     private String phoneNum;
-    @Column(name = "is_exec")
     private Boolean exec;
+
+    //@OneToMany
+    //private List<Reservation> reservations;
 
     public User(String firstName,String lastName, String email, String address, String phoneNum) {
         // ID auto generated
@@ -92,5 +86,13 @@ public class User {
 
 	public void setPhoneNum(String phoneNum) {
         this.phoneNum = phoneNum;
+    }
+
+    public Boolean getExec() {
+        return exec;
+    }
+
+    public void setExec(Boolean exec) {
+        this.exec = exec;
     }
 }

@@ -2,6 +2,7 @@ package ie.ucd.COMP47660GP.entities;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 @Entity
 @Table(name = "flights")
@@ -10,15 +11,13 @@ public class Flight {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "flight_id")
     private int id;
-    @Column(name = "source")
     private String source;
-    @Column(name = "destination")
     private String destination;
-    @Column(name = "date_time", columnDefinition = "TIMESTAMP")
     private LocalDateTime dateTime;
-    @Column(name = "flightNum")
     private String flightNum;
 
+    //@OneToMany
+    //private Collection<Reservation> reservations;
     //private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy h:mma");
 
     public Flight(String source, String destination, LocalDateTime dateTime, String flightNum) {
