@@ -72,5 +72,12 @@ public class UserController {
         userRepository.updateUserId(current_id,updated_id);  // does not work!!!
     }
 
+    @DeleteMapping("/deleteMember/{id}")
+    @ResponseBody
+    public void deleteMember(@PathVariable int id){
+//        User user = userRepository.findUser(id).orElseThrow(() -> new UserNotFoundException(id));
+        User user = userRepository.findUser(id);
+        userRepository.delete(user);
+    }
 }
 
