@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
-@SpringBootApplication(scanBasePackages = {"ie.ucd.COMP47660GP.service.impl","ie.ucd.COMP47660GP.service", "ie.ucd.COMP47660GP.config", "ie.ucd.COMP47660GP.controller"})
+@SpringBootApplication(scanBasePackages = {"ie.ucd.COMP47660GP.service.impl","ie.ucd.COMP47660GP.service", "ie.ucd.COMP47660GP.config", "ie.ucd.COMP47660GP.controller", "ie.ucd.COMP47660GP.validator"})
 public class Application {
 
     public static void main(String[] args) {

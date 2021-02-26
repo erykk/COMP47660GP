@@ -68,10 +68,14 @@ public class UserController {
     }
 
     @RequestMapping(value="/register", method=RequestMethod.POST)
-    public String register(User userCredentials, BindingResult bindingResult, Model model){
+    public String register(@ModelAttribute("userCredentials") User userCredentials, BindingResult bindingResult, Model model){
         loginValidator.validate(userCredentials, bindingResult);
 
-        userService.save(userCredentials);
+        if (bindingResult.hasErrors()){
+            return "register";
+        }
+
+        userService.saveExecUser(userCredentials);
 
         loginService.autoLogin(userCredentials.getEmail(), userCredentials.getPassword());
 

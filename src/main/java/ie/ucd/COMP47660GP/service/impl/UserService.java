@@ -30,6 +30,18 @@ public class UserService {
     }
 
     public void saveExecUser(User user){
+        User existingUser = userRepository.findByEmail(user.getEmail());
+        if (existingUser != null && !existingUser.getExec()) {
+            existingUser.setExec(true);
+            save(existingUser);
+        } else {
+            user.setExec(true);
+            save(user);
+        }
+    }
+
+    public void saveGuestUser(User user){
+        user.setExec(false);
         save(user);
     }
 
