@@ -17,19 +17,19 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "user_id")
+    //@Column(name = "user_id")
     private int id;
-    @Column(name = "first_name")
+    //@Column(name = "first_name")
     private String firstName;
-    @Column(name = "last_name")
+    //@Column(name = "last_name")
     private String lastName;
-    @Column(name = "email", unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     private String email;
-    @Column(name = "address")
+    //@Column(name = "address")
     private String address;
-    @Column(name = "phone_num")
+    //@Column(name = "phone_num")
     private String phoneNum;
-    @Column(name = "is_exec")
+    //@Column(name = "is_exec")
     private Boolean exec;
 
     private String password;

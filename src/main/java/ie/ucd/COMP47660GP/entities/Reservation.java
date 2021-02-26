@@ -1,14 +1,6 @@
 package ie.ucd.COMP47660GP.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Column;
-import javax.persistence.ManyToOne;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
+import javax.persistence.*;
 
 
 @Entity
@@ -19,17 +11,17 @@ public class Reservation {
     @Column(name = "reservation_id")
     private int id;
     //@Column(name = "flight_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "flight_id")
     private Flight flight;
     //@Column(name = "user_id", nullable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
     @Column(name = "cancelled")
     private Boolean cancelled;
 
-    public Reservation(int id, Flight flight, User user) {
+    public Reservation(Flight flight, User user) {
         // ID auto gen
         this.flight = flight;
         this.user = user;
