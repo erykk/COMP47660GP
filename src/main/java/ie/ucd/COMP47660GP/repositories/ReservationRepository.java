@@ -13,5 +13,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
 
     //void createReservation(String name, String surname, String address, String phone, String email);
     @Query("select r from Reservation r where r.user.id = :user_id")
-    List<Reservation> findReservations(int user_id);
+    List<Reservation> findUsersReservations(int user_id);
 }
