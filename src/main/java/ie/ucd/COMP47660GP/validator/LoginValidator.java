@@ -32,11 +32,13 @@ public class LoginValidator implements Validator {
         if (existingUser != null && existingUser.getExec()) {
             errors.rejectValue("email", "userCredentials.email", "Account exists already");
         }
+        if (!user.getEmail().contains("@")) {
+            errors.rejectValue("email", "userCredentials.email", "Must be valid email");
+        }
 
         if (user.getPassword().length() < 6) {
             errors.rejectValue("password", "userCredentials.password", "Password too short");
         }
-        // checkNumber(user.getPassword());
 
         if (!checkNumber(user.getPassword())) {
             errors.rejectValue("password", "userCredentials.password", "Password needs to contain a number");

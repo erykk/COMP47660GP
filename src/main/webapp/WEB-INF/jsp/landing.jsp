@@ -7,6 +7,14 @@
     <title>An Airline</title>
 </head>
 <body>
+    <header>
+        <nav class="navbar navbar-expand-lg header">
+        <a class="navbar-brand" href="#"><img id="logo" src="images/airplane.png" alt="Image"></a>
+            <div>
+                <h1>British Airways</h1>
+            </div>
+        </nav>
+    </header>
 <div style="text-align: center;">
     <p>Current User: <c:out value="${currentUser}"/></p>
     <h1>An Airline - Cheap Flights</h1>

@@ -109,7 +109,7 @@ public class UserController {
 
         if (exists) {
 
-            return "/";
+            return "success";
         } else {
             model.addAttribute("msg", "login failed");
         }

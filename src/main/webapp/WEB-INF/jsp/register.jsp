@@ -14,7 +14,14 @@
 </head>
 
 <body>
-
+    <header>
+        <nav class="navbar navbar-expand-lg header">
+        <a class="navbar-brand" href="#"><img id="logo" src="images/airplane.png" alt="Image"></a>
+            <div>
+                <h1>British Airways</h1>
+            </div>
+        </nav>
+    </header>
 <div class="container">
 
     <form:form method="POST" action="${contexPath}/secureRegister" modelAttribute="userCredentials" class="form-signin">
