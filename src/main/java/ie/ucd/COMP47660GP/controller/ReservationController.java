@@ -33,29 +33,8 @@ public class ReservationController {
     @Autowired
     ReservationRepository reservationRepository;
 
-    int ref;   // Testing purposes
-
-    // POST a reservation for the given flight and user id
-//    // TODO: id params when creating URI
-//    @PostMapping(value="/bookFlight", params = {"name", "surname", "address", "phone", "email"})
-//    public ResponseEntity<String> createReservation(@RequestParam(value = "name") String name, @RequestParam(value = "surname") String surname,
-//                                                    @RequestParam(value = "address") String address, @RequestParam(value = "phone") String phone,
-//                                                    @RequestParam(value = "email") String email, @RequestBody String flight) throws URISyntaxException {
-//
-//        return reservationRepository.save();
-//
-//        //reservationRepository.createReservation(name, surname, address, phone, email);
-//        String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-//                build().toUriString()+ "/reservations/"+ref++;  // Create new URI for reservation
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setLocation(new URI(path));
-//
-//        return new ResponseEntity<>("Reservation Booked Successfully", headers, HttpStatus.CREATED);  // return info back to client class
-//    }
-
     @PostMapping("/createReservation")
     public ResponseEntity addReservation(@Valid @RequestBody Reservation reservation) throws URISyntaxException  {
-        System.out.println("TESTING reservation");
         reservationRepository.save(reservation);
         return new ResponseEntity(HttpStatus.CREATED);
     }
@@ -63,7 +42,6 @@ public class ReservationController {
     // GET all reservations associated with given user id
     @GetMapping(value = "/reservation", params = {"user_id"})
     public List<Reservation> getReservations(@RequestParam(value = "user_id") int user_id) {
-
         return reservationRepository.findReservations(user_id);
     }
 

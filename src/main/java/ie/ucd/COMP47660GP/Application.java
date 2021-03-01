@@ -14,6 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @SpringBootApplication
 public class Application implements CommandLineRunner {
@@ -36,13 +37,15 @@ public class Application implements CommandLineRunner {
         Flight flight = new Flight("Dublin","Paris",ldt,"GE5678");
         //flight.setId(111);
 
-        User user = new User("test", "test", "test1", "test", "test");
-
+        User user = new User("testing", "test", "test14", "testidge", "test");
+        System.out.println("TESTing application");
         userRepository.save(user);
         flightRepository.save(flight);
 
         Reservation res = new Reservation(flight, user);
         reservationRepository.save(res);
+        List<Reservation> reservations = reservationRepository.findReservations(102);
+        System.out.println(reservations.get(0).getId());
     }
 
 //        @Bean

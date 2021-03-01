@@ -33,11 +33,9 @@ public class UserController {
     // POST new executive club member
     @PostMapping("/createMember")
     public ResponseEntity addMember(@Valid @RequestBody User user) throws URISyntaxException  {
-        System.out.println("TESTING MEMBER");
         userRepository.save(user);
-        System.out.println("User id: "+user.getId());
         String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-                build().toUriString()+ "/member/"+user.getId();  // Create new URI for new member
+                build().toUriString()+ "/user/"+user.getId();  // Create new URI for new member
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(new URI(path));
         return new ResponseEntity(HttpStatus.CREATED);
@@ -64,12 +62,12 @@ public class UserController {
     @ResponseBody
     public void updatePersonalInfo(@RequestBody User updatedUser) {
         User user = userRepository.findUser(updatedUser.getId());
-        System.out.println(user.getLastName());
         int updated_id = user.getId();
         int current_id = updatedUser.getId();
         userRepository.delete(user);
         userRepository.save(updatedUser);
         userRepository.updateUserId(current_id,updated_id);  // does not work!!!
+
     }
 
     @DeleteMapping("/deleteMember/{id}")
