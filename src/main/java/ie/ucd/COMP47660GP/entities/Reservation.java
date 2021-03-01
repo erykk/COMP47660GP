@@ -69,4 +69,8 @@ public class Reservation {
     public Boolean getCancelled() { return this.cancelled; }
 
     public void setCancelled(Boolean status) { this.cancelled = status; }
+
+    public int getReservation_id() {
+        return id;
+    }
 }
