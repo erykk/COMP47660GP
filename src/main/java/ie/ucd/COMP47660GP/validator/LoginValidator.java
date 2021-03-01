@@ -29,17 +29,65 @@ public class LoginValidator implements Validator {
 
         User existingUser = userService.findByEmail(user.getEmail());
         // Exec user exists, allow
-        if (existingUser != null && existingUser.getExec()){
+        if (existingUser != null && existingUser.getExec()) {
             errors.rejectValue("email", "userCredentials.email", "Account exists already");
         }
 
-        if(user.getPassword().length() < 6) {
-            errors.rejectValue("password", "userCredentials.password", "Password too short" );
+        if (user.getPassword().length() < 6) {
+            errors.rejectValue("password", "userCredentials.password", "Password too short");
+        }
+        // checkNumber(user.getPassword());
+
+        if (!checkNumber(user.getPassword())) {
+            errors.rejectValue("password", "userCredentials.password", "Password needs to contain a number");
+        }
+        if (!checkUpper(user.getPassword())) {
+            errors.rejectValue("password", "userCredentials.password",
+                    "Password needs to contain an upper case letter");
+        }
+        if (!checkLower(user.getPassword())) {
+            errors.rejectValue("password", "userCredentials.password", "Password needs to contain a lower case letter");
         }
 
-        if(!user.getPassword().equals(user.getVerifyPassword())){
+        if (!user.getPassword().equals(user.getVerifyPassword())) {
             errors.rejectValue("password", "userCredentials.password", "Passwords don't match");
         }
 
+    }
+
+    private boolean checkNumber(String password) {
+        boolean numberCheck = false;
+        char ch;
+        for (int i = 0; i < password.length(); i++) {
+            ch = password.charAt(i);
+            if (Character.isDigit(ch)) {
+                numberCheck = true;
+            }
+        }
+        return numberCheck;
+    }
+
+    private boolean checkUpper(String password) {
+        boolean upperCheck = false;
+        char ch;
+        for (int i = 0; i < password.length(); i++) {
+            ch = password.charAt(i);
+            if (Character.isUpperCase(ch)) {
+                upperCheck = true;
+            }
+        }
+        return upperCheck;
+    }
+
+    private boolean checkLower(String password) {
+        boolean lowerCheck = false;
+        char ch;
+        for (int i = 0; i < password.length(); i++) {
+            ch = password.charAt(i);
+            if (Character.isLowerCase(ch)) {
+                lowerCheck = true;
+            }
+        }
+        return lowerCheck;
     }
 }

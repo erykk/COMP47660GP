@@ -8,7 +8,7 @@
 </head>
 <body>
 <div style="text-align: center;">
-    <p>Current USer: <c:out value="${currentUser}"/></p>
+    <p>Current User: <c:out value="${currentUser}"/></p>
     <h1>An Airline - Cheap Flights</h1>
     <h2>
         <a href="${pageContext.request.contextPath}/">Home</a>

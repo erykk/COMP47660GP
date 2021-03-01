@@ -39,43 +39,48 @@ public class UserController {
     @Autowired
     SecurityService securityService;
 
-    int ref;   // Testing purposes
+    int ref; // Testing purposes
 
     // POST new executive club member
     // TODO: id params when creating URI
-    @PostMapping(value="/registerMember", params = {"name", "surname", "address", "phone", "email"})
-    public ResponseEntity<String> createReservation(@RequestParam(value = "name") String name, @RequestParam(value = "surname") String surname,
-                                                    @RequestParam(value = "address") String address, @RequestParam(value = "phone") String phone,
-                                                    @RequestParam(value = "email") String email) throws URISyntaxException {
+    @PostMapping(value = "/registerMember", params = { "name", "surname", "address", "phone", "email" })
+    public ResponseEntity<String> createReservation(@RequestParam(value = "name") String name,
+            @RequestParam(value = "surname") String surname, @RequestParam(value = "address") String address,
+            @RequestParam(value = "phone") String phone, @RequestParam(value = "email") String email)
+            throws URISyntaxException {
 
-//        userRepository.createMember(name, surname, address, phone, email);
-        String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-                build().toUriString()+ "/member/"+ref;  // Create new URI for reservation
+        // userRepository.createMember(name, surname, address, phone, email);
+        String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/member/" + ref; // Create
+                                                                                                                     // new
+                                                                                                                     // URI
+                                                                                                                     // for
+                                                                                                                     // reservation
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(new URI(path));
 
-        return new ResponseEntity<>("TEST", headers, HttpStatus.CREATED);  // return info back to client class
+        return new ResponseEntity<>("TEST", headers, HttpStatus.CREATED); // return info back to client class
     }
 
-    @RequestMapping(value="/user/{id}",method=RequestMethod.GET)
-    @ResponseStatus(value=HttpStatus.OK)
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
     public User getUser(@PathVariable String id) {
-//
-//        return userRepository.findUser(id);
+        //
+        // return userRepository.findUser(id);
         return null;
     }
 
     @GetMapping("/register")
-    public String register(Model model){
+    public String register(Model model) {
         model.addAttribute("userCredentials", new User());
         return "register";
     }
 
-    @RequestMapping(value="/secureRegister", method=RequestMethod.POST)
-    public String register(@ModelAttribute("userCredentials") User userCredentials, BindingResult bindingResult, Model model){
+    @RequestMapping(value = "/secureRegister", method = RequestMethod.POST)
+    public String register(@ModelAttribute("userCredentials") User userCredentials, BindingResult bindingResult,
+            Model model) {
         loginValidator.validate(userCredentials, bindingResult);
 
-        if (bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "register";
         }
 
@@ -84,7 +89,8 @@ public class UserController {
 
         userService.saveExecUser(userCredentials);
 
-        //loginService.autoLogin(userCredentials.getEmail(), userCredentials.getPassword());
+        // loginService.autoLogin(userCredentials.getEmail(),
+        // userCredentials.getPassword());
 
         model.addAttribute("userCredentials", userCredentials);
 
@@ -93,16 +99,17 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String login(Model model){
+    public String login(Model model) {
         return "login";
     }
 
     @RequestMapping(value = "/secureLogin", method = RequestMethod.POST)
-    public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model){
+    public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model) {
         boolean exists = securityService.login(email, password);
 
-        if (exists){
-            return "success";
+        if (exists) {
+
+            return "/";
         } else {
             model.addAttribute("msg", "login failed");
         }
@@ -110,4 +117,3 @@ public class UserController {
         return "login";
     }
 }
-
