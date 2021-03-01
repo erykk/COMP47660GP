@@ -4,7 +4,10 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
+    <title>Home - An Airline</title>
     <title>An Airline</title>
+    <link href="${pageContext.request.contextPath}/resources/css/main.css"
+          rel="stylesheet">
 </head>
 <body>
 <div style="text-align: center;">
@@ -15,33 +18,15 @@
         <a href="${pageContext.request.contextPath}/login">Login</a>
         &nbsp;&nbsp;&nbsp;
         <a href="${pageContext.request.contextPath}/register">Register</a>
+        &nbsp;&nbsp;&nbsp;
+        <a href="${pageContext.request.contextPath}/reservation">View Reservation</a>
     </h2>
     <h3>Welcome to our landing page, you'll be landing at your destination of choice in no time..... 🤦</h3>
 </div>
 <div style="text-align: center;">
-<%--    <form method="get" action="${pageContext.request.contextPath}/flight" >--%>
-<%--        <table style="margin-left: auto; margin-right: auto">--%>
-<%--            <tr>--%>
-<%--                <td><label for="origin">Origin:</label></td>--%>
-<%--                <td><input id="origin" name="origin"/></td>--%>
-<%--            </tr>--%>
-<%--            <tr>--%>
-<%--                <td><label for="dest">Destination:</label></td>--%>
-<%--                <td><input id="dest" name="dest"/></td>--%>
-<%--            </tr>--%>
-<%--            <tr>--%>
-<%--                <td><label for="date">Date:</label></td>--%>
-<%--                <td><input type="date" id="date" name="date"/></td>--%>
-<%--            </tr>--%>
-<%--            <tr>--%>
-<%--                <td><input type="submit" value="Submit"/></td>--%>
-<%--            </tr>--%>
-<%--        </table>--%>
-<%--    </form>--%>
-
     <%--@elvariable id="flight" type="ie.ucd.COMP47660GP.entities.Flight"--%>
     <form:form method="get" modelAttribute="flight" action="/flight">
-        <table style="margin-left: auto; margin-right: auto">
+        <table>
             <tr>
                 <td>Origin:</td>
                 <td>

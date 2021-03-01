@@ -7,4 +7,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
 public class NoSuchUserException extends RuntimeException {
     static final long serialVersionUID = -6516152229878843037L;
+
+    public NoSuchUserException() {
+    }
+
+    public NoSuchUserException(int user_id) {
+        super(String.format("User not found for given user id: '%d'", user_id));
+    }
 }

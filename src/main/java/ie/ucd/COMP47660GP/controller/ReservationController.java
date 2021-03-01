@@ -47,13 +47,10 @@ public class ReservationController {
 
     @PatchMapping("/reservation/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public String cancelReservation(@PathVariable("id") int id) {
+    public void cancelReservation(@PathVariable("id") int id) {
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new NoSuchBookingException(id));
         reservation.setCancelled(true);
         reservationRepository.save(reservation);
-
-        // Update to page of where request came from
-        return "redirect:/somehwere";
     }
 
 }
