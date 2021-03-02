@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class LoginValidator implements Validator {
@@ -32,7 +34,7 @@ public class LoginValidator implements Validator {
         if (existingUser != null && existingUser.getExec()) {
             errors.rejectValue("email", "userCredentials.email", "Account exists already");
         }
-        if (!user.getEmail().contains("@")) {
+        if (!isEmailValid(user.getEmail())) {
             errors.rejectValue("email", "userCredentials.email", "Must be valid email");
         }
 
@@ -91,5 +93,15 @@ public class LoginValidator implements Validator {
             }
         }
         return lowerCheck;
+    }
+
+    private boolean isEmailValid(String email) {
+        boolean validEmail = false;
+        Pattern emailPattern = Pattern.compile("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}");
+        Matcher match = emailPattern.matcher(email);
+        if (match.matches()) {
+            validEmail = true;
+        }
+        return validEmail;
     }
 }
