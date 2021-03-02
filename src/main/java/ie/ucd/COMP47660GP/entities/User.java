@@ -1,8 +1,15 @@
 package ie.ucd.COMP47660GP.entities;
 
-import javax.persistence.*;
+
 import java.util.Collection;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.ManyToMany;
+import org.springframework.data.annotation.Transient;
 
 @Entity
 @Table( name = "users")
@@ -21,24 +28,25 @@ public class User {
     //@OneToMany
     //private List<Reservation> reservations;
 
-    public User(String firstName,String lastName, String email, String address, String phoneNum) {
-        // ID auto generated
+
+    public User(String firstName, String lastName, String email, String address, String phoneNum) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.address = address;
         this.phoneNum = phoneNum;
-        this.exec = false;
     }
 
     public User() {
-        this.firstName = "test";
-        this.lastName = "test";
-        this.email = "test";
-        this.address = "test";
-        this.phoneNum = "test";
-        this.exec = false;
+
     }
+
+    private String password;
+    @Transient
+    private String verifyPassword;
+
+    @ManyToMany
+    private Collection<Role> roles;
 
     public int getId() {
 		return id;
@@ -94,5 +102,29 @@ public class User {
 
     public void setExec(Boolean exec) {
         this.exec = exec;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getVerifyPassword() {
+        return verifyPassword;
+    }
+
+    public void setVerifyPassword(String verifyPassword) {
+        this.verifyPassword = verifyPassword;
+    }
+
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
     }
 }

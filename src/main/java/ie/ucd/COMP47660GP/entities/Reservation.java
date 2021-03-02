@@ -10,35 +10,23 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "reservation_id")
     private int id;
-    //@Column(name = "flight_id", nullable = false)
-    //@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "flight_id")
-    @OneToOne(fetch=FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     private Flight flight;
-    //@Column(name = "user_id", nullable = false)
-    //@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    @OneToOne(fetch=FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     private User user;
     @Column(name = "cancelled")
     private Boolean cancelled;
 
-    public Reservation(int id, Flight flight, User user) {
+    public Reservation(Flight flight, User user) {
         // ID auto gen
         this.flight = flight;
         this.user = user;
         this.cancelled = false;
     }
 
-    public Reservation(Flight flight, User user) {
-        this.user = user;
-        this.flight = flight;
-        this.cancelled = false;
-    }
-
     public Reservation() {
         this.flight = new Flight();
-        this.user = new User();
+        this.user = new User("Mr test", "test", "test113", "testidge", "test");
         this.cancelled = false;
     }
 

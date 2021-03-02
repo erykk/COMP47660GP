@@ -4,16 +4,15 @@ import ie.ucd.COMP47660GP.repositories.FlightRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
-@SpringBootApplication
-public class Application /*implements CommandLineRunner*/ {
 
-    @Autowired
-    private ReservationRepository reservationRepository;
-    @Autowired private UserRepository userRepository;
-    @Autowired private FlightRepository flightRepository;
+@SpringBootApplication(scanBasePackages = {"ie.ucd.COMP47660GP.service.impl","ie.ucd.COMP47660GP.service", "ie.ucd.COMP47660GP.config", "ie.ucd.COMP47660GP.controller", "ie.ucd.COMP47660GP.validator"})
+public class Application {
 
     public static void main(String[] args) {
 

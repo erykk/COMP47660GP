@@ -8,12 +8,24 @@ import ie.ucd.COMP47660GP.entities.User;
 import ie.ucd.COMP47660GP.repositories.FlightRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
+import ie.ucd.COMP47660GP.service.LoginService;
+import ie.ucd.COMP47660GP.service.impl.LoginServiceImpl;
+import ie.ucd.COMP47660GP.service.impl.SecurityService;
+import ie.ucd.COMP47660GP.service.impl.UserService;
+import ie.ucd.COMP47660GP.validator.LoginValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -28,18 +40,45 @@ import java.util.*;
 public class UserController {
 
     @Autowired
+    LoginValidator loginValidator;
+    @Autowired
+    UserService userService;
+    @Autowired
     UserRepository userRepository;
+    @Autowired
+    @Qualifier("loginServiceImpl")
+    LoginService loginService;
+    @Autowired
+    SecurityService securityService;
+
+    int ref; // Testing purposes
+
+    /*
 
     // POST new executive club member
     @PostMapping("/createMember")
-    public ResponseEntity addMember(@Valid @RequestBody User user) throws URISyntaxException  {
+    public ResponseEntity addMember(@Valid @RequestBody User user) throws URISyntaxException {
         userRepository.save(user);
         String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-                build().toUriString()+ "/user/"+user.getId();  // Create new URI for new member
+                build().toUriString() + "/user/" + user.getId();  // Create new URI for new member
+    }
+
+
+    // POST new executive club member
+    // TODO: id params when creating URI
+    @PostMapping(value = "/registerMember", params = { "name", "surname", "address", "phone", "email" })
+    public ResponseEntity<String> createReservation(@RequestParam(value = "name") String name,
+            @RequestParam(value = "surname") String surname, @RequestParam(value = "address") String address,
+            @RequestParam(value = "phone") String phone, @RequestParam(value = "email") String email)
+            throws URISyntaxException {
+        // userRepository.createMember(name, surname, address, phone, email);
+        String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/member/" + ref;
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(new URI(path));
         return new ResponseEntity(HttpStatus.CREATED);
     }
+
+
 
     @GetMapping("/member/{id}")
     @ResponseBody
@@ -77,5 +116,63 @@ public class UserController {
         User user = userRepository.findUser(id);
         userRepository.delete(user);
     }
-}
 
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
+    public User getUser(@PathVariable String id) {
+        //
+        // return userRepository.findUser(id);
+        return null;
+    }
+
+
+     */
+
+    @GetMapping("/register")
+    public String register(Model model) {
+        model.addAttribute("userCredentials", new User());
+        return "register";
+    }
+
+    @RequestMapping(value = "/secureRegister", method = RequestMethod.POST)
+    public String register(@ModelAttribute("userCredentials") User userCredentials, BindingResult bindingResult,
+            Model model) {
+        loginValidator.validate(userCredentials, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            return "register";
+        }
+
+        SecurityContext context = SecurityContextHolder.getContext();
+        model.addAttribute("currentUser", context.getAuthentication().getName());
+
+        userService.saveExecUser(userCredentials);
+
+        // loginService.autoLogin(userCredentials.getEmail(),
+        // userCredentials.getPassword());
+
+        model.addAttribute("userCredentials", userCredentials);
+
+        return "success";
+
+    }
+
+    @GetMapping("/login")
+    public String login(Model model) {
+        return "login";
+    }
+
+    @RequestMapping(value = "/secureLogin", method = RequestMethod.POST)
+    public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model) {
+        boolean exists = securityService.login(email, password);
+
+        if (exists) {
+
+            return "success";
+        } else {
+            model.addAttribute("msg", "login failed");
+        }
+
+        return "login";
+    }
+}

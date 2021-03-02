@@ -1,8 +1,7 @@
 package ie.ucd.COMP47660GP.repositories;
 
-import ie.ucd.COMP47660GP.entities.Flight;
+import org.springframework.data.jpa.repository.Query;
 import ie.ucd.COMP47660GP.entities.User;
-import ie.ucd.COMP47660GP.exception.NoSuchFlightException;
 import ie.ucd.COMP47660GP.exception.NoSuchUserException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer>{
@@ -29,4 +29,8 @@ public interface UserRepository extends JpaRepository<User, Integer>{
     @Query("update User u set u.id = :updated_id where u.id = :current_id")
     void updateUserId(int current_id, int updated_id) throws NoSuchUserException;
 
+    User findByEmail(String email);
+
+    //@Query("SELECT u FROM User u WHERE u.email = ?1")
+    //User findByEmail(String email);
 }

@@ -43,7 +43,7 @@ public class CreditCard {
     }
 
     public CreditCard() {
-        this.user = new User();
+        this.user = new User("Mr test", "test", "test113", "testidge", "test");
         this.cardNum = "test";
         this.name = "test";
         this.expiryDate = LocalDateTime.now();
