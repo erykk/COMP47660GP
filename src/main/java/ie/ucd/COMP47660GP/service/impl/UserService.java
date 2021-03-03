@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.HashSet;
 
 @Service
@@ -36,6 +37,7 @@ public class UserService {
             existingUser.setExec(true);
             save(existingUser);
         } else {
+            user.setRoles(Arrays.asList(roleRepository.findByName("EXEC")));
             user.setExec(true);
             save(user);
         }
@@ -43,6 +45,7 @@ public class UserService {
     }
 
     public void saveGuestUser(User user){
+        user.setRoles(Arrays.asList(roleRepository.findByName("GUEST")));
         user.setExec(false);
         save(user);
     }

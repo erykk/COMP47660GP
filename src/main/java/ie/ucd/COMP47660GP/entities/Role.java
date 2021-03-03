@@ -16,8 +16,8 @@ public class Role {
     @ManyToMany(mappedBy = "roles")
     private Collection<User> users;
 
-    @ManyToMany
-    private Collection<Privilege> privileges;
+    //@ManyToMany
+    //private Collection<Privilege> privileges;
 
     public int getId() {
         return id;

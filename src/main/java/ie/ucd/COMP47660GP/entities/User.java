@@ -2,13 +2,8 @@ package ie.ucd.COMP47660GP.entities;
 
 
 import java.util.Collection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Column;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
+
 import org.springframework.data.annotation.Transient;
 
 @Entity
@@ -25,6 +20,14 @@ public class User {
     private String phoneNum;
     private Boolean exec;
 
+    @ManyToMany
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "id"))
+    private Collection<Role> roles;
     //@OneToMany
     //private List<Reservation> reservations;
 
