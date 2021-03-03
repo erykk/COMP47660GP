@@ -1,10 +1,12 @@
 package ie.ucd.COMP47660GP.controller;
 
 import com.fasterxml.jackson.core.util.JsonParserSequence;
+import ie.ucd.COMP47660GP.entities.CreditCard;
 import ie.ucd.COMP47660GP.entities.Flight;
 import ie.ucd.COMP47660GP.entities.Reservation;
 import ie.ucd.COMP47660GP.entities.User;
 
+import ie.ucd.COMP47660GP.repositories.CreditCardRepository;
 import ie.ucd.COMP47660GP.repositories.FlightRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
@@ -51,41 +53,47 @@ public class UserController {
     @Autowired
     SecurityService securityService;
 
+    @Autowired
+    CreditCardRepository creditCardRepository;
+
+
     int ref; // Testing purposes
 
-    /*
-
-    // POST new executive club member
-    @PostMapping("/createMember")
-    public ResponseEntity addMember(@Valid @RequestBody User user) throws URISyntaxException {
-        userRepository.save(user);
-        String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-                build().toUriString() + "/user/" + user.getId();  // Create new URI for new member
-    }
 
 
     // POST new executive club member
-    // TODO: id params when creating URI
-    @PostMapping(value = "/registerMember", params = { "name", "surname", "address", "phone", "email" })
-    public ResponseEntity<String> createReservation(@RequestParam(value = "name") String name,
-            @RequestParam(value = "surname") String surname, @RequestParam(value = "address") String address,
-            @RequestParam(value = "phone") String phone, @RequestParam(value = "email") String email)
-            throws URISyntaxException {
-        // userRepository.createMember(name, surname, address, phone, email);
-        String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/member/" + ref;
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(new URI(path));
-        return new ResponseEntity(HttpStatus.CREATED);
-    }
+//    @PostMapping("/createMember")
+//    public ResponseEntity addMember(@Valid @RequestBody User user) throws URISyntaxException {
+//        userRepository.save(user);
+//        String path = ServletUriComponentsBuilder.fromCurrentContextPath().
+//                build().toUriString() + "/user/" + user.getId();  // Create new URI for new member
+//        ResponseEntity e;
+//        return e;
+//    }
+
+
+//    // POST new executive club member
+//    // TODO: id params when creating URI
+//    @PostMapping(value = "/registerMember", params = { "name", "surname", "address", "phone", "email" })
+//    public ResponseEntity<String> createReservation(@RequestParam(value = "name") String name,
+//            @RequestParam(value = "surname") String surname, @RequestParam(value = "address") String address,
+//            @RequestParam(value = "phone") String phone, @RequestParam(value = "email") String email)
+//            throws URISyntaxException {
+//        // userRepository.createMember(name, surname, address, phone, email);
+//        String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/member/" + ref;
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setLocation(new URI(path));
+//        return new ResponseEntity(HttpStatus.CREATED);
+//    }
 
 
 
-    @GetMapping("/member/{id}")
-    @ResponseBody
-    public User getMember(@PathVariable int id){
-        User user = userRepository.findUser(id);
-        return user;
-    }
+//    @GetMapping("/member/{id}")
+//    @ResponseBody
+//    public User getMember(@PathVariable int id){
+//        User user = userRepository.findUser(id);
+//        return user;
+//    }
 
     @GetMapping("getEmail/{email}")
     @ResponseBody
@@ -97,36 +105,36 @@ public class UserController {
         return "Valid: email does not exist";
     }
 
-    @PutMapping("/editMemberPersonalInfo")
+    @PutMapping("/editPersonalDetails")
     @ResponseBody
-    public void updatePersonalInfo(@RequestBody User updatedUser) {
-        User user = userRepository.findUser(updatedUser.getId());
-        int updated_id = user.getId();
-        int current_id = updatedUser.getId();
-        userRepository.delete(user);
-        userRepository.save(updatedUser);
-        userRepository.updateUserId(current_id,updated_id);  // does not work!!!
-
+    public void updatePersonaDetails(@RequestBody User updatedUser) {
+        userRepository.updateUserId(updatedUser.getAddress(), updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getPhoneNum(), updatedUser.getEmail());
     }
 
-    @DeleteMapping("/deleteMember/{id}")
+    @PostMapping("/creditCard")
     @ResponseBody
-    public void deleteMember(@PathVariable int id){
-//        User user = userRepository.findUser(id).orElseThrow(() -> new UserNotFoundException(id));
-        User user = userRepository.findUser(id);
-        userRepository.delete(user);
+    public void addCreditCard(@RequestBody CreditCard creditCard){
+
     }
 
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-    @ResponseStatus(value = HttpStatus.OK)
-    public User getUser(@PathVariable String id) {
-        //
-        // return userRepository.findUser(id);
-        return null;
-    }
+//    @DeleteMapping("/deleteMember/{id}")
+//    @ResponseBody
+//    public void deleteMember(@PathVariable int id){
+////        User user = userRepository.findUser(id).orElseThrow(() -> new UserNotFoundException(id));
+//        User user = userRepository.findUser(id);
+//        userRepository.delete(user);
+//    }
+
+//    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
+//    @ResponseStatus(value = HttpStatus.OK)
+//    public User getUser(@PathVariable String id) {
+//        //
+//        // return userRepository.findUser(id);
+//        return null;
+//    }
 
 
-     */
+
 
     @GetMapping("/register")
     public String register(Model model) {
