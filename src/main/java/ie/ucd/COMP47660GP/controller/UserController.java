@@ -176,7 +176,7 @@ public class UserController {
             model.addAttribute("msg", "Logged in successfully as " + userRepository.findByEmail(email));
             return "success";
         } else {
-            model.addAttribute("msg", "login failed");
+            model.addAttribute("msg", "User " + email + " does not exist");
             return "fail";
         }
     }
@@ -196,10 +196,12 @@ public class UserController {
                 model.addAttribute("msg", "Successfully removed executive privileges from user " + user.getEmail() + ".");
                 return "success";
             } else {
+                model.addAttribute("msg", "Could not remove executive privileges for user" + user.getEmail() + ". Password doesn't match");
                 return "fail";
             }
         } else {
-            return "null";
+            model.addAttribute("msg", "User " + email + " does not exist.");
+            return "fail";
         }
     }
 }
