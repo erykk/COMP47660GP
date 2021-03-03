@@ -32,28 +32,25 @@
             <tr>
                 <td>Email:</td>
                 <td>
-                    <form:select path="email">
-                        <form:options items="${email}" />
-                    </form:select>
+                        <form:input type="text" path="email" class="form-control" placeholder="${password}"
+                            autofocus="true"></form:input>
                 </td>
             </tr>
 
             <tr>
                 <td>Password:</td>
                 <td>
-                    <form:select path="password">
-                        <form:options items="${password}" />
-                    </form:select>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <form:input path="dateTime" type="date"/>
+                        <form:input type="password" path="password" class="form-control" placeholder="${password}"></form:input>
                 </td>
             </tr>
             <tr>
                 <td>
                     <input type="submit" value="Save Changes"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="submit" value="Become Executive"/>
                 </td>
             </tr>
         </table>
