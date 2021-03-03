@@ -192,6 +192,7 @@ public class UserController {
 
         if (user != null){
             if(userService.deleteExecUser(user, password)) {
+                model.addAttribute("msg", "Successfully removed executive privileges from user " + user.getEmail() + ".")
                 return "success";
             } else {
                 return "fail";
