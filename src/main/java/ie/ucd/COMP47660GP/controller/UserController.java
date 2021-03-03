@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.security.core.context.SecurityContext;
@@ -52,6 +53,8 @@ public class UserController {
     LoginService loginService;
     @Autowired
     SecurityService securityService;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     int ref; // Testing purposes
 
@@ -186,8 +189,9 @@ public class UserController {
     @RequestMapping(value = "/deleteAccount", method = RequestMethod.POST)
     public String deleteAccount(@RequestParam("email") String email, @RequestParam("password") String password, Model model) {
         User user = userService.findByEmail(email);
+
         if (user != null){
-            if(userService.deleteExecUser(user, password)){
+            if(userService.deleteExecUser(user, password)) {
                 return "success";
             } else {
                 return "fail";
