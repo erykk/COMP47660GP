@@ -47,6 +47,17 @@ public class UserService {
         save(user);
     }
 
+    public boolean deleteExecUser(User user, String password){
+        if (user.getPassword().equals(bCryptPasswordEncoder.encode(password))) {
+            System.out.println("service:" + user.getEmail());
+            System.out.println("service" + bCryptPasswordEncoder.encode( user.getPassword()));
+            user.setExec(false);
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
+
     /*
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder(){ return new BCryptPasswordEncoder(); }

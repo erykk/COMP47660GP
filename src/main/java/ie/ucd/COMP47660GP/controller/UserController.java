@@ -19,6 +19,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.security.core.context.SecurityContext;
@@ -167,12 +169,31 @@ public class UserController {
         boolean exists = securityService.login(email, password);
 
         if (exists) {
-
             return "success";
         } else {
             model.addAttribute("msg", "login failed");
         }
 
         return "login";
+    }
+
+    @RequestMapping(value = "/deleteAccount", method = RequestMethod.GET)
+    public String deleteAccount(Model model) {
+        return "deleteAccount";
+    }
+
+
+    @RequestMapping(value = "/deleteAccount", method = RequestMethod.POST)
+    public String deleteAccount(@RequestParam("email") String email, @RequestParam("password") String password, Model model) {
+        User user = userService.findByEmail(email);
+        if (user != null){
+            if(userService.deleteExecUser(user, password)){
+                return "success";
+            } else {
+                return "fail";
+            }
+        } else {
+            return "null";
+        }
     }
 }
