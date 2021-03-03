@@ -1,9 +1,16 @@
 package ie.ucd.COMP47660GP.controller;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import ie.ucd.COMP47660GP.entities.CreditCard;
 import ie.ucd.COMP47660GP.entities.Flight;
 import ie.ucd.COMP47660GP.entities.Reservation;
 import ie.ucd.COMP47660GP.entities.User;
 import ie.ucd.COMP47660GP.exception.NoSuchBookingException;
+import ie.ucd.COMP47660GP.exception.NoSuchCreditCardException;
+import ie.ucd.COMP47660GP.exception.NoSuchFlightException;
+import ie.ucd.COMP47660GP.exception.NoSuchUserException;
+import ie.ucd.COMP47660GP.model.Booking;
+import ie.ucd.COMP47660GP.repositories.CreditCardRepository;
 import ie.ucd.COMP47660GP.repositories.FlightRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
@@ -16,8 +23,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.awt.print.Book;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ReservationController {
@@ -32,6 +46,9 @@ public class ReservationController {
 
     @Autowired
     FlightRepository flightRepository;
+
+    @Autowired
+    CreditCardRepository creditCardRepository;
 
     int ref;   // Testing purposes
 
@@ -53,10 +70,66 @@ public class ReservationController {
 //        return new ResponseEntity<>("Reservation Booked Successfully", headers, HttpStatus.CREATED);  // return info back to client class
 //    }
 
-    @PostMapping("/createReservation")
-    public ResponseEntity addReservation(@Valid @RequestBody Reservation reservation) throws URISyntaxException  {
-        reservationRepository.save(reservation);
-        return new ResponseEntity(HttpStatus.CREATED);
+    @GetMapping("/create-reservation/{id}")
+    public String addReservation(@PathVariable("id") int id, Model model) {
+        Flight flight = flightRepository.findById(id).
+                orElseThrow(() -> new NoSuchFlightException(id));
+
+        model.addAttribute("booking", new Booking());
+        model.addAttribute("flight", flight);
+
+        return "reservation/create_reservation";
+    }
+
+    @PostMapping(value = "/create-reservation", consumes = "application/x-www-form-urlencoded")
+    public String addReservation(Booking booking, Model model) {
+        User user;
+        User receivedUser = booking.getUser();
+        try {
+            user = userRepository.findEmail(booking.getUser().getEmail());
+            if (user == null) {
+                throw new NoSuchUserException();
+            }
+            user.setAddress(receivedUser.getAddress());
+            user.setPhoneNum(receivedUser.getPhoneNum());
+        } catch (NoSuchUserException e) {
+            user = receivedUser;
+        }
+
+        user = userRepository.save(user);
+
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").
+                parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
+
+        LocalDate expiry = LocalDate.parse(booking.getDateStr(), formatter);
+
+        CreditCard creditCard = booking.getCreditCard();
+        try {
+            creditCard = creditCardRepository.findByCardNum(creditCard.getCardNum());
+            if (creditCard == null) {
+                throw new NoSuchCreditCardException();
+            }
+        } catch (NoSuchCreditCardException e) {
+            creditCard = booking.getCreditCard();
+        }
+
+        creditCard.setUser(user);
+        creditCard.setExpiryDate(expiry.atStartOfDay());
+        creditCardRepository.save(creditCard);
+
+        Flight flight = flightRepository.findById(booking.getFlightID()).
+                orElseThrow(() -> new NoSuchFlightException(booking.getFlightID()));
+
+        Reservation reservation = new Reservation();
+        reservation.setUser(user);
+        reservation.setFlight(flight);
+        reservation.setCancelled(false);
+
+        Reservation savedReservation = reservationRepository.save(reservation);
+
+        model.addAttribute("reservation", savedReservation);
+
+        return "reservation/reservation_created";
     }
 
     @GetMapping("/reservation")
@@ -102,4 +175,3 @@ public class ReservationController {
     }
 
 }
-

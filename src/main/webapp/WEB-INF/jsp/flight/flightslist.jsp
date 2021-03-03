@@ -83,7 +83,7 @@
                         <td style="border: 1px solid black;"><c:out value="${flight.destination}"/> </td>
                         <td style="border: 1px solid black;"><c:out value="${flight.dateTime}"/> </td>
                         <td style="border: 1px solid black;"><c:out value="${flight.flightNum}"/> </td>
-                        <td style="border: 1px solid black;"><a href="/reservation/${flight.id}">Make Reservation</a></td>
+                        <td style="border: 1px solid black;"><a href="/create-reservation/${flight.id}">Make Reservation</a></td>
                     </tr>
                 </c:forEach>
             </table>
