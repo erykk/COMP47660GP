@@ -53,9 +53,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //web.ignoring().antMatchers("/**");
 
 
+
         http.authorizeRequests().antMatchers("/register","/","/login", "/secureRegister", "/secureLogin",
-                "/resources/**", "/images/**", "/reservation", "/flight", "/create-reservation", "/create-reservation/*" , "/success", "/fail").permitAll()
-                .anyRequest().authenticated()
+                "/resources/**", "/images/**", "/reservation", "/flight", "/create-reservation", "/create-reservation/*" ,"/deleteAccount" ,"/success", "/fail").permitAll()
+                //.anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
@@ -65,7 +66,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout().logoutSuccessUrl("/success").permitAll()
                 .and().csrf().disable();
-        http.authorizeRequests().antMatchers("/deleteAccount").hasAuthority("EXEC");
+
+
+
 
     }
 

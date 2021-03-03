@@ -11,7 +11,7 @@ import org.springframework.data.annotation.Transient;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "user_id")
+    //@Column(name = "user_id")
     private int id;
     private String firstName;
     private String lastName;
@@ -22,7 +22,7 @@ public class User {
 
     @ManyToMany
     @JoinTable(
-            name = "users_roles",
+            name = "user_roles",
             joinColumns = @JoinColumn(
                     name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(
@@ -47,9 +47,6 @@ public class User {
     private String password;
     @Transient
     private String verifyPassword;
-
-    @ManyToMany
-    private Collection<Role> roles;
 
     public int getId() {
 		return id;

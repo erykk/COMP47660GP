@@ -1,9 +1,7 @@
 package ie.ucd.COMP47660GP.config;
 
-import ie.ucd.COMP47660GP.entities.Privilege;
 import ie.ucd.COMP47660GP.entities.Role;
 import ie.ucd.COMP47660GP.entities.User;
-import ie.ucd.COMP47660GP.repositories.PrivilegeRepository;
 import ie.ucd.COMP47660GP.repositories.RoleRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +18,6 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent>{
     UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
-    @Autowired
-    PrivilegeRepository privilegeRepository;
 
     boolean alreadySetup = false;
 

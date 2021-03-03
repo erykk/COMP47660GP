@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "role_id")
+    //@Column(name = "role_id")
     private int id;
     private String name;
     @ManyToMany(mappedBy = "roles")

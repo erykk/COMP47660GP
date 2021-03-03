@@ -19,6 +19,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -181,6 +182,7 @@ public class UserController {
         }
     }
 
+    @PreAuthorize("hasRole('EXEC')")
     @RequestMapping(value = "/deleteAccount", method = RequestMethod.GET)
     public String deleteAccount(Model model) {
         return "deleteAccount";
