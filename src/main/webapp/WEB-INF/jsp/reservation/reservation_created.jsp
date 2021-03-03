@@ -18,6 +18,8 @@
         &nbsp;&nbsp;&nbsp;
         <a href="${pageContext.request.contextPath}/register">Register</a>
         &nbsp;&nbsp;&nbsp;
+        <a href="${pageContext.request.contextPath}/flight">All Flights</a>
+        &nbsp;&nbsp;&nbsp;
         <a href="${pageContext.request.contextPath}/reservation">View Reservation</a>
     </h2>
 </div>

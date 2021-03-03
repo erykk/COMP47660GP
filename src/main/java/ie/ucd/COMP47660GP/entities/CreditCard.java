@@ -43,11 +43,6 @@ public class CreditCard {
     }
 
     public CreditCard() {
-        this.user = new User();
-        this.cardNum = "test";
-        this.name = "test";
-        this.expiryDate = LocalDateTime.now();
-        this.securityCode = "test";
     }
 
     public int getId() {

@@ -26,12 +26,6 @@ import java.util.TreeMap;
 @Controller
 public class FlightController{
 
-    private static List<String> origins = new LinkedList<>();
-    private static List<String> destinations = new LinkedList<>();
-
-//    @Autowired
-//    CreditCardRepository creditCardRepository;
-//
     @Autowired
     FlightRepository flightRepository;
 
@@ -47,8 +41,18 @@ public class FlightController{
     public String getFlights(Model model) {
         List<Flight> flights = flightRepository.findAll();
         model.addAttribute("flights", flights);
+        List<String> origins = new LinkedList<>();
+        List<String> destinations = new LinkedList<>();
+
+        origins.add("Dublin");
+        destinations.add("London");
+        destinations.add("Paris");
+        destinations.add("Madrid");
+        destinations.add("New York");
+
         model.addAttribute("origins", origins);
         model.addAttribute("destinations", destinations);
+
 
         Flight flight = new Flight();
         model.addAttribute("flight", flight);
@@ -68,21 +72,22 @@ public class FlightController{
         // TODO: Consider order descending by date
         List<Flight> flights = flightRepository.findFlightsByRouteAndDate(origin, dest, now, date.atStartOfDay());
         model.addAttribute("flights", flights);
+        List<String> origins = new LinkedList<>();
+        List<String> destinations = new LinkedList<>();
+
+        origins.add("Dublin");
+        destinations.add("London");
+        destinations.add("Paris");
+        destinations.add("Madrid");
+        destinations.add("New York");
+
         model.addAttribute("origins", origins);
         model.addAttribute("destinations", destinations);
+
 
         Flight flight = new Flight();
         model.addAttribute("flight", flight);
 
         return "flight/flightslist";
     }
-
-    // Add flight to DB
-    // TODO: Considering removing, or at least securing to admin only
-    @PostMapping("/flight")
-    public Flight addFlight(@RequestBody() Flight flight) {
-        return flightRepository.save(flight);
-    }
-
-
 }

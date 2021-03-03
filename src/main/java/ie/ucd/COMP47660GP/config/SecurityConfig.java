@@ -53,7 +53,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //web.ignoring().antMatchers("/**");
 
 
-        http.authorizeRequests().antMatchers("/register","/","/login", "/secureRegister", "/secureLogin", "/resources/**", "/images/**").permitAll()
+        http.authorizeRequests().antMatchers("/register","/","/login", "/secureRegister", "/secureLogin",
+                "/resources/**", "/images/**", "/reservation", "/flight", "/create-reservation", "/create-reservation/*").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
