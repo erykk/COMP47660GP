@@ -1,5 +1,7 @@
 package ie.ucd.COMP47660GP.controller;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.util.JsonParserSequence;
 import ie.ucd.COMP47660GP.entities.CreditCard;
 import ie.ucd.COMP47660GP.entities.Flight;
@@ -40,7 +42,9 @@ import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
-
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+//@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
 @Controller
 public class UserController {
 
@@ -92,7 +96,7 @@ public class UserController {
 //    }
 
 
-
+//
 //    @GetMapping("/member/{id}")
 //    @ResponseBody
 //    public User getMember(@PathVariable int id){
@@ -118,9 +122,27 @@ public class UserController {
 
     @PostMapping("/creditCard")
     @ResponseBody
-    public void addCreditCard(@RequestBody CreditCard creditCard){
-
+    public String addCreditCard(@RequestBody CreditCard creditCard){
+        creditCardRepository.save(creditCard);
+        return "Credit Card Created";
     }
+
+    @GetMapping("/creditCard/{cardNum}")
+    @ResponseBody
+    public String getCreditCard(@PathVariable String cardNum) {
+        CreditCard creditCard = creditCardRepository.findByCardNum(cardNum);
+        return "creditCard";
+    }
+
+    @PutMapping("/editCreditCardDetails")
+    @ResponseBody
+    public void updateCreditCard(@RequestBody CreditCard creditCard){
+        creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(), creditCard.getSecurityCode(),
+                creditCard.getExpiryDate());
+    }
+
+
+
 
 //    @DeleteMapping("/deleteMember/{id}")
 //    @ResponseBody
