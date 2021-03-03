@@ -157,6 +157,7 @@ public class UserController {
         // userCredentials.getPassword());
 
         model.addAttribute("userCredentials", userCredentials);
+        model.addAttribute("msg", "Successfully created user " + userCredentials.getEmail() + ".");
 
         return "success";
 
@@ -172,12 +173,12 @@ public class UserController {
         boolean exists = securityService.login(email, password);
 
         if (exists) {
+            model.addAttribute("msg", "Logged in successfully as " + userRepository.findByEmail(email));
             return "success";
         } else {
             model.addAttribute("msg", "login failed");
+            return "fail";
         }
-
-        return "login";
     }
 
     @RequestMapping(value = "/deleteAccount", method = RequestMethod.GET)
@@ -192,7 +193,7 @@ public class UserController {
 
         if (user != null){
             if(userService.deleteExecUser(user, password)) {
-                model.addAttribute("msg", "Successfully removed executive privileges from user " + user.getEmail() + ".")
+                model.addAttribute("msg", "Successfully removed executive privileges from user " + user.getEmail() + ".");
                 return "success";
             } else {
                 return "fail";
