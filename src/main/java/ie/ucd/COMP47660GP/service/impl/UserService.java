@@ -21,7 +21,7 @@ public class UserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private void save(User user){
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setPassword(user.getPassword());
         user.setRoles(new HashSet<Role>(roleRepository.findAll()));
         userRepository.save(user);
     }
@@ -45,6 +45,17 @@ public class UserService {
     public void saveGuestUser(User user){
         user.setExec(false);
         save(user);
+    }
+
+    public boolean deleteExecUser(User user, String password){
+        if (password.equals(user.getPassword())) {
+            System.out.println("service:" + user.getEmail());
+            System.out.println("service" + bCryptPasswordEncoder.encode(user.getPassword()));
+            user.setExec(false);
+            userRepository.save(user);
+            return true;
+        }
+        return false;
     }
 
     /*

@@ -21,6 +21,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.security.core.context.SecurityContext;
@@ -52,6 +55,8 @@ public class UserController {
     LoginService loginService;
     @Autowired
     SecurityService securityService;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     CreditCardRepository creditCardRepository;
@@ -160,6 +165,7 @@ public class UserController {
         // userCredentials.getPassword());
 
         model.addAttribute("userCredentials", userCredentials);
+        model.addAttribute("msg", "Successfully created user " + userCredentials.getEmail() + ".");
 
         return "success";
 
@@ -175,12 +181,35 @@ public class UserController {
         boolean exists = securityService.login(email, password);
 
         if (exists) {
-
+            model.addAttribute("msg", "Logged in successfully as " + userRepository.findByEmail(email));
             return "success";
         } else {
-            model.addAttribute("msg", "login failed");
+            model.addAttribute("msg", "User " + email + " does not exist");
+            return "fail";
         }
+    }
 
-        return "login";
+    @RequestMapping(value = "/deleteAccount", method = RequestMethod.GET)
+    public String deleteAccount(Model model) {
+        return "deleteAccount";
+    }
+
+
+    @RequestMapping(value = "/deleteAccount", method = RequestMethod.POST)
+    public String deleteAccount(@RequestParam("email") String email, @RequestParam("password") String password, Model model) {
+        User user = userService.findByEmail(email);
+
+        if (user != null){
+            if(userService.deleteExecUser(user, password)) {
+                model.addAttribute("msg", "Successfully removed executive privileges from user " + user.getEmail() + ".");
+                return "success";
+            } else {
+                model.addAttribute("msg", "Could not remove executive privileges for user" + user.getEmail() + ". Password doesn't match");
+                return "fail";
+            }
+        } else {
+            model.addAttribute("msg", "User " + email + " does not exist.");
+            return "fail";
+        }
     }
 }
