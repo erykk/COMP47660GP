@@ -8,10 +8,8 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Delete account</title>
+    <title>Success</title>
 
-    <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
-    <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
 </head>
 
 <body>
