@@ -16,6 +16,7 @@
 
 <body>
 <jsp:include page="nav.jsp"/>
+<br>
 <div class="container" style="text-align: center">
     <form method="POST" action="${contextPath}/deleteAccount" class="form-signin">
         <h2 class="form-heading">Delete Executive Account</h2>
@@ -28,7 +29,7 @@
             <span>${error}</span>
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Delete</button>
+            <button class="btn btn-lg btn-outline-primary btn-block" type="submit">Delete</button>
         </div>
     </form>
 </div>

@@ -10,6 +10,7 @@
 </head>
 <body>
 <jsp:include page="../nav.jsp"/>
+<br>
 <div style="text-align: center;">
 
     <%--@elvariable id="flight" type="ie.ucd.COMP47660GP.entities.Flight"--%>
@@ -18,7 +19,7 @@
             <tr>
                 <td>Origin:</td>
                 <td>
-                    <form:select path="source">
+                    <form:select class="form-control" path="source">
                         <form:option value="Select" label="--Select--" />
                         <form:options items="${origins}" />
                     </form:select>
@@ -28,7 +29,7 @@
             <tr>
                 <td>Destination:</td>
                 <td>
-                    <form:select path="destination">
+                    <form:select class="form-control" path="destination">
                         <form:option value="Select" label="--Select--" />
                         <form:options items="${destinations}" />
                     </form:select>
@@ -36,12 +37,15 @@
             </tr>
             <tr>
                 <td>
-                    <form:input path="dateTime" type="date"/>
+                    Deparature time/date:
+                </td>
+                <td>
+                    <form:input class="form-control" path="dateTime" type="date"/>
                 </td>
             </tr>
             <tr>
-                <td>
-                    <input type="submit" value="Submit"/>
+                <td colspan="2">
+                    <input class="btn btn-lg btn-outline-primary btn-block" type="submit" value="Submit"/>
                 </td>
             </tr>
         </table>
