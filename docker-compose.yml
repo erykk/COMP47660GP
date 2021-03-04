@@ -11,7 +11,7 @@ services:
     ports:
       - 3306:3306
     healthcheck:
-      test: "/usr/bin/mysql --user=root --password=student-door-shore-vertical --execute=\"SHOW DATABASES;\""
+      test: "/usr/bin/mysql --user=root --password= --execute=\"SHOW DATABASES;\""
       timeout: 5s
       retries: 5
 
