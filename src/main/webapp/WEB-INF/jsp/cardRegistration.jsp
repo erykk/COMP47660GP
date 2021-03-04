@@ -28,6 +28,10 @@
     <form:form method="POST" action="${contexPath}/creditCard" modelAttribute="cardCredentials">
         <table>
     <h2>Add Credit Card</h2>
+    <tr>
+        <td>Name on Card:</td>
+        <td><form:input path="name"/></td>
+    </tr>
         <tr>
             <td>Card Number:</td>
             <td> <div class="form-group ${status.error ? 'has-error' : ''}">

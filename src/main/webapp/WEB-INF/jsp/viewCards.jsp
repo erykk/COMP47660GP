@@ -6,7 +6,7 @@
 
 <html>
 <head>
-    <title>Your Account</title>
+    <title>Your Cards</title>
 
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
@@ -26,41 +26,32 @@
         <a href="${pageContext.request.contextPath}/">Home</a>
         &nbsp;&nbsp;&nbsp;
     </h2>
-    <form:form method="GET" modelAttribute="userCredentials" class="form-signin">
-        <h2 class="form-signin-heading">Account Details</h2>
+    <form:form method="GET" modelAttribute="cardCredentials" class="form-signin">
+        <h2 class="form-signin-heading">Card Details</h2>
         <table>
             <tr>
-                <td>Email:</td>
+                <td>Name on Card:</td>
                 <td>
-                        <form:input type="text" path="email" class="form-control" placeholder="${email}"
+                        <form:input type="text" path="name" class="form-control" placeholder="${name}"
                             autofocus="true"></form:input>
                 </td>
             </tr>
             <tr>
-                <td>First Name:</td>
-                <td><form:input type="text" path="firstName" class="form-control" placeholder="${firstName}"
-                    autofocus="true"></form:input></td>
+                <td>Card Number:</td>
+                <td>
+                        <form:input type="text" path="cardNum" class="form-control" placeholder="${cardNum}"
+                            autofocus="true"></form:input>
+                </td>
             </tr>
             <tr>
-                <td>Last Name:</td>
-                <td><form:input type="text" path="lastName" class="form-control" placeholder="${lastName}"
+                <td>Expiry Date:</td>
+                <td><form:input type="text" path="expiryDate" class="form-control" placeholder="${expiryDate}"
                     autofocus="true"></form:input></td>
             </tr>
-            <tr>
-                <td>Address:</td>
-                <td><form:input type="text" path="address" class="form-control" placeholder="${address}"
-                    autofocus="true"></form:input></td>
-            </tr>
-            <tr>
-                <td>Phone Number:</td>
-                <td><form:input type="text" path="phoneNum" class="form-control" placeholder="${phoneNum}"
-                    autofocus="true"></form:input></td>
-            </tr>
-
             <tr>
                 <td>Password:</td>
                 <td>
-                        <form:input type="password" path="password" class="form-control" placeholder="${password}"></form:input>
+                        <form:input type="password" path="securityCode" class="form-control" placeholder="${securityCode}"></form:input>
                 </td>
             </tr>
             <tr>
