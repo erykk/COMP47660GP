@@ -8,6 +8,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.LinkedList;
 
+import ie.ucd.COMP47660GP.entities.CreditCard;
 import ie.ucd.COMP47660GP.entities.Flight;
 import ie.ucd.COMP47660GP.entities.User;
 import org.springframework.http.HttpHeaders;
@@ -37,21 +38,29 @@ public class Client {
         LocalDate localDate = LocalDate.of(2021,05,18);
         LocalTime localTime = LocalTime.of(10,15);
         LocalDateTime ldt = LocalDateTime.of(localDate,localTime);
-        Flight flight = new Flight("Dublin","Paris",ldt,"GE5678");
-        flight.setId(111);
 
-        Flight flight2 = new Flight("Dublin","Eindhoven",ldt,"GE5678");
-        System.out.println(flight2.getDestination() + "  : " + flight2.getId());
+        User user = new User("Barry", "Murphy", "bbe@gmail.com", "46 Hillside", "0845637893");
+        user.setId(38);
+//        String s = restTemplate.getForObject("http://localhost:8080/mem/38",String.class);
+//        System.out.println(s);
 
+//        System.out.println(user.getLastName());
 
-
-
-
+        CreditCard creditCard = new CreditCard(1,user,"TEST","Mr Credit Card",ldt,"TEST");
 //
-//        // POST Register an Executive club member
-//        HttpEntity<String> request4 = new HttpEntity<>("John");
-//        String response4 = restTemplate.postForObject("http://localhost:8080/executive-club-members",request4,String.class);
-//        System.out.println("\n"+response4+"\n");
+//        HttpEntity<CreditCard> request4 = new HttpEntity<>(creditCard);
+//        String s2 = restTemplate.postForObject("http://localhost:8080/creditCard",request4,String.class);
+//        System.out.println("\n"+s2+"\n");
+
+        CreditCard c = restTemplate.getForObject("http://localhost:8080/creditCard/TEST",CreditCard.class);
+        System.out.println(c.getId());
+
+        // PUT
+//        HttpEntity<CreditCard> request7 = new HttpEntity<>(creditCard);
+//        restTemplate.put("http://localhost:8080/editCreditCardDetails",request7);
+
+//        CreditCard c = restTemplate.getForObject("http://localhost:8080/creditCard/TEST",CreditCard.class);
+//        System.out.println("\nGET: "+c.getCardNum()+"\n");
 //
 //
 //
@@ -60,8 +69,7 @@ public class Client {
 //        restTemplate.delete("http://localhost:8080/executive-club-members/767");
 //
 //        // GET email info by getting all members info
-//        String response5 = restTemplate.getForObject("http://localhost:8080/member?id=32&email=bb@gmail.com",String.class);
-//        System.out.println("\nGET: "+response5+"\n");
+//
 
 
 //          User response5 = restTemplate.getForObject("http://localhost:8080/member/85",User.class);
@@ -69,11 +77,11 @@ public class Client {
 //              System.out.println("\nGET: "+response5.getAddress()+"\n");
 //              response5.setAddress("Ivor's gaff");
 //          }
-        User user = new User("Mr test", "test", "test113", "testidge", "test");
-        // POST User
-        HttpEntity<User> requestUser = new HttpEntity<>(user);
-        ResponseEntity responseUser = restTemplate.postForObject("http://localhost:8080/createMember",requestUser,ResponseEntity.class);
-        System.out.println("\nPOST USER: "+responseUser+"\n");
+//        User user = new User("Mr test", "test", "test113", "testidge", "test");
+//        // POST User
+//        HttpEntity<User> requestUser = new HttpEntity<>(user);
+//        ResponseEntity responseUser = restTemplate.postForObject("http://localhost:8080/createMember",requestUser,ResponseEntity.class);
+//        System.out.println("\nPOST USER: "+responseUser+"\n");
 
 
 
@@ -94,9 +102,9 @@ public class Client {
 
 
         // POST Reservation
-        Reservation res = new Reservation(flight2,user);
-        HttpEntity<Reservation> request = new HttpEntity<>(res);
-        ResponseEntity r = restTemplate.postForObject("http://localhost:8080/reservation",request,ResponseEntity.class);
+//        Reservation res = new Reservation(flight2,user);
+//        HttpEntity<Reservation> request = new HttpEntity<>(res);
+//        ResponseEntity r = restTemplate.postForObject("http://localhost:8080/reservation",request,ResponseEntity.class);
 
 
 

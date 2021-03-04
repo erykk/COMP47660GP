@@ -26,8 +26,8 @@ public interface UserRepository extends JpaRepository<User, Integer>{
 
     @Transactional
     @Modifying
-    @Query("update User u set u.id = :updated_id where u.id = :current_id")
-    void updateUserId(int current_id, int updated_id) throws NoSuchUserException;
+    @Query("update User u set u.address = :address, u.firstName = :first_name, u.lastName = :last_name, u.phoneNum = :phone_num where u.email = :email")
+    void updateUserId(String address, String email, String first_name, String last_name, String phone_num) throws NoSuchUserException;
 
     User findByEmail(String email);
 
