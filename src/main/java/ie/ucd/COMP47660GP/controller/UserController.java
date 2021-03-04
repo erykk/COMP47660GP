@@ -104,7 +104,7 @@ public class UserController {
     @GetMapping("/register")
     public String register(Model model) {
         model.addAttribute("userCredentials", new User());
-        return "register";
+        return "user/register";
     }
 
     @RequestMapping(value = "/secureRegister", method = RequestMethod.POST)
@@ -112,7 +112,7 @@ public class UserController {
         loginValidator.validate(userCredentials, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "register";
+            return "user/register";
         }
 
         SecurityContext context = SecurityContextHolder.getContext();
@@ -126,13 +126,13 @@ public class UserController {
         model.addAttribute("userCredentials", userCredentials);
         model.addAttribute("msg", "Successfully created user " + userCredentials.getEmail() + ".");
 
-        return "success";
+        return "user/success";
 
     }
 
     @GetMapping("/login")
     public String login(Model model) {
-        return "login";
+        return "user/login";
     }
 
     @RequestMapping(value = "/secureLogin", method = RequestMethod.POST)
@@ -140,18 +140,18 @@ public class UserController {
         boolean exists = securityService.login(email, password);
 
         if (exists) {
-            model.addAttribute("msg", "Logged in successfully as " + userRepository.findByEmail(email));
-            return "success";
+            model.addAttribute("msg", "Logged in successfully as " + userRepository.findByEmail(email).getEmail());
+            return "user/success";
         } else {
             model.addAttribute("msg", "User " + email + " does not exist");
-            return "fail";
+            return "user/fail";
         }
     }
 
     @PreAuthorize("hasRole('EXEC')")
     @RequestMapping(value = "/deleteAccount", method = RequestMethod.GET)
     public String deleteAccount(Model model) {
-        return "deleteAccount";
+        return "user/deleteAccount";
     }
 
 
@@ -162,14 +162,14 @@ public class UserController {
         if (user != null){
             if(userService.deleteExecUser(user, password)) {
                 model.addAttribute("msg", "Successfully removed executive privileges from user " + user.getEmail() + ".");
-                return "success";
+                return "user/success";
             } else {
                 model.addAttribute("msg", "Could not remove executive privileges for user" + user.getEmail() + ". Password doesn't match");
-                return "fail";
+                return "user/fail";
             }
         } else {
             model.addAttribute("msg", "User " + email + " does not exist.");
-            return "fail";
+            return "user/fail";
         }
     }
 

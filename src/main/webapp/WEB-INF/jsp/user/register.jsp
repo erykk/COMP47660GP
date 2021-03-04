@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <jsp:include page="nav.jsp"/>
+    <jsp:include page="../nav.jsp"/>
     <br>
     <div class="container">
 

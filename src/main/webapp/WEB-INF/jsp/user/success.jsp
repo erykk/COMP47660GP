@@ -15,7 +15,7 @@
 <body>
 <div class="container">
     <h2><c:out value="${msg}"/></h2>
-    <a class="btn btn-lg btn-outline-secondary" href="${pageContext.request.contextPath}/landing">Back to main</a>
+    <a class="btn btn-lg btn-outline-secondary" href="${pageContext.request.contextPath}/">Back to main</a>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
