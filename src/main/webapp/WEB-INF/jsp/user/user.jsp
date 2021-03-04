@@ -15,10 +15,7 @@
 <body>
     <jsp:include page="../nav.jsp"/>
 <div class="container">
-    <h2>
-        <a href="${pageContext.request.contextPath}/">Home</a>
-        &nbsp;&nbsp;&nbsp;
-    </h2>
+
     <form:form method="GET" modelAttribute="userCredentials" class="form-signin">
         <h2 class="form-signin-heading">Account Details</h2>
         <table>

@@ -132,7 +132,7 @@ public class UserController {
     @GetMapping("/registerCard")
     public String registerCard(Model model) {
         model.addAttribute("cardCredentials", new CreditCard());
-        return "cardRegistration";
+        return "user/cardRegistration";
     }
 
     @RequestMapping(value = "/creditCard", method = RequestMethod.POST)
@@ -141,12 +141,12 @@ public class UserController {
         cardValidator.validate(cardCredentials, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "cardRegistration";
+            return "user/viewCards";
         }
         model.addAttribute("cardCredentials", cardCredentials);
         model.addAttribute("msg", "Successfully added card " + cardCredentials.getCardNum() + ".");
 
-        return "user";
+        return "user/viewCards";
 
     }
 
