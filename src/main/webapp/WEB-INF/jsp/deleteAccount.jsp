@@ -16,7 +16,7 @@
 
 <body>
 <jsp:include page="nav.jsp"/>
-<div class="container">
+<div class="container" style="text-align: center">
     <form method="POST" action="${contextPath}/deleteAccount" class="form-signin">
         <h2 class="form-heading">Delete Executive Account</h2>
 

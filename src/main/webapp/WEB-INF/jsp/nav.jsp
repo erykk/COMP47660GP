@@ -7,11 +7,13 @@
             &nbsp;&nbsp;&nbsp;
             <a href="${pageContext.request.contextPath}/login">Login</a>
             &nbsp;&nbsp;&nbsp;
-            <a href="${pageContext.request.contextPath}/register">Register</a>
+            <a href="${pageContext.request.contextPath}/register">Register as Executive</a>
             &nbsp;&nbsp;&nbsp;
             <a href="${pageContext.request.contextPath}/flight">All Flights</a>
             &nbsp;&nbsp;&nbsp;
             <a href="${pageContext.request.contextPath}/reservation">View Reservation</a>
+
+            <a href="${pageContext.request.contextPath}/deleteAccount">Delete Executive Account</a>
         </h2>
     </div>
 </nav>
