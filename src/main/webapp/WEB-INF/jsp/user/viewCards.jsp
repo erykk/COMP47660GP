@@ -46,11 +46,6 @@
             </tr>
             <tr>
                 <td>
-                    <input type="submit" value="Save Changes"/>
-                </td>
-            </tr>
-            <tr>
-                <td>
                     <h4 class="text-center"><a href="${contextPath}/registerCard">Add Card</a></h4>
                 </td>
             </tr>

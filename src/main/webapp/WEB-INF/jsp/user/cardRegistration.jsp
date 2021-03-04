@@ -20,7 +20,7 @@
     <h2>Add Credit Card</h2>
     <tr>
         <td>Name on Card:</td>
-        <td><form:input path="name"/></td>
+        <td><form:input type="text" path="name" class="form-control" placeholder="Name"/></td>
     </tr>
         <tr>
             <td>Card Number:</td>
@@ -31,7 +31,7 @@
         </tr>
         <tr>
             <td>Expiry Date:</td>
-            <td><form:input path="expiryDate"/></td>
+            <td><form:input type="text" path="expiryDate" class="form-control" placeholder="MM/YY"/></td>
         </tr>
         <tr>
             <td>CVV:</td>
