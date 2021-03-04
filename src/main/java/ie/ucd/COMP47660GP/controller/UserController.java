@@ -62,25 +62,48 @@ public class UserController {
     SecurityService securityService;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Autowired
     CreditCardRepository creditCardRepository;
 
-    //int ref; // Testing purposes
 
-    /*
-    @GetMapping("/member/{id}")
-    @ResponseBody
-    public User getMember(@PathVariable int id){
-        User user = userRepository.findUser(id);
-        return user;
-    }
+    int ref; // Testing purposes
 
-    @GetMapping("/member/{id}")
-    @ResponseBody
-    public User getMember(@PathVariable int id){
-        User user = userRepository.findUser(id);
-        return user;
-    }
+
+
+    // POST new executive club member
+//    @PostMapping("/createMember")
+//    public ResponseEntity addMember(@Valid @RequestBody User user) throws URISyntaxException {
+//        userRepository.save(user);
+//        String path = ServletUriComponentsBuilder.fromCurrentContextPath().
+//                build().toUriString() + "/user/" + user.getId();  // Create new URI for new member
+//        ResponseEntity e;
+//        return e;
+//    }
+
+
+//    // POST new executive club member
+//    // TODO: id params when creating URI
+//    @PostMapping(value = "/registerMember", params = { "name", "surname", "address", "phone", "email" })
+//    public ResponseEntity<String> createReservation(@RequestParam(value = "name") String name,
+//            @RequestParam(value = "surname") String surname, @RequestParam(value = "address") String address,
+//            @RequestParam(value = "phone") String phone, @RequestParam(value = "email") String email)
+//            throws URISyntaxException {
+//        // userRepository.createMember(name, surname, address, phone, email);
+//        String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/member/" + ref;
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setLocation(new URI(path));
+//        return new ResponseEntity(HttpStatus.CREATED);
+//    }
+
+
+//
+//    @GetMapping("/member/{id}")
+//    @ResponseBody
+//    public User getMember(@PathVariable int id){
+//        User user = userRepository.findUser(id);
+//        return user;
+//    }
 
     @GetMapping("getEmail/{email}")
     @ResponseBody
@@ -98,8 +121,48 @@ public class UserController {
         userRepository.updateUserId(updatedUser.getAddress(), updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getPhoneNum(), updatedUser.getEmail());
     }
 
+    @PostMapping("/creditCard")
+    @ResponseBody
+    public String addCreditCard(@RequestBody CreditCard creditCard){
+        creditCardRepository.save(creditCard);
+        return "Credit Card Created";
+    }
 
-     */
+    @GetMapping("/creditCard/{cardNum}")
+    @ResponseBody
+    public String getCreditCard(@PathVariable String cardNum) {
+        CreditCard creditCard = creditCardRepository.findByCardNum(cardNum);
+        return "creditCard";
+    }
+
+    @PutMapping("/editCreditCardDetails")
+    @ResponseBody
+    public void updateCreditCard(@RequestBody CreditCard creditCard){
+        creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(), creditCard.getSecurityCode(),
+                creditCard.getExpiryDate());
+    }
+
+
+
+
+//    @DeleteMapping("/deleteMember/{id}")
+//    @ResponseBody
+//    public void deleteMember(@PathVariable int id){
+////        User user = userRepository.findUser(id).orElseThrow(() -> new UserNotFoundException(id));
+//        User user = userRepository.findUser(id);
+//        userRepository.delete(user);
+//    }
+
+//    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
+//    @ResponseStatus(value = HttpStatus.OK)
+//    public User getUser(@PathVariable String id) {
+//        //
+//        // return userRepository.findUser(id);
+//        return null;
+//    }
+
+
+
 
     @GetMapping("/register")
     public String register(Model model) {
@@ -108,7 +171,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/secureRegister", method = RequestMethod.POST)
-    public String register(@ModelAttribute("userCredentials") User userCredentials, BindingResult bindingResult, Model model) {
+    public String register(@ModelAttribute("userCredentials") User userCredentials, BindingResult bindingResult,
+            Model model) {
         loginValidator.validate(userCredentials, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -171,26 +235,5 @@ public class UserController {
             model.addAttribute("msg", "User " + email + " does not exist.");
             return "user/fail";
         }
-    }
-
-    @GetMapping("/creditCard/{cardNum}")
-    @ResponseBody
-    public String getCreditCard(@PathVariable String cardNum) {
-        CreditCard creditCard = creditCardRepository.findByCardNum(cardNum);
-        return "creditCard";
-    }
-
-    @PutMapping("/editCreditCardDetails")
-    @ResponseBody
-    public void updateCreditCard(@RequestBody CreditCard creditCard){
-        creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(), creditCard.getSecurityCode(),
-                creditCard.getExpiryDate());
-    }
-
-    @PostMapping("/creditCard")
-    @ResponseBody
-    public String addCreditCard(@RequestBody CreditCard creditCard){
-        creditCardRepository.save(creditCard);
-        return "Credit Card Created";
     }
 }
