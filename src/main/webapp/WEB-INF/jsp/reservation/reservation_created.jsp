@@ -9,7 +9,7 @@
           rel="stylesheet">
 </head>
 <body>
-<jsp:include page="nav.jsp"/>
+<jsp:include page="../nav.jsp"/>
 <div style="text-align: center;">
     <h2>Reservation Successful!</h2>
     <h2>Save your reservation reference number for looking up your reservation at a later time: <jsp:useBean id="reservation" scope="request" type="ie.ucd.COMP47660GP.entities.Reservation"/>

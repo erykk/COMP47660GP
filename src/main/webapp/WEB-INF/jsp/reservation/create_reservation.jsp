@@ -9,7 +9,7 @@
           rel="stylesheet">
 </head>
 <body>
-<jsp:include page="nav.jsp"/>
+<jsp:include page="../nav.jsp"/>
 <div style="text-align: center;">
 
     <table>

@@ -9,7 +9,7 @@
           rel="stylesheet">
 </head>
 <body>
-<jsp:include page="nav.jsp"/>
+<jsp:include page="../nav.jsp"/>
 <div style="text-align: center;">
     <%--@elvariable id="reservation" type="ie.ucd.COMP47660GP.entities.Reservation"--%>
     <%--@elvariable id="user" type="ie.ucd.COMP47660GP.entities.User"--%>

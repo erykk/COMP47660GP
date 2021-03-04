@@ -10,14 +10,6 @@
           rel="stylesheet">
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg header">
-        <a class="navbar-brand" href="#"><img id="logo" src="images/airplane.png" alt="Image"></a>
-            <div>
-                <h1>British Airways</h1>
-            </div>
-        </nav>
-    </header>
 <jsp:include page="nav.jsp"/>
 <div style="text-align: center;">
     <%--@elvariable id="flight" type="ie.ucd.COMP47660GP.entities.Flight"--%>

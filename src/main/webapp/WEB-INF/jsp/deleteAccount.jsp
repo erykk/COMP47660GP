@@ -15,14 +15,7 @@
 </head>
 
 <body>
-<header>
-    <nav class="navbar navbar-expand-lg header">
-        <a class="navbar-brand" href="#"><img id="logo" src="images/airplane.png" alt="Image"></a>
-        <div>
-            <h1>British Airways</h1>
-        </div>
-    </nav>
-</header>
+<jsp:include page="nav.jsp"/>
 <div class="container">
     <form method="POST" action="${contextPath}/deleteAccount" class="form-signin">
         <h2 class="form-heading">Delete Executive Account</h2>
