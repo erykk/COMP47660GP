@@ -6,12 +6,10 @@
 <head>
     <title>Home - An Airline</title>
     <title>An Airline</title>
-    <link href="${pageContext.request.contextPath}/resources/css/main.css"
-          rel="stylesheet">
 </head>
 <body>
 <jsp:include page="nav.jsp"/>
-<div style="text-align: center;">
+<div class="container">
     <%--@elvariable id="flight" type="ie.ucd.COMP47660GP.entities.Flight"--%>
     <form:form method="get" modelAttribute="flight" action="/flight">
         <table>
