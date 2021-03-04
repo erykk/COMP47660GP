@@ -2,7 +2,6 @@ package ie.ucd.COMP47660GP.entities;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Collection;
 
 @Entity
 @Table(name = "flights")
@@ -16,10 +15,6 @@ public class Flight {
     private LocalDateTime dateTime;
     private String flightNum;
 
-    //@OneToMany
-    //private Collection<Reservation> reservations;
-    //private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yyyy h:mma");
-
     public Flight(String source, String destination, LocalDateTime dateTime, String flightNum) {
         // ID auto gen
         this.source = source;
@@ -29,10 +24,6 @@ public class Flight {
     }
 
     public Flight(){
-        this.source = "test";
-        this.destination = "test";
-        this.dateTime = LocalDateTime.now();
-        this.flightNum = "test";
     }
 
 

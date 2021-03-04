@@ -28,6 +28,8 @@
         &nbsp;&nbsp;&nbsp;
         <a href="${pageContext.request.contextPath}/register">Register</a>
         &nbsp;&nbsp;&nbsp;
+        <a href="${pageContext.request.contextPath}/flight">All Flights</a>
+        &nbsp;&nbsp;&nbsp;
         <a href="${pageContext.request.contextPath}/reservation">View Reservation</a>
     </h2>
     <h3>Welcome to our landing page, you'll be landing at your destination of choice in no time..... 🤦</h3>

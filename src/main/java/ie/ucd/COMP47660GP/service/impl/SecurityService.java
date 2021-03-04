@@ -17,7 +17,7 @@ public class SecurityService {
     private AuthenticationManager authenticationManager;
 
     public boolean login(String email, String password){
-        boolean state= false;
+        boolean state = false;
         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails,password,userDetails.getAuthorities());
 

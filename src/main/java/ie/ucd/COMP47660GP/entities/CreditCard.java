@@ -43,11 +43,6 @@ public class CreditCard {
     }
 
     public CreditCard() {
-        this.user = new User("Mr test", "test", "test113", "testidge", "test");
-        this.cardNum = "test";
-        this.name = "test";
-        this.expiryDate = LocalDateTime.now();
-        this.securityCode = "test";
     }
 
     public int getId() {
@@ -62,7 +57,15 @@ public class CreditCard {
 		return cardNum;
 	}
 
-	public void setCardNum(String cardNum) {
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setCardNum(String cardNum) {
         this.cardNum = cardNum;
     }
 

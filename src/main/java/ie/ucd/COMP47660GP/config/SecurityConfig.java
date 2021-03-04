@@ -10,6 +10,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -53,8 +55,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //web.ignoring().antMatchers("/**");
 
 
-        http.authorizeRequests().antMatchers("/register","/","/login", "/secureRegister", "/secureLogin").permitAll()
-                .anyRequest().authenticated()
+
+        http.authorizeRequests().antMatchers("/register","/","/login", "/secureRegister", "/secureLogin",
+                "/resources/**", "/images/**", "/reservation", "/flight", "/create-reservation", "/create-reservation/*", "/deleteAccount", "/success", "/fail").permitAll()
+                //.anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
@@ -64,6 +68,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout().logoutSuccessUrl("/success").permitAll()
                 .and().csrf().disable();
+
+
 
 
     }
