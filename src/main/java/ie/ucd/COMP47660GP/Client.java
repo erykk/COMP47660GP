@@ -40,24 +40,27 @@ public class Client {
         LocalDateTime ldt = LocalDateTime.of(localDate,localTime);
 
         User user = new User("Barry", "Murphy", "bbe@gmail.com", "46 Hillside", "0845637893");
-        user.setId(38);
+        user.setId(6);
 //        String s = restTemplate.getForObject("http://localhost:8080/mem/38",String.class);
 //        System.out.println(s);
 
-//        System.out.println(user.getLastName());
+//       // POST User
+//        HttpEntity<User> requestUser = new HttpEntity<>(user);
+//        ResponseEntity responseUser = restTemplate.postForObject("http://localhost:8080/createMember",requestUser,ResponseEntity.class);
+//        System.out.println("\nPOST USER: "+responseUser+"\n");
 
-        CreditCard creditCard = new CreditCard(1,user,"TEST","Mr Credit Card",ldt,"TEST");
+        CreditCard creditCard = new CreditCard(1,user,"TEST","Mr Debit",ldt,"TEST");
 //
 //        HttpEntity<CreditCard> request4 = new HttpEntity<>(creditCard);
 //        String s2 = restTemplate.postForObject("http://localhost:8080/creditCard",request4,String.class);
 //        System.out.println("\n"+s2+"\n");
 
-        CreditCard c = restTemplate.getForObject("http://localhost:8080/creditCard/TEST",CreditCard.class);
-        System.out.println(c.getId());
+//        CreditCard c = restTemplate.getForObject("http://localhost:8080/creditCard/TEST",CreditCard.class);
+//        System.out.println(c.getName());
 
         // PUT
-//        HttpEntity<CreditCard> request7 = new HttpEntity<>(creditCard);
-//        restTemplate.put("http://localhost:8080/editCreditCardDetails",request7);
+        HttpEntity<CreditCard> request7 = new HttpEntity<>(creditCard);
+        restTemplate.put("http://localhost:8080/editCreditCardDetails",request7);
 
 //        CreditCard c = restTemplate.getForObject("http://localhost:8080/creditCard/TEST",CreditCard.class);
 //        System.out.println("\nGET: "+c.getCardNum()+"\n");
@@ -78,10 +81,7 @@ public class Client {
 //              response5.setAddress("Ivor's gaff");
 //          }
 //        User user = new User("Mr test", "test", "test113", "testidge", "test");
-//        // POST User
-//        HttpEntity<User> requestUser = new HttpEntity<>(user);
-//        ResponseEntity responseUser = restTemplate.postForObject("http://localhost:8080/createMember",requestUser,ResponseEntity.class);
-//        System.out.println("\nPOST USER: "+responseUser+"\n");
+//
 
 
 

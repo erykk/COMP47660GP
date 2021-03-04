@@ -179,4 +179,11 @@ public class ReservationController {
         reservation.setCancelled(true);
         reservationRepository.save(reservation);
     }
+
+    @GetMapping("/reservation-history")
+    public String getReservationHistory(User user, Model model) {
+        List<Reservation> reservations = reservationRepository.findUsersReservations(user.getId());
+        model.addAttribute("reservations", reservations);
+        return "reservation_history";
+    }
 }

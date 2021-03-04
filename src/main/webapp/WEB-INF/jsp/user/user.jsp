@@ -13,14 +13,7 @@
 </head>
 
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg header">
-        <a class="navbar-brand" href="#"><img id="logo" src="images/airplane.png" alt="Image"></a>
-            <div>
-                <h1>British Airways</h1>
-            </div>
-        </nav>
-    </header>
+    <jsp:include page="../nav.jsp"/>
 <div class="container">
     <h2>
         <a href="${pageContext.request.contextPath}/">Home</a>
