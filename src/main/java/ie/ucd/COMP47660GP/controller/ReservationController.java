@@ -159,6 +159,13 @@ public class ReservationController {
         return "reservation/user_reservation";
     }
 
+    @GetMapping("/reservation-history")
+    public String getReservationHistory(User user, Model model) {
+        List<Reservation> reservations = reservationRepository.findUsersReservations(user.getId());
+        model.addAttribute("reservations", reservations);
+        return "reservation_history";
+    }
+
 
     // GET all reservations associated with given user id
     @GetMapping(value = "/reservation/{id}")
