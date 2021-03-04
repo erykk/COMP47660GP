@@ -34,3 +34,8 @@ build/
 .vscode/
 
 application.properties
+
+### Docker files
+
+Dockerfile
+docker-compose.yml

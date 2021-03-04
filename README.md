@@ -1,26 +1,18 @@
 COMP47660 Group Project
 
 Instructions:
-To run the service run the following commands:
 
-Package the application:
-```
-mvn package
-```
-Run docker-compose.yml which starts the mysql server. Wait until "ready for 
-connections" is logged before starting the application, which should take about
-a minute. To shutdown the mysql server, press CTRL + C.
-```
-docker-compose up
-```
-Run the application:
-```
-mvn spring-boot:run
-```
-On the first run of the application, it will throw exceptions on startup as 
-its tables do not exist and will subsequently create them.
+The service requires for a MySQL server to be running prior to start up. One way to do this is to start a MySQL instance on port 3306 using XAMPP: https://www.apachefriends.org/index.html
 
+The application can be run by navigating to the application folder and running
 
-Notes:
-Database data is stored in the ./data directory and persists between DB 
-shutdowns.
+```
+    mvn spring-boot:run
+```
+
+Following initialization, navigate to 
+
+```
+    localhost:8080
+```
+
