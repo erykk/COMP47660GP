@@ -20,6 +20,10 @@
         </nav>
     </header>
 <div class="container">
+    <h2>
+        <a href="${pageContext.request.contextPath}/">Home</a>
+        &nbsp;&nbsp;&nbsp;
+    </h2>
 
     <form:form method="post" modelAttribute="userCredentials" action="${contextPath}/secureRegister">
         <table>

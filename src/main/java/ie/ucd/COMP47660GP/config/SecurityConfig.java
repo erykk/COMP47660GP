@@ -29,64 +29,50 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         /*
-        http.authorizeRequests()
-                .antMatchers("/", "/login", "/register", "/flight").permitAll()
-                .anyRequest().authenticated()
-                .and().csrf().disable();
-
+         * http.authorizeRequests() .antMatchers("/", "/login", "/register",
+         * "/flight").permitAll() .anyRequest().authenticated() .and().csrf().disable();
+         * 
          */
 
         /*
-        http
-            .authorizeRequests()
-            .antMatchers("/", "/register", "/flight").permitAll()
-            .anyRequest().authenticated()
-            .and()
-            .formLogin()
-            .loginPage("/login")
-            .permitAll()
-            .and()
-            .logout()
-            .permitAll();
-        */
+         * http .authorizeRequests() .antMatchers("/", "/register",
+         * "/flight").permitAll() .anyRequest().authenticated() .and() .formLogin()
+         * .loginPage("/login") .permitAll() .and() .logout() .permitAll();
+         */
 
-        //web.ignoring().antMatchers("/**");
+        // web.ignoring().antMatchers("/**");
 
-
-        http.authorizeRequests().antMatchers("/register","/","/login", "/secureRegister", "/secureLogin",
-                "/resources/**", "/images/**", "/reservation", "/mem/{id}", "/creditCard", "/creditCard/{cardNum}", "/editCreditCardDetails",
-                "/flight", "/create-reservation", "/create-reservation/*", "/deleteAccount" , "/success", "/fail").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login")
-                .loginProcessingUrl("/loginSecure")
-                .usernameParameter("email")
-                .passwordParameter("password")
-                .and()
-                .logout().logoutSuccessUrl("/success").permitAll()
-                .and().csrf().disable();
-
+        http.authorizeRequests()
+                .antMatchers("/register", "/", "/login", "/secureRegister", "/secureLogin", "/resources/**",
+                        "/images/**", "/reservation", "/mem/{id}", "/creditCard", "/creditCard/{cardNum}",
+                        "/registerCard", "/editCreditCardDetails", "/flight", "/create-reservation",
+                        "/create-reservation/*", "/deleteAccount", "/success", "/fail")
+                .permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login")
+                .loginProcessingUrl("/loginSecure").usernameParameter("email").passwordParameter("password").and()
+                .logout().logoutSuccessUrl("/success").permitAll().and().csrf().disable();
 
     }
 
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder(){ return new BCryptPasswordEncoder(); }
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
-    AuthenticationManager customAuthenticationManager () throws Exception { return authenticationManager(); }
+    AuthenticationManager customAuthenticationManager() throws Exception {
+        return authenticationManager();
+    }
 
     @Bean
-    public UserDetailsService userDetailsService() { return super.userDetailsService(); }
+    public UserDetailsService userDetailsService() {
+        return super.userDetailsService();
+    }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
-        auth.inMemoryAuthentication()
-                .withUser("user").password("pass").roles("USER")
-                .and()
-                .withUser("admin").password("pass").roles("ADMIN");
+        auth.inMemoryAuthentication().withUser("user").password("pass").roles("USER").and().withUser("admin")
+                .password("pass").roles("ADMIN");
     }
-
 
 }

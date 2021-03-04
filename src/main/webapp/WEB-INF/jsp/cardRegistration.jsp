@@ -8,9 +8,6 @@
 <head>
     <meta charset="utf-8">
     <title>Add Credit Card</title>
-
-    <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
-    <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
 </head>
 
 <body>
@@ -23,33 +20,38 @@
         </nav>
     </header>
 <div class="container">
+    <h2>
+        <a href="${pageContext.request.contextPath}/">Home</a>
+        &nbsp;&nbsp;&nbsp;
+    </h2>
 
-    <form:form method="POST" action="${contexPath}/creditCard" modelAttribute="cardCredentials" class="form-signin">
-        <h2 class="form-signin-heading">Add Credit Card</h2>
-        <spring:bind path="cardNum">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="text" path="cardNum" class="form-control" placeholder="Card Number"
-                            autofocus="true"></form:input>
+    <form:form method="POST" action="${contexPath}/creditCard" modelAttribute="cardCredentials">
+        <table>
+    <h2>Add Credit Card</h2>
+        <tr>
+            <td>Card Number:</td>
+            <td> <div class="form-group ${status.error ? 'has-error' : ''}">
+                <form:input type="text" path="cardNum" class="form-control" placeholder="Card Number"></form:input>
                 <form:errors path="cardNum"></form:errors>
-            </div>
-        </spring:bind>
+            </div></td>
+        </tr>
+        <tr>
+            <td>Expiry Date:</td>
+            <td><form:input path="expiryDate"/></td>
+        </tr>
+        <tr>
+            <td>CVV:</td>
+            <td> <div class="form-group ${status.error ? 'has-error' : ''}">
+                <form:input type="password" path="securityCode" class="form-control" placeholder="CVV"></form:input>
+                <form:errors path="securityCode"></form:errors>
+            </div></td>
+        </tr>
 
-        <spring:bind path="expiryDate">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="expiryDate" path="expiryDate" class="form-control" placeholder="Expiry Date"></form:input>
-                <form:errors path="expiryDate"></form:errors>
-            </div>
-        </spring:bind>
-
-        <spring:bind path="cvv">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="password" path="cvv" class="form-control"
-                            placeholder="CVV</form:input>
-                <form:errors path="cvv"></form:errors>
-            </div>
-        </spring:bind>
-
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Add card</button>
+        <tr>
+            <td></td>
+            <td><form:button type="submit">Add Card</form:button></td>
+        </tr>
+    </table>
     </form:form>
 
 </div>

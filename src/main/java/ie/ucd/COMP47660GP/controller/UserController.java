@@ -16,6 +16,7 @@ import ie.ucd.COMP47660GP.service.LoginService;
 import ie.ucd.COMP47660GP.service.impl.LoginServiceImpl;
 import ie.ucd.COMP47660GP.service.impl.SecurityService;
 import ie.ucd.COMP47660GP.service.impl.UserService;
+import ie.ucd.COMP47660GP.validator.CreditCardValidator;
 import ie.ucd.COMP47660GP.validator.LoginValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -52,6 +53,8 @@ public class UserController {
 
     @Autowired
     LoginValidator loginValidator;
+    @Autowired
+    CreditCardValidator cardValidator;
     @Autowired
     UserService userService;
     @Autowired
@@ -190,10 +193,25 @@ public class UserController {
                 creditCard.getSecurityCode(), creditCard.getExpiryDate());
     }
 
-    @PostMapping("/creditCard")
-    @ResponseBody
-    public String addCreditCard(@RequestBody CreditCard creditCard) {
-        creditCardRepository.save(creditCard);
-        return "Credit Card Created";
+    // @PostMapping("/creditCard")
+    // @ResponseBody
+    // public String addCreditCard(@RequestBody CreditCard creditCard) {
+    // creditCardRepository.save(creditCard);
+    // return "user";
+    // }
+
+    @RequestMapping(value = "/creditCard", method = RequestMethod.POST)
+    public String addCreditCard(@ModelAttribute("cardCredentials") CreditCard cardCredentials,
+            BindingResult bindingResult, Model model) {
+        cardValidator.validate(cardCredentials, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            return "cardRegistration";
+        }
+        model.addAttribute("cardCredentials", cardCredentials);
+        model.addAttribute("msg", "Successfully added card " + cardCredentials.getCardNum() + ".");
+
+        return "user";
+
     }
 }

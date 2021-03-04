@@ -51,30 +51,36 @@ public class ReservationController {
     @Autowired
     CreditCardRepository creditCardRepository;
 
-    int ref;   // Testing purposes
+    int ref; // Testing purposes
 
     // POST a reservation for the given flight and user id
-//    // TODO: id params when creating URI
-//    @PostMapping(value="/bookFlight", params = {"name", "surname", "address", "phone", "email"})
-//    public ResponseEntity<String> createReservation(@RequestParam(value = "name") String name, @RequestParam(value = "surname") String surname,
-//                                                    @RequestParam(value = "address") String address, @RequestParam(value = "phone") String phone,
-//                                                    @RequestParam(value = "email") String email, @RequestBody String flight) throws URISyntaxException {
-//
-//        return reservationRepository.save();
-//
-//        //reservationRepository.createReservation(name, surname, address, phone, email);
-//        String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-//                build().toUriString()+ "/reservations/"+ref++;  // Create new URI for reservation
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setLocation(new URI(path));
-//
-//        return new ResponseEntity<>("Reservation Booked Successfully", headers, HttpStatus.CREATED);  // return info back to client class
-//    }
+    // // TODO: id params when creating URI
+    // @PostMapping(value="/bookFlight", params = {"name", "surname", "address",
+    // "phone", "email"})
+    // public ResponseEntity<String> createReservation(@RequestParam(value = "name")
+    // String name, @RequestParam(value = "surname") String surname,
+    // @RequestParam(value = "address") String address, @RequestParam(value =
+    // "phone") String phone,
+    // @RequestParam(value = "email") String email, @RequestBody String flight)
+    // throws URISyntaxException {
+    //
+    // return reservationRepository.save();
+    //
+    // //reservationRepository.createReservation(name, surname, address, phone,
+    // email);
+    // String path = ServletUriComponentsBuilder.fromCurrentContextPath().
+    // build().toUriString()+ "/reservations/"+ref++; // Create new URI for
+    // reservation
+    // HttpHeaders headers = new HttpHeaders();
+    // headers.setLocation(new URI(path));
+    //
+    // return new ResponseEntity<>("Reservation Booked Successfully", headers,
+    // HttpStatus.CREATED); // return info back to client class
+    // }
 
     @GetMapping("/create-reservation/{id}")
     public String addReservation(@PathVariable("id") int id, Model model) {
-        Flight flight = flightRepository.findById(id).
-                orElseThrow(() -> new NoSuchFlightException(id));
+        Flight flight = flightRepository.findById(id).orElseThrow(() -> new NoSuchFlightException(id));
 
         model.addAttribute("booking", new Booking());
         model.addAttribute("flight", flight);
@@ -99,8 +105,8 @@ public class ReservationController {
 
         user = userRepository.save(user);
 
-        DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").
-                parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM")
+                .parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
 
         LocalDate expiry = LocalDate.parse(booking.getDateStr(), formatter);
 
@@ -118,8 +124,8 @@ public class ReservationController {
         creditCard.setExpiryDate(expiry.atStartOfDay());
         creditCardRepository.save(creditCard);
 
-        Flight flight = flightRepository.findById(booking.getFlightID()).
-                orElseThrow(() -> new NoSuchFlightException(booking.getFlightID()));
+        Flight flight = flightRepository.findById(booking.getFlightID())
+                .orElseThrow(() -> new NoSuchFlightException(booking.getFlightID()));
 
         Reservation reservation = new Reservation();
         reservation.setUser(user);
@@ -135,12 +141,12 @@ public class ReservationController {
 
     @GetMapping("/reservation")
     public String displayReservation(@RequestParam(value = "reservation_id", required = false) Integer reservation_id,
-                                     Model model) {
+            Model model) {
         Reservation reservation;
         if (reservation_id != null) {
             try {
-                reservation = reservationRepository.findById(reservation_id).
-                        orElseThrow(() -> new NoSuchBookingException(reservation_id));
+                reservation = reservationRepository.findById(reservation_id)
+                        .orElseThrow(() -> new NoSuchBookingException(reservation_id));
                 User user = reservation.getUser();
                 Flight flight = reservation.getFlight();
 
@@ -158,7 +164,6 @@ public class ReservationController {
 
         return "reservation/user_reservation";
     }
-
 
     // GET all reservations associated with given user id
     @GetMapping(value = "/reservation/{id}")
