@@ -1,10 +1,14 @@
 package ie.ucd.COMP47660GP.controller;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.util.JsonParserSequence;
+import ie.ucd.COMP47660GP.entities.CreditCard;
 import ie.ucd.COMP47660GP.entities.Flight;
 import ie.ucd.COMP47660GP.entities.Reservation;
 import ie.ucd.COMP47660GP.entities.User;
 
+import ie.ucd.COMP47660GP.repositories.CreditCardRepository;
 import ie.ucd.COMP47660GP.repositories.FlightRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
@@ -39,7 +43,9 @@ import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
-
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+//@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
 @Controller
 public class UserController {
 
@@ -56,10 +62,19 @@ public class UserController {
     SecurityService securityService;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    CreditCardRepository creditCardRepository;
 
     //int ref; // Testing purposes
 
     /*
+    @GetMapping("/member/{id}")
+    @ResponseBody
+    public User getMember(@PathVariable int id){
+        User user = userRepository.findUser(id);
+        return user;
+    }
+
     @GetMapping("/member/{id}")
     @ResponseBody
     public User getMember(@PathVariable int id){
@@ -77,17 +92,13 @@ public class UserController {
         return "Valid: email does not exist";
     }
 
-    @PutMapping("/editMemberPersonalInfo")
+    @PutMapping("/editPersonalDetails")
     @ResponseBody
-    public void updatePersonalInfo(@RequestBody User updatedUser) {
-        User user = userRepository.findUser(updatedUser.getId());
-        int updated_id = user.getId();
-        int current_id = updatedUser.getId();
-        userRepository.delete(user);
-        userRepository.save(updatedUser);
-        userRepository.updateUserId(current_id,updated_id);  // does not work!!!
-
+    public void updatePersonaDetails(@RequestBody User updatedUser) {
+        userRepository.updateUserId(updatedUser.getAddress(), updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getPhoneNum(), updatedUser.getEmail());
     }
+
+
      */
 
     @GetMapping("/register")
@@ -160,5 +171,26 @@ public class UserController {
             model.addAttribute("msg", "User " + email + " does not exist.");
             return "fail";
         }
+    }
+
+    @GetMapping("/creditCard/{cardNum}")
+    @ResponseBody
+    public String getCreditCard(@PathVariable String cardNum) {
+        CreditCard creditCard = creditCardRepository.findByCardNum(cardNum);
+        return "creditCard";
+    }
+
+    @PutMapping("/editCreditCardDetails")
+    @ResponseBody
+    public void updateCreditCard(@RequestBody CreditCard creditCard){
+        creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(), creditCard.getSecurityCode(),
+                creditCard.getExpiryDate());
+    }
+
+    @PostMapping("/creditCard")
+    @ResponseBody
+    public String addCreditCard(@RequestBody CreditCard creditCard){
+        creditCardRepository.save(creditCard);
+        return "Credit Card Created";
     }
 }
