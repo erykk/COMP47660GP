@@ -1,6 +1,8 @@
 package ie.ucd.COMP47660GP.controller;
 
 import ie.ucd.COMP47660GP.entities.Flight;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +29,16 @@ public class GeneralController {
 
         Flight flight = new Flight();
         model.addAttribute("flight", flight);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String currUser;
+        if(authentication != null){
+            currUser = authentication.getName();
+        } else {
+            currUser = "Guest";
+        }
+        model.addAttribute("currentUser", currUser);
 
         return "landing";
     }

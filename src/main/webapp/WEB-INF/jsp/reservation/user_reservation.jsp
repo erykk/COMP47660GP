@@ -9,20 +9,8 @@
           rel="stylesheet">
 </head>
 <body>
-<div style="text-align: center;">
-    <h1>An Airline - Cheap Flights</h1>
-    <h2>
-        <a href="${pageContext.request.contextPath}/">Home</a>
-        &nbsp;&nbsp;&nbsp;
-        <a href="${pageContext.request.contextPath}/login">Login</a>
-        &nbsp;&nbsp;&nbsp;
-        <a href="${pageContext.request.contextPath}/register">Register</a>
-        &nbsp;&nbsp;&nbsp;
-        <a href="${pageContext.request.contextPath}/flight">All Flights</a>
-        &nbsp;&nbsp;&nbsp;
-        <a href="${pageContext.request.contextPath}/reservation">View Reservation</a>
-    </h2>
-</div>
+<jsp:include page="../nav.jsp"/>
+<br>
 <div style="text-align: center;">
     <%--@elvariable id="reservation" type="ie.ucd.COMP47660GP.entities.Reservation"--%>
     <%--@elvariable id="user" type="ie.ucd.COMP47660GP.entities.User"--%>
@@ -33,17 +21,17 @@
                 <td>Enter reservation ID:</td>
                 <td>
                     <c:if test="${reservation.reservation_id == 0}">
-                        <input type="number" id="reservation_id" name="reservation_id">
+                        <input class="form-control" type="number" id="reservation_id" name="reservation_id">
                     </c:if>
 
                     <c:if test="${reservation.reservation_id != 0}">
-                        <form:input type="number" path="reservation_id"/>
+                        <form:input class="form-control" type="number" path="reservation_id"/>
                     </c:if>
                 </td>
             </tr>
             <tr>
-                <td>
-                    <input type="submit" value="Submit"/>
+                <td colspan="2">
+                    <input class="btn btn-lg btn-outline-primary btn-block" type="submit" value="Submit"/>
                 </td>
             </tr>
         </table>

@@ -67,14 +67,18 @@ public class UserController {
     CreditCardRepository creditCardRepository;
 
 
+    int ref; // Testing purposes
+
+
+
     // POST new executive club member
 //    @PostMapping("/createMember")
 //    public ResponseEntity addMember(@Valid @RequestBody User user) throws URISyntaxException {
 //        userRepository.save(user);
 //        String path = ServletUriComponentsBuilder.fromCurrentContextPath().
 //                build().toUriString() + "/user/" + user.getId();  // Create new URI for new member
-//        ResponseEntity re = new ResponseEntity(HttpStatus.OK);
-//        return re;
+//        ResponseEntity e;
+//        return e;
 //    }
 
 
@@ -126,19 +130,16 @@ public class UserController {
 
     @GetMapping("/creditCard/{cardNum}")
     @ResponseBody
-    public CreditCard getCreditCard(@PathVariable String cardNum) {
+    public String getCreditCard(@PathVariable String cardNum) {
         CreditCard creditCard = creditCardRepository.findByCardNum(cardNum);
-        return creditCard;
+        return "creditCard";
     }
 
     @PutMapping("/editCreditCardDetails")
     @ResponseBody
     public void updateCreditCard(@RequestBody CreditCard creditCard){
-        CreditCard creditCard2 = creditCardRepository.findByCardNum((creditCard.getCardNum()));
-        if(creditCard2 != null){
-            creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(), creditCard.getSecurityCode(),
-                    creditCard.getExpiryDate());
-        }
+        creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(), creditCard.getSecurityCode(),
+                creditCard.getExpiryDate());
     }
 
 
