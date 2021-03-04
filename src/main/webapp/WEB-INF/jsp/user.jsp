@@ -50,7 +50,7 @@
             </tr>
             <tr>
                 <td>
-                    <input type="submit" value="Become Executive"/>
+                    <h4 class="text-center"><a href="${contextPath}/creditCard">Add Card</a></h4>
                 </td>
             </tr>
         </table>
