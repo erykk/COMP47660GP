@@ -18,22 +18,7 @@
             </div>
         </nav>
     </header>
-<div style="text-align: center;">
-    <p>Current User: <c:out value="${currentUser}"/></p>
-    <h1>An Airline - Cheap Flights</h1>
-    <h2>
-        <a href="${pageContext.request.contextPath}/">Home</a>
-        &nbsp;&nbsp;&nbsp;
-        <a href="${pageContext.request.contextPath}/login">Login</a>
-        &nbsp;&nbsp;&nbsp;
-        <a href="${pageContext.request.contextPath}/register">Register</a>
-        &nbsp;&nbsp;&nbsp;
-        <a href="${pageContext.request.contextPath}/flight">All Flights</a>
-        &nbsp;&nbsp;&nbsp;
-        <a href="${pageContext.request.contextPath}/reservation">View Reservation</a>
-    </h2>
-    <h3>Welcome to our landing page, you'll be landing at your destination of choice in no time..... 🤦</h3>
-</div>
+<jsp:include page="nav.jsp"/>
 <div style="text-align: center;">
     <%--@elvariable id="flight" type="ie.ucd.COMP47660GP.entities.Flight"--%>
     <form:form method="get" modelAttribute="flight" action="/flight">
