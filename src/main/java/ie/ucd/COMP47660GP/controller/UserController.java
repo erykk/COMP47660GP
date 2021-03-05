@@ -116,9 +116,10 @@ public class UserController {
     }
 
     @GetMapping("/creditCard/{cardNum}")
-    @ResponseBody
-    public String getCreditCard(@PathVariable String cardNum) {
+    public String getCreditCard(@PathVariable String cardNum, Model model) {
         CreditCard creditCard = creditCardRepository.findByCardNum(cardNum);
+
+        model.addAttribute("creditcard", new CreditCard());
         return "user/viewCard";
     }
 

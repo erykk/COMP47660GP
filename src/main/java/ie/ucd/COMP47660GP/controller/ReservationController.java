@@ -107,7 +107,7 @@ public class ReservationController {
         }
 
         creditCard.setUser(user);
-        creditCard.setExpiryDate(expiry.atStartOfDay());
+        creditCard.setExpiryDate(expiry.atStartOfDay().toString());
         creditCardRepository.save(creditCard);
 
         Flight flight = flightRepository.findById(booking.getFlightID()).

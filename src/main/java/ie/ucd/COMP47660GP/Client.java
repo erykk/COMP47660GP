@@ -25,7 +25,7 @@ public class Client {
         User user = new User("Barry", "Murphy", "bbe@gmail.com", "46 Hillside", "0845637893");
         user.setId(6);
 
-        CreditCard creditCard = new CreditCard(1,user,"TEST","Mr Debit",ldt,"TEST");
+        CreditCard creditCard = new CreditCard(1,user,"TEST","Mr Debit",ldt.toString(),"TEST");
 
         // PUT
         HttpEntity<CreditCard> request7 = new HttpEntity<>(creditCard);

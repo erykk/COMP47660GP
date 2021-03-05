@@ -16,32 +16,32 @@
     <jsp:include page="../nav.jsp"/>
 <div class="container">
 
-    <form:form method="GET" modelAttribute="cardCredentials" class="form-signin">
+    <%--@elvariable id="creditcard" type="ie.ucd.COMP47660GP.entities.CreditCard"--%>
+    <form:form method="post" modelAttribute="creditcard" class="form-signin" action="/creditcard">
         <h2 class="form-signin-heading">Card Details</h2>
         <table>
             <tr>
                 <td>Name on Card:</td>
                 <td>
-                        <form:input type="text" path="name" class="form-control" placeholder="${name}"
-                            autofocus="true"></form:input>
+                        <form:input  path="name" class="form-control" autofocus="true"/>
                 </td>
             </tr>
             <tr>
                 <td>Card Number:</td>
                 <td>
                         <form:input type="text" path="cardNum" class="form-control" placeholder="${cardNum}"
-                            autofocus="true"></form:input>
+                            autofocus="true"/>
                 </td>
             </tr>
             <tr>
                 <td>Expiry Date:</td>
                 <td><form:input type="text" path="expiryDate" class="form-control" placeholder="${expiryDate}"
-                    autofocus="true"></form:input></td>
+                    autofocus="true"/></td>
             </tr>
             <tr>
                 <td>CVV:</td>
                 <td>
-                        <form:input type="password" path="securityCode" class="form-control" placeholder="${securityCode}"></form:input>
+                        <form:input type="password" path="securityCode" class="form-control" placeholder="${securityCode}"/>
                 </td>
             </tr>
 
