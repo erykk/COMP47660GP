@@ -90,7 +90,6 @@ public class UserController {
         securityService.checkLoggedInStatus(model);
         cardValidator.validate(cardCredentials, bindingResult);
 
-
         if (bindingResult.hasErrors()) {
             return "user/cardRegistration";
         }
@@ -136,11 +135,12 @@ public class UserController {
         return "user/viewCard";
     }
 
-    @PostMapping(value = "/editCreditCardDetails", consumes = "application/x-www-form-urlencoded")
+    @PostMapping(value = "/editCreditCardDetails/{id}", consumes = "application/x-www-form-urlencoded")
     @ResponseBody
-    public void updateCreditCard(CreditCard creditCard) {
+    public String updateCreditCard(@PathVariable int id, CreditCard creditCard) {
         creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(),
                 creditCard.getSecurityCode(), creditCard.getExpiryDate());
+        return "user/editCard";
     }
 
     @GetMapping("/register")
