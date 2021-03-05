@@ -1,6 +1,8 @@
 package ie.ucd.COMP47660GP.controller;
 
 import ie.ucd.COMP47660GP.entities.Flight;
+import ie.ucd.COMP47660GP.service.impl.SecurityService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,9 @@ import java.util.List;
 
 @Controller
 public class GeneralController {
+
+    @Autowired
+    SecurityService securityService;
 
     @GetMapping("/")
     public String getLanding(Model model) {
@@ -30,10 +35,7 @@ public class GeneralController {
         Flight flight = new Flight();
         model.addAttribute("flight", flight);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication != null && !authentication.getName().equals("anonymousUser")){
-            model.addAttribute("logged_in", true);
-        }
+        securityService.checkLoggedInStatus(model);
 
         return "landing";
     }
