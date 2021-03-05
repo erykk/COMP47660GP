@@ -73,7 +73,6 @@ public class UserController {
     @Autowired
     CreditCardRepository creditCardRepository;
 
-
     @GetMapping("getEmail/{email}")
     @ResponseBody
     public String checkIfEmailIsValid(@PathVariable String email) {
@@ -120,7 +119,7 @@ public class UserController {
     @ResponseBody
     public String getCreditCard(@PathVariable String cardNum) {
         CreditCard creditCard = creditCardRepository.findByCardNum(cardNum);
-        return "user/viewCard/" + creditCard;
+        return "user/viewCard";
     }
 
     @PutMapping("/editCreditCardDetails")
