@@ -237,6 +237,7 @@ public class UserController {
             if (userService.deleteExecUser(user, password)) {
                 model.addAttribute("msg",
                         "Successfully removed executive privileges from user " + user.getEmail() + ".");
+                securityService.forceLogout(model);
                 return "user/success";
             } else {
                 model.addAttribute("msg", "Could not remove executive privileges for user" + user.getEmail()
