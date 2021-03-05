@@ -16,13 +16,12 @@
 
 
     <form:form method="POST" action="${contexPath}/creditCard" modelAttribute="cardCredentials">
-        <h2>Add Credit Card</h2>
-        <table>
-
-    <tr>
-        <td>Name on Card:</td>
-        <td><form:input type="text" path="name" class="form-control" placeholder="Name"/></td>
-    </tr>
+    <h2 style="text-align: center">Add Credit Card</h2>
+    <table style="margin: 0 auto">
+        <tr>
+            <td>Name on Card:</td>
+            <td><form:input type="text" path="name" class="form-control" placeholder="Name"/></td>
+        </tr>
         <tr>
             <td>Card Number:</td>
             <td> <div class="form-group ${status.error ? 'has-error' : ''}">
@@ -44,7 +43,7 @@
 
         <tr>
             <td></td>
-            <td><form:button type="submit">Add Card</form:button></td>
+            <td><form:button class="btn btn-lg btn-primary" type="submit">Add Card</form:button></td>
         </tr>
     </table>
     </form:form>
