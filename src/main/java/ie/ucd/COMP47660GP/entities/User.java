@@ -1,6 +1,5 @@
 package ie.ucd.COMP47660GP.entities;
 
-
 import java.util.Collection;
 import javax.persistence.*;
 
@@ -11,7 +10,6 @@ import org.springframework.data.annotation.Transient;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    //@Column(name = "user_id")
     private int id;
     private String firstName;
     private String lastName;
@@ -28,8 +26,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(
                     name = "role_id", referencedColumnName = "id"))
     private Collection<Role> roles;
-    //@OneToMany
-    //private List<Reservation> reservations;
 
 
     public User(String firstName, String lastName, String email, String address, String phoneNum) {

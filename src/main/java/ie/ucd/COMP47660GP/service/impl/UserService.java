@@ -5,7 +5,6 @@ import ie.ucd.COMP47660GP.entities.User;
 import ie.ucd.COMP47660GP.repositories.RoleRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -61,9 +60,4 @@ public class UserService {
         return false;
     }
 
-    /*
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder(){ return new BCryptPasswordEncoder(); }
-
-     */
 }
