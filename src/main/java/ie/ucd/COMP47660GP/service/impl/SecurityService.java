@@ -42,4 +42,8 @@ public class SecurityService {
             model.addAttribute("logged_in", false);
         }
     }
+    public void forceLogout (Model model) {
+        SecurityContextHolder.clearContext();
+        model.addAttribute("logged_in", false);
+    }
 }
