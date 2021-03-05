@@ -8,6 +8,7 @@ import ie.ucd.COMP47660GP.entities.Flight;
 import ie.ucd.COMP47660GP.entities.Reservation;
 import ie.ucd.COMP47660GP.entities.User;
 
+import ie.ucd.COMP47660GP.exception.NoSuchUserException;
 import ie.ucd.COMP47660GP.repositories.CreditCardRepository;
 import ie.ucd.COMP47660GP.repositories.FlightRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
@@ -198,13 +199,12 @@ public class UserController {
     @RequestMapping(value = "/secureLogin", method = RequestMethod.POST)
     public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model) {
         securityService.checkLoggedInStatus(model);
-        boolean exists = securityService.login(email, password);
-
-        if (exists) {
+        try {
+            securityService.login(email, password);
             model.addAttribute("msg", "Logged in successfully as " + userRepository.findByEmail(email).getEmail());
             model.addAttribute("user", userRepository.findByEmail(email));
             return "user/user";
-        } else {
+        } catch (NoSuchUserException e) {
             model.addAttribute("msg", "User " + email + " does not exist");
             return "user/fail";
         }
