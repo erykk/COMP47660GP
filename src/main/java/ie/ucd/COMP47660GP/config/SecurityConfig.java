@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/create-reservation/*", "/deleteAccount", "/success", "/fail")
                 .permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login")
                 .loginProcessingUrl("/loginSecure").usernameParameter("email").passwordParameter("password").and()
-                .logout().logoutSuccessUrl("/").permitAll().and().csrf().disable();
+                .logout().logoutSuccessUrl("/logoutSuccess").permitAll().and().csrf().disable();
     }
 
     @Bean

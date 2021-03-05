@@ -21,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
@@ -167,8 +168,12 @@ public class ReservationController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void cancelReservation(@PathVariable("id") int id) {
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new NoSuchBookingException(id));
-        reservation.setCancelled(true);
-        reservationRepository.save(reservation);
+        LocalDateTime flightTime = reservation.getFlight().getDateTime();
+        // Can only cancel if flight is more than 24 hours away.
+        if (flightTime.isAfter(LocalDateTime.now().plusHours(24))) {
+            reservation.setCancelled(true);
+            reservationRepository.save(reservation);
+        }
     }
 
     @GetMapping("/reservation-history")
