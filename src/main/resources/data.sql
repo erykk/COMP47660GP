@@ -1,8 +1,3 @@
--- This config doesn't work
-
-use db;
-
-
 INSERT INTO flights (flight_id, source, destination, date_time, flight_num)
     VALUES
            (1,"Dublin", "London", "21-05-21, 14:30", "FR587L"),
@@ -31,3 +26,7 @@ INSERT INTO reservations(reservation_id, flight_flight_id, user_id, cancelled)
            (6, 4,18, true),
            (7, 2,17, false),
            (8, 3,16, false);
+
+UPDATE hibernate_sequence
+SET next_val = 100
+WHERE next_val < 100
