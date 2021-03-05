@@ -16,6 +16,7 @@ import ie.ucd.COMP47660GP.service.LoginService;
 import ie.ucd.COMP47660GP.service.impl.LoginServiceImpl;
 import ie.ucd.COMP47660GP.service.impl.SecurityService;
 import ie.ucd.COMP47660GP.service.impl.UserService;
+import ie.ucd.COMP47660GP.validator.CreditCardValidator;
 import ie.ucd.COMP47660GP.validator.LoginValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -43,6 +44,7 @@ import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+
 //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 //@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
@@ -51,6 +53,8 @@ public class UserController {
 
     @Autowired
     LoginValidator loginValidator;
+    @Autowired
+    CreditCardValidator cardValidator;
     @Autowired
     UserService userService;
     @Autowired
@@ -66,44 +70,47 @@ public class UserController {
     @Autowired
     CreditCardRepository creditCardRepository;
 
-
     int ref; // Testing purposes
 
-
-
     // POST new executive club member
-//    @PostMapping("/createMember")
-//    public ResponseEntity addMember(@Valid @RequestBody User user) throws URISyntaxException {
-//        userRepository.save(user);
-//        String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-//                build().toUriString() + "/user/" + user.getId();  // Create new URI for new member
-//        ResponseEntity e;
-//        return e;
-//    }
+    // @PostMapping("/createMember")
+    // public ResponseEntity addMember(@Valid @RequestBody User user) throws
+    // URISyntaxException {
+    // userRepository.save(user);
+    // String path = ServletUriComponentsBuilder.fromCurrentContextPath().
+    // build().toUriString() + "/user/" + user.getId(); // Create new URI for new
+    // member
+    // ResponseEntity e;
+    // return e;
+    // }
 
+    // // POST new executive club member
+    // // TODO: id params when creating URI
+    // @PostMapping(value = "/registerMember", params = { "name", "surname",
+    // "address", "phone", "email" })
+    // public ResponseEntity<String> createReservation(@RequestParam(value = "name")
+    // String name,
+    // @RequestParam(value = "surname") String surname, @RequestParam(value =
+    // "address") String address,
+    // @RequestParam(value = "phone") String phone, @RequestParam(value = "email")
+    // String email)
+    // throws URISyntaxException {
+    // // userRepository.createMember(name, surname, address, phone, email);
+    // String path =
+    // ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() +
+    // "/member/" + ref;
+    // HttpHeaders headers = new HttpHeaders();
+    // headers.setLocation(new URI(path));
+    // return new ResponseEntity(HttpStatus.CREATED);
+    // }
 
-//    // POST new executive club member
-//    // TODO: id params when creating URI
-//    @PostMapping(value = "/registerMember", params = { "name", "surname", "address", "phone", "email" })
-//    public ResponseEntity<String> createReservation(@RequestParam(value = "name") String name,
-//            @RequestParam(value = "surname") String surname, @RequestParam(value = "address") String address,
-//            @RequestParam(value = "phone") String phone, @RequestParam(value = "email") String email)
-//            throws URISyntaxException {
-//        // userRepository.createMember(name, surname, address, phone, email);
-//        String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/member/" + ref;
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setLocation(new URI(path));
-//        return new ResponseEntity(HttpStatus.CREATED);
-//    }
-
-
-//
-//    @GetMapping("/member/{id}")
-//    @ResponseBody
-//    public User getMember(@PathVariable int id){
-//        User user = userRepository.findUser(id);
-//        return user;
-//    }
+    //
+    // @GetMapping("/member/{id}")
+    // @ResponseBody
+    // public User getMember(@PathVariable int id){
+    // User user = userRepository.findUser(id);
+    // return user;
+    // }
 
     @GetMapping("getEmail/{email}")
     @ResponseBody
@@ -118,14 +125,29 @@ public class UserController {
     @PutMapping("/editPersonalDetails")
     @ResponseBody
     public void updatePersonaDetails(@RequestBody User updatedUser) {
-        userRepository.updateUserId(updatedUser.getAddress(), updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getPhoneNum(), updatedUser.getEmail());
+        userRepository.updateUserId(updatedUser.getAddress(), updatedUser.getFirstName(), updatedUser.getLastName(),
+                updatedUser.getPhoneNum(), updatedUser.getEmail());
     }
 
-    @PostMapping("/creditCard")
-    @ResponseBody
-    public String addCreditCard(@RequestBody CreditCard creditCard){
-        creditCardRepository.save(creditCard);
-        return "Credit Card Created";
+    @GetMapping("/registerCard")
+    public String registerCard(Model model) {
+        model.addAttribute("cardCredentials", new CreditCard());
+        return "user/cardRegistration";
+    }
+
+    @RequestMapping(value = "/creditCard", method = RequestMethod.POST)
+    public String addCreditCard(@ModelAttribute("cardCredentials") CreditCard cardCredentials,
+            BindingResult bindingResult, Model model) {
+        cardValidator.validate(cardCredentials, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            return "user/viewCards";
+        }
+        model.addAttribute("cardCredentials", cardCredentials);
+        model.addAttribute("msg", "Successfully added card " + cardCredentials.getCardNum() + ".");
+
+        return "user/viewCards";
+
     }
 
     @GetMapping("/creditCard/{cardNum}")
@@ -137,32 +159,27 @@ public class UserController {
 
     @PutMapping("/editCreditCardDetails")
     @ResponseBody
-    public void updateCreditCard(@RequestBody CreditCard creditCard){
-        creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(), creditCard.getSecurityCode(),
-                creditCard.getExpiryDate());
+    public void updateCreditCard(@RequestBody CreditCard creditCard) {
+        creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(),
+                creditCard.getSecurityCode(), creditCard.getExpiryDate());
     }
 
+    // @DeleteMapping("/deleteMember/{id}")
+    // @ResponseBody
+    // public void deleteMember(@PathVariable int id){
+    //// User user = userRepository.findUser(id).orElseThrow(() -> new
+    // UserNotFoundException(id));
+    // User user = userRepository.findUser(id);
+    // userRepository.delete(user);
+    // }
 
-
-
-//    @DeleteMapping("/deleteMember/{id}")
-//    @ResponseBody
-//    public void deleteMember(@PathVariable int id){
-////        User user = userRepository.findUser(id).orElseThrow(() -> new UserNotFoundException(id));
-//        User user = userRepository.findUser(id);
-//        userRepository.delete(user);
-//    }
-
-//    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-//    @ResponseStatus(value = HttpStatus.OK)
-//    public User getUser(@PathVariable String id) {
-//        //
-//        // return userRepository.findUser(id);
-//        return null;
-//    }
-
-
-
+    // @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
+    // @ResponseStatus(value = HttpStatus.OK)
+    // public User getUser(@PathVariable String id) {
+    // //
+    // // return userRepository.findUser(id);
+    // return null;
+    // }
 
     @GetMapping("/register")
     public String register(Model model) {
@@ -190,7 +207,7 @@ public class UserController {
         model.addAttribute("userCredentials", userCredentials);
         model.addAttribute("msg", "Successfully created user " + userCredentials.getEmail() + ".");
 
-        return "user/success";
+        return "user/user";
 
     }
 
@@ -205,7 +222,7 @@ public class UserController {
 
         if (exists) {
             model.addAttribute("msg", "Logged in successfully as " + userRepository.findByEmail(email).getEmail());
-            return "user/success";
+            return "user/user";
         } else {
             model.addAttribute("msg", "User " + email + " does not exist");
             return "user/fail";
@@ -218,17 +235,19 @@ public class UserController {
         return "user/deleteAccount";
     }
 
-
     @RequestMapping(value = "/deleteAccount", method = RequestMethod.POST)
-    public String deleteAccount(@RequestParam("email") String email, @RequestParam("password") String password, Model model) {
+    public String deleteAccount(@RequestParam("email") String email, @RequestParam("password") String password,
+            Model model) {
         User user = userService.findByEmail(email);
 
-        if (user != null){
-            if(userService.deleteExecUser(user, password)) {
-                model.addAttribute("msg", "Successfully removed executive privileges from user " + user.getEmail() + ".");
+        if (user != null) {
+            if (userService.deleteExecUser(user, password)) {
+                model.addAttribute("msg",
+                        "Successfully removed executive privileges from user " + user.getEmail() + ".");
                 return "user/success";
             } else {
-                model.addAttribute("msg", "Could not remove executive privileges for user" + user.getEmail() + ". Password doesn't match");
+                model.addAttribute("msg", "Could not remove executive privileges for user" + user.getEmail()
+                        + ". Password doesn't match");
                 return "user/fail";
             }
         } else {
