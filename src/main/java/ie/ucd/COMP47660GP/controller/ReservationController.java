@@ -1,6 +1,5 @@
 package ie.ucd.COMP47660GP.controller;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import ie.ucd.COMP47660GP.entities.CreditCard;
 import ie.ucd.COMP47660GP.entities.Flight;
 import ie.ucd.COMP47660GP.entities.Reservation;
@@ -17,14 +16,10 @@ import ie.ucd.COMP47660GP.repositories.UserRepository;
 import ie.ucd.COMP47660GP.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.awt.print.Book;
-import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,7 +27,6 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class ReservationController {
@@ -51,25 +45,6 @@ public class ReservationController {
     @Autowired
     CreditCardRepository creditCardRepository;
 
-    int ref;   // Testing purposes
-
-    // POST a reservation for the given flight and user id
-//    // TODO: id params when creating URI
-//    @PostMapping(value="/bookFlight", params = {"name", "surname", "address", "phone", "email"})
-//    public ResponseEntity<String> createReservation(@RequestParam(value = "name") String name, @RequestParam(value = "surname") String surname,
-//                                                    @RequestParam(value = "address") String address, @RequestParam(value = "phone") String phone,
-//                                                    @RequestParam(value = "email") String email, @RequestBody String flight) throws URISyntaxException {
-//
-//        return reservationRepository.save();
-//
-//        //reservationRepository.createReservation(name, surname, address, phone, email);
-//        String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-//                build().toUriString()+ "/reservations/"+ref++;  // Create new URI for reservation
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setLocation(new URI(path));
-//
-//        return new ResponseEntity<>("Reservation Booked Successfully", headers, HttpStatus.CREATED);  // return info back to client class
-//    }
 
     @GetMapping(value = "/create-reservation/{id}")
     public String addReservation(@PathVariable("id") int id, Model model) {
@@ -193,8 +168,12 @@ public class ReservationController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void cancelReservation(@PathVariable("id") int id) {
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new NoSuchBookingException(id));
-        reservation.setCancelled(true);
-        reservationRepository.save(reservation);
+        LocalDateTime flightTime = reservation.getFlight().getDateTime();
+        // Can only cancel if flight is more than 24 hours away.
+        if (flightTime.isAfter(LocalDateTime.now().plusHours(24))) {
+            reservation.setCancelled(true);
+            reservationRepository.save(reservation);
+        }
     }
 
     @GetMapping("/reservation-history")

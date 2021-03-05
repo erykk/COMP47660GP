@@ -2,9 +2,7 @@ package ie.ucd.COMP47660GP.repositories;
 
 import ie.ucd.COMP47660GP.entities.CreditCard;
 import ie.ucd.COMP47660GP.exception.NoSuchCreditCardException;
-import ie.ucd.COMP47660GP.exception.NoSuchUserException;
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

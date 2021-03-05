@@ -1,20 +1,9 @@
 package ie.ucd.COMP47660GP.entities;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Column;
-import javax.persistence.OneToOne;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
 
 //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 //@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)

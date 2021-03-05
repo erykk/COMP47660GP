@@ -73,47 +73,6 @@ public class UserController {
     @Autowired
     CreditCardRepository creditCardRepository;
 
-    int ref; // Testing purposes
-
-    // POST new executive club member
-    // @PostMapping("/createMember")
-    // public ResponseEntity addMember(@Valid @RequestBody User user) throws
-    // URISyntaxException {
-    // userRepository.save(user);
-    // String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-    // build().toUriString() + "/user/" + user.getId(); // Create new URI for new
-    // member
-    // ResponseEntity e;
-    // return e;
-    // }
-
-    // // POST new executive club member
-    // // TODO: id params when creating URI
-    // @PostMapping(value = "/registerMember", params = { "name", "surname",
-    // "address", "phone", "email" })
-    // public ResponseEntity<String> createReservation(@RequestParam(value = "name")
-    // String name,
-    // @RequestParam(value = "surname") String surname, @RequestParam(value =
-    // "address") String address,
-    // @RequestParam(value = "phone") String phone, @RequestParam(value = "email")
-    // String email)
-    // throws URISyntaxException {
-    // // userRepository.createMember(name, surname, address, phone, email);
-    // String path =
-    // ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() +
-    // "/member/" + ref;
-    // HttpHeaders headers = new HttpHeaders();
-    // headers.setLocation(new URI(path));
-    // return new ResponseEntity(HttpStatus.CREATED);
-    // }
-
-    //
-    // @GetMapping("/member/{id}")
-    // @ResponseBody
-    // public User getMember(@PathVariable int id){
-    // User user = userRepository.findUser(id);
-    // return user;
-    // }
 
     @GetMapping("getEmail/{email}")
     @ResponseBody
@@ -155,7 +114,6 @@ public class UserController {
         creditCards.add(cardCredentials);
         model.addAttribute("creditCards", creditCards);
         return "user/viewCards";
-
     }
 
     @GetMapping("/creditCard/{cardNum}")
@@ -171,23 +129,6 @@ public class UserController {
         creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(),
                 creditCard.getSecurityCode(), creditCard.getExpiryDate());
     }
-
-    // @DeleteMapping("/deleteMember/{id}")
-    // @ResponseBody
-    // public void deleteMember(@PathVariable int id){
-    //// User user = userRepository.findUser(id).orElseThrow(() -> new
-    // UserNotFoundException(id));
-    // User user = userRepository.findUser(id);
-    // userRepository.delete(user);
-    // }
-
-    // @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-    // @ResponseStatus(value = HttpStatus.OK)
-    // public User getUser(@PathVariable String id) {
-    // //
-    // // return userRepository.findUser(id);
-    // return null;
-    // }
 
     @GetMapping("/register")
     public String register(Model model) {
@@ -209,14 +150,10 @@ public class UserController {
 
         userService.saveExecUser(userCredentials);
 
-        // loginService.autoLogin(userCredentials.getEmail(),
-        // userCredentials.getPassword());
-
         model.addAttribute("userCredentials", userCredentials);
         model.addAttribute("msg", "Successfully created user " + userCredentials.getEmail() + ".");
 
-        return "user/login";
-
+        return "redirect:/login";
     }
 
     @GetMapping("/login")
