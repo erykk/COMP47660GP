@@ -16,8 +16,9 @@
 
 
     <form:form method="POST" action="${contexPath}/creditCard" modelAttribute="cardCredentials">
+        <h2>Add Credit Card</h2>
         <table>
-    <h2>Add Credit Card</h2>
+
     <tr>
         <td>Name on Card:</td>
         <td><form:input type="text" path="name" class="form-control" placeholder="Name"/></td>

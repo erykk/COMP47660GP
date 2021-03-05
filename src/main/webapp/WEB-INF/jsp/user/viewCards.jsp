@@ -30,7 +30,7 @@
                     <td><c:out value="${creditcard.name}"/></td>
                     <td><c:out value="${creditcard.cardNum}"/></td>
                     <td><c:out value="${creditcard.expiryDate}"/></td>
-                    <td><input class="form-control" type="submit" value="Edit"/></td>
+                    <td><a href="/editCreditCardDetails/${creditcard.id}">Edit</a></td>
                 </tr>
             </tbody>
         </c:forEach>
@@ -40,34 +40,6 @@
             </td>
         </tr>
     </table>
-
-
-<%--    <form:form method="GET" modelAttribute="cardCredentials"  action="/creditCard/{cardNum}">--%>
-<%--        <h2 class="form-signin-heading">Card Details</h2>--%>
-<%--        <table>--%>
-<%--            <tr class="form-group">--%>
-<%--                <td>All Cards:</td>--%>
-<%--                <td>--%>
-<%--                    <form:select class="form-control" path="cardNum">--%>
-<%--                        <form:option value="Select" label="--Select--" />--%>
-<%--                        <form:options items="${creditCards}" />--%>
-<%--                    </form:select>--%>
-<%--                </td>--%>
-<%--            </tr>--%>
-<%--            <tr>--%>
-<%--                <td>--%>
-<%--                    <input class="form-control" type="submit" value="View Card Details"/>--%>
-<%--                </td>--%>
-<%--            </tr>--%>
-
-<%--            <tr>--%>
-<%--                <td>--%>
-<%--                    <h4 class="text-center"><a href="${contextPath}/registerCard">Add Card</a></h4>--%>
-<%--                </td>--%>
-<%--            </tr>--%>
-<%--        </table>--%>
-<%--    </form:form>--%>
-
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
