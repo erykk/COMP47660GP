@@ -15,20 +15,20 @@ public class CreditCard {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "card_id")
     private int id;
-    //@Column(name = "user_id")
+    // @Column(name = "user_id")
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User user;
     @Column(name = "card_num", unique = true, nullable = false)
     private String cardNum;
     @Column(name = "card_name")
     private String name;
     @Column(name = "expiry_date")
-    private LocalDateTime expiryDate;
+    private String expiryDate;
     @Column(name = "cvv")
     private String securityCode;
 
-    public CreditCard(int id, User user, String cardNum, String name, LocalDateTime expiryDate, String securityCode) {
+    public CreditCard(int id, User user, String cardNum, String name, String expiryDate, String securityCode) {
         // ID auto gen
         this.user = user;
         this.cardNum = cardNum;
@@ -41,16 +41,16 @@ public class CreditCard {
     }
 
     public int getId() {
-		return id;
-	}
+        return id;
+    }
 
-	public void setId(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
     public String getCardNum() {
-		return cardNum;
-	}
+        return cardNum;
+    }
 
     public User getUser() {
         return user;
@@ -65,26 +65,26 @@ public class CreditCard {
     }
 
     public String getName() {
-		return name;
-	}
+        return name;
+    }
 
-	public void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public LocalDateTime getExpiryDate() {
-		return expiryDate;
-	}
+    public String getExpiryDate() {
+        return expiryDate;
+    }
 
-	public void setExpiryDate(LocalDateTime expiryDate) {
+    public void setExpiryDate(String expiryDate) {
         this.expiryDate = expiryDate;
     }
 
     public String getSecurityCode() {
-		return securityCode;
-	}
+        return securityCode;
+    }
 
-	public void setSecurityCode(String securityCode) {
+    public void setSecurityCode(String securityCode) {
         this.securityCode = securityCode;
     }
 

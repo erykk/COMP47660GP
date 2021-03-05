@@ -21,5 +21,5 @@ public interface CreditCardRepository extends JpaRepository<CreditCard, Integer>
     @Transactional
     @Modifying
     @Query("update CreditCard c set c.name = :card_name, c.securityCode = :cvv, c.expiryDate = :date where c.cardNum = :card_num")
-    void updateCreditCardInfo(String card_num, String card_name, String cvv, LocalDateTime date) throws NoSuchCreditCardException;
+    void updateCreditCardInfo(String card_num, String card_name, String cvv, String date) throws NoSuchCreditCardException;
 }

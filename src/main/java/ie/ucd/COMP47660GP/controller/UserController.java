@@ -13,6 +13,7 @@ import ie.ucd.COMP47660GP.repositories.FlightRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
 import ie.ucd.COMP47660GP.service.LoginService;
+import ie.ucd.COMP47660GP.service.impl.CreditCardService;
 import ie.ucd.COMP47660GP.service.impl.LoginServiceImpl;
 import ie.ucd.COMP47660GP.service.impl.SecurityService;
 import ie.ucd.COMP47660GP.service.impl.UserService;
@@ -56,8 +57,11 @@ public class UserController {
     LoginValidator loginValidator;
     @Autowired
     CreditCardValidator cardValidator;
+    List<CreditCard> creditCards = new LinkedList<>();
     @Autowired
     UserService userService;
+    @Autowired
+    CreditCardService cardService;
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -70,7 +74,6 @@ public class UserController {
 
     @Autowired
     CreditCardRepository creditCardRepository;
-
 
     @GetMapping("getEmail/{email}")
     @ResponseBody
@@ -102,19 +105,29 @@ public class UserController {
         cardValidator.validate(cardCredentials, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "user/viewCards";
+            return "user/cardRegistration";
         }
+
+        cardService.save(cardCredentials);
+
         model.addAttribute("cardCredentials", cardCredentials);
         model.addAttribute("msg", "Successfully added card " + cardCredentials.getCardNum() + ".");
+        creditCards.add(cardCredentials);
+        model.addAttribute("creditCards", creditCards);
+        return "user/viewCards";
+    }
 
+    @GetMapping("/viewCards")
+    public String cards(Model model) {
         return "user/viewCards";
     }
 
     @GetMapping("/creditCard/{cardNum}")
-    @ResponseBody
-    public String getCreditCard(@PathVariable String cardNum) {
+    public String getCreditCard(@PathVariable String cardNum, Model model) {
         CreditCard creditCard = creditCardRepository.findByCardNum(cardNum);
-        return "creditCard";
+
+        model.addAttribute("creditcard", new CreditCard());
+        return "user/viewCard";
     }
 
     @PostMapping(value = "/editCreditCardDetails", consumes = "application/x-www-form-urlencoded")
@@ -147,6 +160,14 @@ public class UserController {
         model.addAttribute("msg", "Successfully created user " + userCredentials.getEmail() + ".");
 
         return "redirect:/login";
+    }
+
+    @GetMapping("/user")
+    public String user(Model model) {
+        SecurityContext context = SecurityContextHolder.getContext();
+        User currentUser = userRepository.findEmail(context.getAuthentication().getName());
+        model.addAttribute("userCredentials", currentUser);
+        return "user/user";
     }
 
     @GetMapping("/login")
