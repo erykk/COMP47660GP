@@ -44,6 +44,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -84,11 +85,12 @@ public class UserController {
         return "Valid: email does not exist";
     }
 
-    @PutMapping("/editPersonalDetails")
+    @PostMapping(value = "/editPersonalDetails", consumes = "application/x-www-form-urlencoded")
     @ResponseBody
-    public void updatePersonaDetails(@RequestBody User updatedUser) {
-        userRepository.updateUserId(updatedUser.getAddress(), updatedUser.getFirstName(), updatedUser.getLastName(),
-                updatedUser.getPhoneNum(), updatedUser.getEmail());
+    public String updatePersonaDetails(User user) {
+        System.out.println("TEST /editPersonalDetails");
+        userRepository.updateUserId(user.getAddress(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getPhoneNum());
+        return "redirect:/user";
     }
 
     @GetMapping("/registerCard")
@@ -133,11 +135,10 @@ public class UserController {
         return "user/viewCard";
     }
 
-    @PutMapping("/editCreditCardDetails")
+    @PostMapping(value = "/editCreditCardDetails", consumes = "application/x-www-form-urlencoded")
     @ResponseBody
-    public void updateCreditCard(@RequestBody CreditCard creditCard) {
-        creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(),
-                creditCard.getSecurityCode(), creditCard.getExpiryDate());
+    public void updateCreditCard(CreditCard creditCard ) {
+        creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(), creditCard.getSecurityCode(), creditCard.getExpiryDate());
     }
 
     @GetMapping("/register")
@@ -185,7 +186,7 @@ public class UserController {
 
         if (exists) {
             model.addAttribute("msg", "Logged in successfully as " + userRepository.findByEmail(email).getEmail());
-            model.addAttribute("userCredentials", userRepository.findByEmail(email));
+            model.addAttribute("user", userRepository.findByEmail(email));
             return "user/user";
         } else {
             model.addAttribute("msg", "User " + email + " does not exist");

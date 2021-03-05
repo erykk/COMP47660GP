@@ -16,7 +16,7 @@
     <jsp:include page="../nav.jsp"/>
 <div class="container">
 
-    <form:form method="GET" modelAttribute="userCredentials" class="form-signin">
+    <form:form method="POST" modelAttribute="user" class="form-signin" action="/editPersonalDetails">
         <h2 class="form-signin-heading">Account Details</h2>
         <table>
             <tr>
@@ -80,5 +80,25 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
+
+    <script>
+        function updateUserDetails(address, firstName, lastName, phone, email) {
+            <%--id = ${reservation.reservation_id}--%>
+
+            // fetch(window.location.protocol + '://' + window.location.hostname + ':' + window.location.port + '/reservation/' + id, {
+            fetch(window.location.protocol + 'editPersonalDetails/' + address + '/' + firstName + '/' + lastName + '/' + phone + '/' + email, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    completed: true
+                }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            })
+
+            location.reload()
+        }
+
+    </script>
 </body>
 </html>
