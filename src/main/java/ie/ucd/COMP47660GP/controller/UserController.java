@@ -1,52 +1,32 @@
 package ie.ucd.COMP47660GP.controller;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.util.JsonParserSequence;
 import ie.ucd.COMP47660GP.entities.CreditCard;
-import ie.ucd.COMP47660GP.entities.Flight;
 import ie.ucd.COMP47660GP.entities.Reservation;
 import ie.ucd.COMP47660GP.entities.User;
-
 import ie.ucd.COMP47660GP.exception.NoSuchUserException;
 import ie.ucd.COMP47660GP.repositories.CreditCardRepository;
-import ie.ucd.COMP47660GP.repositories.FlightRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
 import ie.ucd.COMP47660GP.service.LoginService;
 import ie.ucd.COMP47660GP.service.impl.CreditCardService;
-import ie.ucd.COMP47660GP.service.impl.LoginServiceImpl;
 import ie.ucd.COMP47660GP.service.impl.SecurityService;
 import ie.ucd.COMP47660GP.service.impl.UserService;
 import ie.ucd.COMP47660GP.validator.CreditCardValidator;
 import ie.ucd.COMP47660GP.validator.LoginValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 //@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)

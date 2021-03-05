@@ -3,10 +3,8 @@ package ie.ucd.COMP47660GP.entities;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
-//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-//@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
 @Entity
 @Table(name = "creditcards")

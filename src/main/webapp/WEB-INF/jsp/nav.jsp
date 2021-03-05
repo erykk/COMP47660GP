@@ -5,7 +5,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
         <a class="navbar-brand" href="/">
-            <img id="logo" src="images/airplane.png" alt="Image" width="200px;">
+            <img id="logo" src="/images/airplane.png" alt="Image" width="200px;">
         </a>
         <h2 class="">British Airways</h2>
         <ul class="navbar-nav ml-auto">

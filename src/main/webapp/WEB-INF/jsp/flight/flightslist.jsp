@@ -51,11 +51,11 @@
         </table>
     </form:form>
 
+    <caption><h2>Flights</h2></caption>
     <c:choose>
         <c:when test="${empty flights}"><h2 style="color:red">No results...</h2></c:when>
         <c:when test="${not empty flights}">
             <table>
-                <caption><h2>Flights</h2></caption>
                 <colgroup>
                     <col span="2" style="width: 20%;">
                     <col span="1" style="width: 25%;">
