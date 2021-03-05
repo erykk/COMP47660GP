@@ -65,6 +65,8 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
     @Autowired
+    ReservationRepository reservationRepository;
+    @Autowired
     @Qualifier("loginServiceImpl")
     LoginService loginService;
     @Autowired
@@ -88,8 +90,10 @@ public class UserController {
     @PostMapping(value = "/editPersonalDetails", consumes = "application/x-www-form-urlencoded")
     @ResponseBody
     public String updatePersonaDetails(User user) {
+
         System.out.println("TEST /editPersonalDetails");
-        userRepository.updateUserId(user.getAddress(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getPhoneNum());
+        userRepository.updateUserId(user.getAddress(), user.getEmail(), user.getFirstName(), user.getLastName(),
+                user.getPhoneNum());
         return "redirect:/user";
     }
 
@@ -122,8 +126,10 @@ public class UserController {
         return "user/viewCards";
     }
 
-    @GetMapping("/reservationHistory")
-    public String history(Model model) {
+    @GetMapping("/reservationHistory/{id}")
+    public String history(@PathVariable("id") int id, Model model) {
+        List<Reservation> reservations = reservationRepository.findUsersReservations(id);
+        model.addAttribute("reservations", reservations);
         return "user/reservationHistory";
     }
 
@@ -137,8 +143,9 @@ public class UserController {
 
     @PostMapping(value = "/editCreditCardDetails", consumes = "application/x-www-form-urlencoded")
     @ResponseBody
-    public void updateCreditCard(CreditCard creditCard ) {
-        creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(), creditCard.getSecurityCode(), creditCard.getExpiryDate());
+    public void updateCreditCard(CreditCard creditCard) {
+        creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(),
+                creditCard.getSecurityCode(), creditCard.getExpiryDate());
     }
 
     @GetMapping("/register")

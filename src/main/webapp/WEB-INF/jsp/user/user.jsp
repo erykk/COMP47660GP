@@ -70,7 +70,7 @@
             </tr>
             <tr>
                 <td>
-                    <h4 class="text-center"><a href="${contextPath}/reservationHistory">View Your Reservation History</a></h4>
+                    <h4 class="text-center"><a href="${contextPath}/reservationHistory/${user.id}">View Your Reservation History</a></h4>
                 </td>
             </tr>
         </table>
