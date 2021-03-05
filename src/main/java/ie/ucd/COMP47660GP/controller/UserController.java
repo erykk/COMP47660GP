@@ -42,6 +42,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 //@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
@@ -135,11 +136,14 @@ public class UserController {
         return "creditCard";
     }
 
-    @PutMapping("/editCreditCardDetails")
+    @PutMapping("/editCreditCardDetails/{num}/{name}/{cvv}/{year}/{month}/{day}/{hour}/{min}")
     @ResponseBody
-    public void updateCreditCard(@RequestBody CreditCard creditCard){
-        creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(), creditCard.getSecurityCode(),
-                creditCard.getExpiryDate());
+    public void updateCreditCard(@PathVariable String num, @PathVariable String name, @PathVariable String cvv,
+                                 @PathVariable int year, @PathVariable int month, @PathVariable int day, @PathVariable int hour, @PathVariable int min ){
+        LocalDate localDate = LocalDate.of(year,month,day);
+        LocalTime localTime = LocalTime.of(hour,min);
+        LocalDateTime ldt = LocalDateTime.of(localDate,localTime);
+        creditCardRepository.updateCreditCardInfo(num, name, cvv, ldt);
     }
 
 

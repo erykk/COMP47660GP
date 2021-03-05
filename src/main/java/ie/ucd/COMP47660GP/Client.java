@@ -60,7 +60,7 @@ public class Client {
 
         // PUT
         HttpEntity<CreditCard> request7 = new HttpEntity<>(creditCard);
-        restTemplate.put("http://localhost:8080/editCreditCardDetails",request7);
+        restTemplate.put("http://localhost:8080/editCreditCardDetails/TEST/VISA DEBIT/TEST/2021/09/15/00/00",request7);
 
 //        CreditCard c = restTemplate.getForObject("http://localhost:8080/creditCard/TEST",CreditCard.class);
 //        System.out.println("\nGET: "+c.getCardNum()+"\n");
