@@ -222,6 +222,7 @@ public class UserController {
 
         if (exists) {
             model.addAttribute("msg", "Logged in successfully as " + userRepository.findByEmail(email).getEmail());
+            model.addAttribute("userCredentials", userRepository.findByEmail(email));
             return "user/user";
         } else {
             model.addAttribute("msg", "User " + email + " does not exist");
