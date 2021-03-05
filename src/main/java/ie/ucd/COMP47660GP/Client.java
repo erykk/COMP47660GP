@@ -29,7 +29,7 @@ public class Client {
 
         // PUT
         HttpEntity<CreditCard> request7 = new HttpEntity<>(creditCard);
-        restTemplate.put("http://localhost:8080/editCreditCardDetails",request7);
+        restTemplate.put("http://localhost:8080/editCreditCardDetails/TEST/Mastercard/453/2023/10/12/00/00",request7);
     }
 }
 

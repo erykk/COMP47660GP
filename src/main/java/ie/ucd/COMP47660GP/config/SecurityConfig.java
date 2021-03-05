@@ -25,8 +25,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers("/register", "/", "/login", "/secureRegister", "/secureLogin", "/resources/**",
-                        "/images/**", "/reservation", "/mem/{id}", "/creditCard", "/creditCard/{cardNum}",
-                        "/registerCard", "/editCreditCardDetails", "/flight", "/create-reservation", "/createMember",
+                        "/images/**", "/reservation", "/mem/{id}", "/creditCard", "/creditCard/{cardNum}", "/editCreditCardDetails/{num}/{name}/{cvv}/{year}/{month}/{day}/{hour}/{min}",
+                        "/registerCard", "/editPersonalDetails/{address}/{firstName}/{lastName}/{phone}/{email}", "/flight", "/create-reservation", "/createMember",
                         "/create-reservation/*", "/deleteAccount", "/success", "/fail")
                 .permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login")
                 .loginProcessingUrl("/loginSecure").usernameParameter("email").passwordParameter("password").and()

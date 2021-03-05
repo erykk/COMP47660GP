@@ -43,6 +43,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -81,11 +82,11 @@ public class UserController {
         return "Valid: email does not exist";
     }
 
-    @PutMapping("/editPersonalDetails")
+    @PutMapping("/editPersonalDetails/{address}/{firstName}/{lastName}/{phone}/{email}")
     @ResponseBody
-    public void updatePersonaDetails(@RequestBody User updatedUser) {
-        userRepository.updateUserId(updatedUser.getAddress(), updatedUser.getFirstName(), updatedUser.getLastName(),
-                updatedUser.getPhoneNum(), updatedUser.getEmail());
+    public void updatePersonaDetails(@PathVariable String address, @PathVariable String firstName, @PathVariable String lastName,
+                                     @PathVariable String phone, @PathVariable String email) {
+        userRepository.updateUserId(address, email, firstName, lastName, phone);
     }
 
     @GetMapping("/registerCard")
@@ -115,11 +116,14 @@ public class UserController {
         return "creditCard";
     }
 
-    @PutMapping("/editCreditCardDetails")
+    @PutMapping("/editCreditCardDetails/{num}/{name}/{cvv}/{year}/{month}/{day}/{hour}/{min}")
     @ResponseBody
-    public void updateCreditCard(@RequestBody CreditCard creditCard) {
-        creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(),
-                creditCard.getSecurityCode(), creditCard.getExpiryDate());
+    public void updateCreditCard(@PathVariable String num, @PathVariable String name, @PathVariable String cvv,
+                                 @PathVariable int year, @PathVariable int month, @PathVariable int day, @PathVariable int hour, @PathVariable int min ) {
+        LocalDate localDate = LocalDate.of(year, month, day);
+        LocalTime localTime = LocalTime.of(hour, min);
+        LocalDateTime ldt = LocalDateTime.of(localDate, localTime);
+        creditCardRepository.updateCreditCardInfo(num, name, cvv, ldt);
     }
 
     @GetMapping("/register")
