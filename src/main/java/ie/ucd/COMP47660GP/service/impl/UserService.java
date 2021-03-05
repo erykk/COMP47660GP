@@ -40,7 +40,6 @@ public class UserService {
             user.setExec(true);
             save(user);
         }
-        save(user);
     }
 
     public void saveGuestUser(User user){
