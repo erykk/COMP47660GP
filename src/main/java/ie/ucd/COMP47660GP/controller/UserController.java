@@ -190,7 +190,7 @@ public class UserController {
     public String user(Model model) {
         SecurityContext context = SecurityContextHolder.getContext();
         User currentUser = userRepository.findEmail(context.getAuthentication().getName());
-        model.addAttribute("userCredentials", currentUser);
+        model.addAttribute("user", currentUser);
         return "user/user";
     }
 
