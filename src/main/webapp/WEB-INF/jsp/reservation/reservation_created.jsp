@@ -12,8 +12,18 @@
 <jsp:include page="../nav.jsp"/>
 <div style="text-align: center;">
     <h2>Reservation Successful!</h2>
-    <h2>Save your reservation reference number for looking up your reservation at a later time: <jsp:useBean id="reservation" scope="request" type="ie.ucd.COMP47660GP.entities.Reservation"/>
-    <c:out value="${reservation.reservation_id}"/></h2>
+    <h2>Save your reservation reference number(s) for looking up your reservation at a later time: </h2>
+    <table style="margin-left: auto; margin-right: auto">
+        <jsp:useBean id="reservations" scope="request" type="java.util.List"/>
+        <c:forEach items="${reservations}" var="reservation" varStatus="status">
+            <tr>
+                <td><c:out value="${reservation.reservation_id}"/></td>
+            </tr>
+        </c:forEach>
+    </table>
+
+
+
 </div>
 <div>
 
