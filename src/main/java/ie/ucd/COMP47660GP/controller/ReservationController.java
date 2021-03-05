@@ -13,6 +13,7 @@ import ie.ucd.COMP47660GP.repositories.CreditCardRepository;
 import ie.ucd.COMP47660GP.repositories.FlightRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
+import ie.ucd.COMP47660GP.service.impl.SecurityService;
 import ie.ucd.COMP47660GP.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,12 +46,16 @@ public class ReservationController {
     @Autowired
     CreditCardRepository creditCardRepository;
 
+    @Autowired
+    SecurityService securityService;
+
 
     @GetMapping(value = "/create-reservation/{id}")
     public String addReservation(@PathVariable("id") int id, Model model) {
         Flight flight = flightRepository.findById(id).
                 orElseThrow(() -> new NoSuchFlightException(id));
         model.addAttribute("flight", flight);
+        securityService.checkLoggedInStatus(model);
 
         return "reservation/num_passengers";
     }
@@ -63,12 +68,14 @@ public class ReservationController {
 
         model.addAttribute("booking", new Booking(numPassengers));
         model.addAttribute("flight", flight);
+        securityService.checkLoggedInStatus(model);
 
         return "reservation/create_reservation";
     }
 
     @PostMapping(value = "/create-reservation", consumes = "application/x-www-form-urlencoded")
     public String addReservation(Booking booking, Model model) {
+        securityService.checkLoggedInStatus(model);
         List<User> users = booking.getUsers();
         User user = null;
 
@@ -134,6 +141,7 @@ public class ReservationController {
     @GetMapping("/reservation")
     public String displayReservation(@RequestParam(value = "reservation_id", required = false) Integer reservation_id,
                                      Model model) {
+        securityService.checkLoggedInStatus(model);
         Reservation reservation;
         if (reservation_id != null) {
             try {
@@ -178,6 +186,7 @@ public class ReservationController {
 
     @GetMapping("/reservation-history")
     public String getReservationHistory(User user, Model model) {
+        securityService.checkLoggedInStatus(model);
         List<Reservation> reservations = reservationRepository.findUsersReservations(user.getId());
         model.addAttribute("reservations", reservations);
         return "reservation_history";

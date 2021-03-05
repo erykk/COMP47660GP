@@ -4,6 +4,7 @@ import ie.ucd.COMP47660GP.entities.Flight;
 import ie.ucd.COMP47660GP.repositories.FlightRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
+import ie.ucd.COMP47660GP.service.impl.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +29,9 @@ public class FlightController{
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    SecurityService securityService;
+
 
     // GET all flights
     @GetMapping("/flight")
@@ -49,7 +53,7 @@ public class FlightController{
 
         Flight flight = new Flight();
         model.addAttribute("flight", flight);
-
+        securityService.checkLoggedInStatus(model);
         return "flight/flightslist";
     }
 
@@ -80,6 +84,7 @@ public class FlightController{
 
         Flight flight = new Flight();
         model.addAttribute("flight", flight);
+        securityService.checkLoggedInStatus(model);
 
         return "flight/flightslist";
     }

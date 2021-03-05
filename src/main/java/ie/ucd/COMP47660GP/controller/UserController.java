@@ -90,7 +90,6 @@ public class UserController {
     @PostMapping(value = "/editPersonalDetails", consumes = "application/x-www-form-urlencoded")
     @ResponseBody
     public String updatePersonaDetails(User user) {
-
         System.out.println("TEST /editPersonalDetails");
         userRepository.updateUserId(user.getAddress(), user.getEmail(), user.getFirstName(), user.getLastName(),
                 user.getPhoneNum());
@@ -100,13 +99,16 @@ public class UserController {
     @GetMapping("/registerCard")
     public String registerCard(Model model) {
         model.addAttribute("cardCredentials", new CreditCard());
+        securityService.checkLoggedInStatus(model);
         return "user/cardRegistration";
     }
 
     @RequestMapping(value = "/creditCard", method = RequestMethod.POST)
     public String addCreditCard(@ModelAttribute("cardCredentials") CreditCard cardCredentials,
             BindingResult bindingResult, Model model) {
+        securityService.checkLoggedInStatus(model);
         cardValidator.validate(cardCredentials, bindingResult);
+
 
         if (bindingResult.hasErrors()) {
             return "user/cardRegistration";
@@ -123,11 +125,13 @@ public class UserController {
 
     @GetMapping("/viewCards")
     public String cards(Model model) {
+        securityService.checkLoggedInStatus(model);
         return "user/viewCards";
     }
 
     @GetMapping("/reservationHistory/{id}")
     public String history(@PathVariable("id") int id, Model model) {
+        securityService.checkLoggedInStatus(model);
         List<Reservation> reservations = reservationRepository.findUsersReservations(id);
         model.addAttribute("reservations", reservations);
         return "user/reservationHistory";
@@ -135,8 +139,8 @@ public class UserController {
 
     @GetMapping("/creditCard/{cardNum}")
     public String getCreditCard(@PathVariable String cardNum, Model model) {
+        securityService.checkLoggedInStatus(model);
         CreditCard creditCard = creditCardRepository.findByCardNum(cardNum);
-
         model.addAttribute("creditcard", new CreditCard());
         return "user/viewCard";
     }
@@ -151,12 +155,14 @@ public class UserController {
     @GetMapping("/register")
     public String register(Model model) {
         model.addAttribute("userCredentials", new User());
+        securityService.checkLoggedInStatus(model);
         return "user/register";
     }
 
     @RequestMapping(value = "/secureRegister", method = RequestMethod.POST)
     public String register(@ModelAttribute("userCredentials") User userCredentials, BindingResult bindingResult,
             Model model) {
+        securityService.checkLoggedInStatus(model);
         loginValidator.validate(userCredentials, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -176,6 +182,7 @@ public class UserController {
 
     @GetMapping("/user")
     public String user(Model model) {
+        securityService.checkLoggedInStatus(model);
         SecurityContext context = SecurityContextHolder.getContext();
         User currentUser = userRepository.findEmail(context.getAuthentication().getName());
         model.addAttribute("userCredentials", currentUser);
@@ -184,11 +191,13 @@ public class UserController {
 
     @GetMapping("/login")
     public String login(Model model) {
+        securityService.checkLoggedInStatus(model);
         return "user/login";
     }
 
     @RequestMapping(value = "/secureLogin", method = RequestMethod.POST)
     public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model) {
+        securityService.checkLoggedInStatus(model);
         boolean exists = securityService.login(email, password);
 
         if (exists) {
@@ -204,12 +213,14 @@ public class UserController {
     @PreAuthorize("hasRole('EXEC')")
     @RequestMapping(value = "/deleteAccount", method = RequestMethod.GET)
     public String deleteAccount(Model model) {
+        securityService.checkLoggedInStatus(model);
         return "user/deleteAccount";
     }
 
     @RequestMapping(value = "/deleteAccount", method = RequestMethod.POST)
     public String deleteAccount(@RequestParam("email") String email, @RequestParam("password") String password,
             Model model) {
+        securityService.checkLoggedInStatus(model);
         User user = userService.findByEmail(email);
 
         if (user != null) {
