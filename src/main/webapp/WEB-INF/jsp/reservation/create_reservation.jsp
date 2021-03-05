@@ -73,6 +73,16 @@
                 <td>Expiry Date:</td>
                 <td><form:input type="month" path="dateStr"/></td>
             </tr>
+            <c:if test="${not empty creditcards}">
+                <tr>
+                    <td>
+                        <form:select path="savedCard">
+                            <form:option value="NONE" label="--- Select ---"/>
+                            <form:options items="${creditcards}" itemLabel="cardNum"/>
+                        </form:select>
+                    </td>
+                </tr>
+            </c:if>
             <tr>
                 <td></td>
                 <td><form:button type="submit">Submit</form:button></td>
@@ -81,7 +91,6 @@
                 <td><jsp:useBean id="flight" scope="request" type="ie.ucd.COMP47660GP.entities.Flight"/>
                 <form:input hidden="true" value="${flight.id}" path="flightID"/></td>
             </tr>
-
         </table>
 
     </form:form>
