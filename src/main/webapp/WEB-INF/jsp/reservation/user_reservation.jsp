@@ -39,8 +39,8 @@
 
     <c:choose>
         <c:when test="${not empty user}">
+            <caption><h2>Reservation Details</h2></caption>
             <table style="margin-left: auto; margin-right: auto; border: 1px solid black">
-                <caption><h2>Reservation Details</h2></caption>
                 <thead>
                     <tr>
                         <th style="border: 1px solid black;">Reservation ID</th>

@@ -120,6 +120,11 @@ public class UserController {
         return "user/viewCards";
     }
 
+    @GetMapping("/reservationHistory")
+    public String history(Model model) {
+        return "user/reservationHistory";
+    }
+
     @GetMapping("/creditCard/{cardNum}")
     public String getCreditCard(@PathVariable String cardNum, Model model) {
         CreditCard creditCard = creditCardRepository.findByCardNum(cardNum);

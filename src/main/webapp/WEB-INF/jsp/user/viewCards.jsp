@@ -21,6 +21,7 @@
                 <th>Name</th>
                 <th>Card Number</th>
                 <th>Expiry Date</th>
+                <th></th>
             </tr>
         </thead>
         <c:forEach items="${creditCards}" var="creditcard">
@@ -28,7 +29,8 @@
                 <tr>
                     <td><c:out value="${creditcard.name}"/></td>
                     <td><c:out value="${creditcard.cardNum}"/></td>
-                    <td><c:out value="${creditcard.expiryDate}"/>
+                    <td><c:out value="${creditcard.expiryDate}"/></td>
+                    <td><input class="form-control" type="submit" value="Edit"/></td>
                 </tr>
             </tbody>
         </c:forEach>

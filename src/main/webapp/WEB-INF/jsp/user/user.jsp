@@ -68,6 +68,11 @@
                     <h4 class="text-center"><a href="${contextPath}/registerCard">Add Card</a></h4>
                 </td>
             </tr>
+            <tr>
+                <td>
+                    <h4 class="text-center"><a href="${contextPath}/reservationHistory">View Your Reservation History</a></h4>
+                </td>
+            </tr>
         </table>
     </form:form>
 
