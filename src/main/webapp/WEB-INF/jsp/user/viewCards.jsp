@@ -44,6 +44,7 @@
                         <form:input type="password" path="securityCode" class="form-control" placeholder="${securityCode}"></form:input>
                 </td>
             </tr>
+
             <tr>
                 <td>
                     <h4 class="text-center"><a href="${contextPath}/registerCard">Add Card</a></h4>
