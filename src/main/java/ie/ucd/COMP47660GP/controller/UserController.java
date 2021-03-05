@@ -70,9 +70,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/editPersonalDetails", consumes = "application/x-www-form-urlencoded")
-    //@ResponseBody
     public String updatePersonaDetails(User user) {
-        System.out.println("TEST /editPersonalDetails");
         userRepository.updateUserId(user.getAddress(), user.getEmail(), user.getFirstName(), user.getLastName(),
                 user.getPhoneNum());
         return "redirect:/user";
