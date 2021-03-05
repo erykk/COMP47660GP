@@ -5,7 +5,7 @@
         <a class="navbar-brand" href="#">
             <img id="logo" src="images/airplane.png" alt="Image" width="200px;">
         </a>
-        <h2 class="">An Airline</h2>
+        <h2 class="">British Airways</h2>
         <ul class="navbar-nav ml-auto">
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/">Home</a></li>
             &nbsp;&nbsp;&nbsp;

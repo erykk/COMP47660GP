@@ -13,6 +13,7 @@ import ie.ucd.COMP47660GP.repositories.FlightRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
 import ie.ucd.COMP47660GP.service.LoginService;
+import ie.ucd.COMP47660GP.service.impl.CreditCardService;
 import ie.ucd.COMP47660GP.service.impl.LoginServiceImpl;
 import ie.ucd.COMP47660GP.service.impl.SecurityService;
 import ie.ucd.COMP47660GP.service.impl.UserService;
@@ -57,6 +58,8 @@ public class UserController {
     CreditCardValidator cardValidator;
     @Autowired
     UserService userService;
+    @Autowired
+    CreditCardService cardService;
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -138,14 +141,19 @@ public class UserController {
     @RequestMapping(value = "/creditCard", method = RequestMethod.POST)
     public String addCreditCard(@ModelAttribute("cardCredentials") CreditCard cardCredentials,
             BindingResult bindingResult, Model model) {
+        List<CreditCard> creditCards = new LinkedList<>();
         cardValidator.validate(cardCredentials, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "user/viewCards";
+            return "user/cardRegistration";
         }
+
+        cardService.save(cardCredentials);
+
         model.addAttribute("cardCredentials", cardCredentials);
         model.addAttribute("msg", "Successfully added card " + cardCredentials.getCardNum() + ".");
-
+        creditCards.add(cardCredentials);
+        model.addAttribute("creditCards", creditCards);
         return "user/viewCards";
 
     }
@@ -154,7 +162,7 @@ public class UserController {
     @ResponseBody
     public String getCreditCard(@PathVariable String cardNum) {
         CreditCard creditCard = creditCardRepository.findByCardNum(cardNum);
-        return "creditCard";
+        return "user/viewCard/" + creditCard;
     }
 
     @PutMapping("/editCreditCardDetails")
@@ -207,7 +215,7 @@ public class UserController {
         model.addAttribute("userCredentials", userCredentials);
         model.addAttribute("msg", "Successfully created user " + userCredentials.getEmail() + ".");
 
-        return "user/user";
+        return "user/login";
 
     }
 
