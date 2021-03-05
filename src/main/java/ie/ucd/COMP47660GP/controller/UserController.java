@@ -116,10 +116,12 @@ public class UserController {
         return "Valid: email does not exist";
     }
 
-    @PutMapping("/editPersonalDetails")
+    @PutMapping("/editPersonalDetails/{address}/{firstName}/{lastName}/{phone}/{email}")
     @ResponseBody
-    public void updatePersonaDetails(@RequestBody User updatedUser) {
-        userRepository.updateUserId(updatedUser.getAddress(), updatedUser.getFirstName(), updatedUser.getLastName(), updatedUser.getPhoneNum(), updatedUser.getEmail());
+    public void updatePersonaDetails(@PathVariable String address, @PathVariable String firstName, @PathVariable String lastName,
+                                     @PathVariable String phone, @PathVariable String email) {
+        userRepository.updateUserId(address, email, firstName, lastName, phone);
+        System.out.println("Address: "+address);
     }
 
     @PostMapping("/creditCard")

@@ -49,6 +49,9 @@ public class Client {
 //        ResponseEntity responseUser = restTemplate.postForObject("http://localhost:8080/createMember",requestUser,ResponseEntity.class);
 //        System.out.println("\nPOST USER: "+responseUser+"\n");
 
+        HttpEntity<User> request7 = new HttpEntity<>(user);
+        restTemplate.put("http://localhost:8080/editPersonalDetails/hillside/Johnson/Johnson/087/test@test.com",request7);
+
         CreditCard creditCard = new CreditCard(1,user,"TEST","Mr Debit",ldt,"TEST");
 //
 //        HttpEntity<CreditCard> request4 = new HttpEntity<>(creditCard);
@@ -59,8 +62,8 @@ public class Client {
 //        System.out.println(c.getName());
 
         // PUT
-        HttpEntity<CreditCard> request7 = new HttpEntity<>(creditCard);
-        restTemplate.put("http://localhost:8080/editCreditCardDetails/TEST/VISA DEBIT/TEST/2021/09/15/00/00",request7);
+//        HttpEntity<CreditCard> request7 = new HttpEntity<>(creditCard);
+//        restTemplate.put("http://localhost:8080/editCreditCardDetails/TEST/VISA DEBIT/TEST/2021/09/15/00/00",request7);
 
 //        CreditCard c = restTemplate.getForObject("http://localhost:8080/creditCard/TEST",CreditCard.class);
 //        System.out.println("\nGET: "+c.getCardNum()+"\n");
