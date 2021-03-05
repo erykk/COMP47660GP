@@ -16,27 +16,27 @@
     <jsp:include page="../nav.jsp"/>
 <div class="container">
     <table style="margin-left: auto; margin-right: auto">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Card Number</th>
+                <th>Expiry Date</th>
+            </tr>
+        </thead>
         <c:forEach items="${creditCards}" var="creditcard">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Card Number</th>
-                    <th>Security Code</th>
-                </tr>
-            </thead>
             <tbody>
                 <tr>
                     <td><c:out value="${creditcard.name}"/></td>
                     <td><c:out value="${creditcard.cardNum}"/></td>
-                    <td><c:out value="${creditcard.securityCode}"/>
-                </tr>
-                <tr>
-                    <td>
-                        <h4 class="text-center"><a href="${contextPath}/registerCard">Add Card</a></h4>
-                    </td>
+                    <td><c:out value="${creditcard.expiryDate}"/>
                 </tr>
             </tbody>
         </c:forEach>
+        <tr>
+            <td>
+                <h4 class="text-center"><a href="${contextPath}/registerCard">Add Card</a></h4>
+            </td>
+        </tr>
     </table>
 
 

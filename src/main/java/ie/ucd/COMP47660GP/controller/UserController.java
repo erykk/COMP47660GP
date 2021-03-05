@@ -56,6 +56,7 @@ public class UserController {
     LoginValidator loginValidator;
     @Autowired
     CreditCardValidator cardValidator;
+    List<CreditCard> creditCards = new LinkedList<>();
     @Autowired
     UserService userService;
     @Autowired
@@ -99,7 +100,6 @@ public class UserController {
     @RequestMapping(value = "/creditCard", method = RequestMethod.POST)
     public String addCreditCard(@ModelAttribute("cardCredentials") CreditCard cardCredentials,
             BindingResult bindingResult, Model model) {
-        List<CreditCard> creditCards = new LinkedList<>();
         cardValidator.validate(cardCredentials, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -112,6 +112,11 @@ public class UserController {
         model.addAttribute("msg", "Successfully added card " + cardCredentials.getCardNum() + ".");
         creditCards.add(cardCredentials);
         model.addAttribute("creditCards", creditCards);
+        return "user/viewCards";
+    }
+
+    @GetMapping("/viewCards")
+    public String cards(Model model) {
         return "user/viewCards";
     }
 
@@ -154,6 +159,14 @@ public class UserController {
         model.addAttribute("msg", "Successfully created user " + userCredentials.getEmail() + ".");
 
         return "redirect:/login";
+    }
+
+    @GetMapping("/user")
+    public String user(Model model) {
+        SecurityContext context = SecurityContextHolder.getContext();
+        User currentUser = userRepository.findEmail(context.getAuthentication().getName());
+        model.addAttribute("userCredentials", currentUser);
+        return "user/user";
     }
 
     @GetMapping("/login")
