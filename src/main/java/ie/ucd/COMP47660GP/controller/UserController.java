@@ -82,11 +82,12 @@ public class UserController {
         return "Valid: email does not exist";
     }
 
-    @PutMapping("/editPersonalDetails/{address}/{firstName}/{lastName}/{phone}/{email}")
+    @PostMapping(value = "/editPersonalDetails", consumes = "application/x-www-form-urlencoded")
     @ResponseBody
-    public void updatePersonaDetails(@PathVariable String address, @PathVariable String firstName, @PathVariable String lastName,
-                                     @PathVariable String phone, @PathVariable String email) {
-        userRepository.updateUserId(address, email, firstName, lastName, phone);
+    public String updatePersonaDetails(User user) {
+        System.out.println("TEST /editPersonalDetails");
+        userRepository.updateUserId(user.getAddress(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getPhoneNum());
+        return "redirect:/user";
     }
 
     @GetMapping("/registerCard")
@@ -116,14 +117,10 @@ public class UserController {
         return "creditCard";
     }
 
-    @PutMapping("/editCreditCardDetails/{num}/{name}/{cvv}/{year}/{month}/{day}/{hour}/{min}")
+    @PostMapping(value = "/editCreditCardDetails", consumes = "application/x-www-form-urlencoded")
     @ResponseBody
-    public void updateCreditCard(@PathVariable String num, @PathVariable String name, @PathVariable String cvv,
-                                 @PathVariable int year, @PathVariable int month, @PathVariable int day, @PathVariable int hour, @PathVariable int min ) {
-        LocalDate localDate = LocalDate.of(year, month, day);
-        LocalTime localTime = LocalTime.of(hour, min);
-        LocalDateTime ldt = LocalDateTime.of(localDate, localTime);
-        creditCardRepository.updateCreditCardInfo(num, name, cvv, ldt);
+    public void updateCreditCard(CreditCard creditCard ) {
+        creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(), creditCard.getSecurityCode(), creditCard.getExpiryDate());
     }
 
     @GetMapping("/register")
@@ -163,7 +160,7 @@ public class UserController {
 
         if (exists) {
             model.addAttribute("msg", "Logged in successfully as " + userRepository.findByEmail(email).getEmail());
-            model.addAttribute("userCredentials", userRepository.findByEmail(email));
+            model.addAttribute("user", userRepository.findByEmail(email));
             return "user/user";
         } else {
             model.addAttribute("msg", "User " + email + " does not exist");

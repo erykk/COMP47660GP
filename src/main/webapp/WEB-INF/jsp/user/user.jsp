@@ -16,7 +16,7 @@
     <jsp:include page="../nav.jsp"/>
 <div class="container">
 
-    <form:form method="GET" modelAttribute="userCredentials" class="form-signin">
+    <form:form method="POST" modelAttribute="user" class="form-signin" action="/editPersonalDetails">
         <h2 class="form-signin-heading">Account Details</h2>
         <table>
             <tr>
