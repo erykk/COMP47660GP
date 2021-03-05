@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import ie.ucd.COMP47660GP.entities.CreditCard;
 import ie.ucd.COMP47660GP.entities.Reservation;
 import ie.ucd.COMP47660GP.entities.User;
+import ie.ucd.COMP47660GP.exception.NoSuchCreditCardException;
 import ie.ucd.COMP47660GP.exception.NoSuchUserException;
 import ie.ucd.COMP47660GP.repositories.CreditCardRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
@@ -135,12 +136,19 @@ public class UserController {
         return "user/viewCard";
     }
 
-    @PostMapping(value = "/editCreditCardDetails/{id}", consumes = "application/x-www-form-urlencoded")
-    @ResponseBody
-    public String updateCreditCard(@PathVariable int id, CreditCard creditCard) {
+    @GetMapping("/editCreditCardDetails/{id}")
+    public String editCreditCard(@PathVariable("id") int id, Model model) {
+        CreditCard card = creditCardRepository.findById(id).orElseThrow(() -> new NoSuchCreditCardException());
+        model.addAttribute("cardCredentials", card);
+
+        return "user/editCard";
+    }
+
+    @PostMapping(value = "/editCreditCardDetails")
+    public String updateCreditCard(CreditCard creditCard) {
         creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(),
                 creditCard.getSecurityCode(), creditCard.getExpiryDate());
-        return "user/editCard";
+        return "redirect:/viewCards";
     }
 
     @GetMapping("/register")

@@ -25,7 +25,7 @@
             <tr>
                 <td>Card Number:</td>
                 <td> <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:input type="text" path="cardNum" class="form-control"></form:input>
+                    <form:input type="text" path="cardNum"  readonly="true" class="form-control"></form:input>
                     <form:errors path="cardNum"></form:errors>
                 </div></td>
             </tr>
@@ -43,7 +43,7 @@
 
             <tr>
                 <td></td>
-                <td><form:button type="submit">Add Card</form:button></td>
+                <td><form:button type="submit">Save Edit</form:button></td>
             </tr>
     </table>
     </form:form>
