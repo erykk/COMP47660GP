@@ -13,7 +13,6 @@
     <jsp:include page="../nav.jsp"/>
     <br>
     <div class="container">
-
         <form:form method="POST" modelAttribute="user" class="form-signin" action="/editPersonalDetails">
             <h2 class="form-signin-heading" style="text-align: center">Account Details</h2>
             <br>
@@ -53,7 +52,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>
+                    <td colspan="2">
                         <input class="btn btn-lg btn-outline-primary" type="submit" value="Save Changes"/>
                     </td>
                 </tr>
@@ -77,25 +76,5 @@
         </form:form>
 
     </div>
-
-    <script>
-        function updateUserDetails(address, firstName, lastName, phone, email) {
-            <%--id = ${reservation.reservation_id}--%>
-
-            // fetch(window.location.protocol + '://' + window.location.hostname + ':' + window.location.port + '/reservation/' + id, {
-            fetch(window.location.protocol + 'editPersonalDetails/' + address + '/' + firstName + '/' + lastName + '/' + phone + '/' + email, {
-                method: 'PUT',
-                body: JSON.stringify({
-                    completed: true
-                }),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8"
-                }
-            })
-
-            location.reload()
-        }
-
-    </script>
 </body>
 </html>
