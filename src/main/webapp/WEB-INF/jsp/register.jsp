@@ -11,58 +11,70 @@
 </head>
 
 <body>
-    <jsp:include page="nav.jsp"/>
-    <br>
-    <div class="container">
+    <header>
+        <nav class="navbar navbar-expand-lg header">
+        <a class="navbar-brand" href="#"><img id="logo" src="images/airplane.png" alt="Image"></a>
+            <div>
+                <h1>British Airways</h1>
+            </div>
+        </nav>
+    </header>
+<div class="container">
+    <h2>
+        <a href="${pageContext.request.contextPath}/">Home</a>
+        &nbsp;&nbsp;&nbsp;
+    </h2>
 
-        <form:form method="post" modelAttribute="userCredentials" action="${contextPath}/secureRegister">
-            <table style="margin: 0 auto">
-                <tr><td colspan="2"><h3>Sign Up for our Executive member account.</h3></td></tr>
-                <tr>
-                    <td>First Name:</td>
-                    <td><form:input class="form-control" path="firstName"/></td>
-                </tr>
-                <tr>
-                    <td>Last Name:</td>
-                    <td><form:input class="form-control" path="lastName"/></td>
-                </tr>
-                <tr>
-                    <td>Email:</td>
-                    <td><form:input class="form-control" type="email" path="email"/></td>
-                </tr>
-                <tr>
-                    <td>Address:</td>
-                    <td><form:input class="form-control" path="address"/></td>
-                </tr>
-                <tr>
-                    <td>Phone Number:</td>
-                    <td><form:input class="form-control" type="tel" path="phoneNum"/></td>
-                </tr>
-                <tr>
-                    <td>Password</td>
-                    <td>
-                        <div class="form-group ${status.error ? 'has-error' : ''}">
-                            <form:input type="password" path="password" class="form-control" placeholder="Password"></form:input>
-                            <form:errors path="password"></form:errors>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Verify Password</td>
-                    <td>
-                        <div class="form-group ${status.error ? 'has-error' : ''}">
-                            <form:input type="password" path="verifyPassword" class="form-control"
-                                        placeholder="Verify your password"></form:input>
-                            <form:errors path="verifyPassword"></form:errors>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><form:button class="btn btn-lg btn-outline-primary btn-block" type="submit">Submit</form:button></td>
-                </tr>
-            </table>
-        </form:form>
-    </div>
+    <form:form method="post" modelAttribute="userCredentials" action="${contextPath}/secureRegister">
+        <table>
+            <tr><td><h3>Sign Up for our Executive member account.</h3></td></tr>
+            <tr>
+                <td>First Name:</td>
+                <td><form:input path="firstName"/></td>
+            </tr>
+            <tr>
+                <td>Last Name:</td>
+                <td><form:input path="lastName"/></td>
+            </tr>
+            <tr>
+                <td>Email:</td>
+                <td><form:input type="email" path="email"/></td>
+            </tr>
+            <tr>
+                <td>Address:</td>
+                <td><form:input path="address"/></td>
+            </tr>
+            <tr>
+                <td>Phone Number:</td>
+                <td><form:input type="tel" path="phoneNum"/></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <form:input type="password" path="password" class="form-control" placeholder="Password"></form:input>
+                        <form:errors path="password"></form:errors>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <form:input type="password" path="verifyPassword" class="form-control"
+                                    placeholder="Verify your password"></form:input>
+                        <form:errors path="verifyPassword"></form:errors>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><form:button type="submit">Submit</form:button></td>
+            </tr>
+        </table>
+    </form:form>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="${contextPath}/resources/js/bootstrap.min.js"></script>
 </body>
 </html>

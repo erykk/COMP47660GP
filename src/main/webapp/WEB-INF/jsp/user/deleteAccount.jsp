@@ -12,7 +12,7 @@
 </head>
 
 <body>
-    <jsp:include page="nav.jsp"/>
+    <jsp:include page="../nav.jsp"/>
     <br>
     <div class="container" style="text-align: center">
         <form method="POST" action="${contextPath}/deleteAccount" class="form-signin">

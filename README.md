@@ -16,3 +16,11 @@ Following initialization, navigate to
     localhost:8080
 ```
 
+The application will create the database schema and all required tables, and will fill them
+with some data. After the first run, the following line in application.properties **must** be
+commented out:
+
+```
+    spring.datasource.initialization-mode=always
+```
+

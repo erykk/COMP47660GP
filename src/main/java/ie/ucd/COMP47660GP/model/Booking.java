@@ -3,24 +3,34 @@ package ie.ucd.COMP47660GP.model;
 import ie.ucd.COMP47660GP.entities.CreditCard;
 import ie.ucd.COMP47660GP.entities.User;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class Booking {
-    private User user;
+    private List<User> users;
     private CreditCard creditCard;
     int flightID;
     String dateStr;
 
     public Booking() {
-        user = new User();
+        users = new LinkedList<>();
         creditCard = new CreditCard();
         flightID = 0;
     }
 
-    public User getUser() {
-        return user;
+    public Booking(int num) {
+        this();
+        for(int i = 0; i < num; i++) {
+            users.add(new User());
+        }
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
     public String getDateStr() {

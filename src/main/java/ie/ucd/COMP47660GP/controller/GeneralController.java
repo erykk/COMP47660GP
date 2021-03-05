@@ -31,15 +31,15 @@ public class GeneralController {
         model.addAttribute("flight", flight);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        String currUser;
-        if(authentication != null){
-            currUser = authentication.getName();
-        } else {
-            currUser = "Guest";
+        if(authentication != null && !authentication.getName().equals("anonymousUser")){
+            model.addAttribute("logged_in", true);
         }
-        model.addAttribute("currentUser", currUser);
 
         return "landing";
+    }
+
+    @GetMapping("/logoutSuccess")
+    public String loggedOut() {
+        return "user/logged_out_success";
     }
 }

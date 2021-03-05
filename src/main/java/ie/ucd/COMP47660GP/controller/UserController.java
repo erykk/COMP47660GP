@@ -16,6 +16,7 @@ import ie.ucd.COMP47660GP.service.LoginService;
 import ie.ucd.COMP47660GP.service.impl.LoginServiceImpl;
 import ie.ucd.COMP47660GP.service.impl.SecurityService;
 import ie.ucd.COMP47660GP.service.impl.UserService;
+import ie.ucd.COMP47660GP.validator.CreditCardValidator;
 import ie.ucd.COMP47660GP.validator.LoginValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -42,8 +43,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.*;
+
 //@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 //@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
@@ -52,6 +53,8 @@ public class UserController {
 
     @Autowired
     LoginValidator loginValidator;
+    @Autowired
+    CreditCardValidator cardValidator;
     @Autowired
     UserService userService;
     @Autowired
@@ -68,44 +71,6 @@ public class UserController {
     CreditCardRepository creditCardRepository;
 
 
-    int ref; // Testing purposes
-
-
-
-    // POST new executive club member
-//    @PostMapping("/createMember")
-//    public ResponseEntity addMember(@Valid @RequestBody User user) throws URISyntaxException {
-//        userRepository.save(user);
-//        String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-//                build().toUriString() + "/user/" + user.getId();  // Create new URI for new member
-//        ResponseEntity e;
-//        return e;
-//    }
-
-
-//    // POST new executive club member
-//    // TODO: id params when creating URI
-//    @PostMapping(value = "/registerMember", params = { "name", "surname", "address", "phone", "email" })
-//    public ResponseEntity<String> createReservation(@RequestParam(value = "name") String name,
-//            @RequestParam(value = "surname") String surname, @RequestParam(value = "address") String address,
-//            @RequestParam(value = "phone") String phone, @RequestParam(value = "email") String email)
-//            throws URISyntaxException {
-//        // userRepository.createMember(name, surname, address, phone, email);
-//        String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/member/" + ref;
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setLocation(new URI(path));
-//        return new ResponseEntity(HttpStatus.CREATED);
-//    }
-
-
-//
-//    @GetMapping("/member/{id}")
-//    @ResponseBody
-//    public User getMember(@PathVariable int id){
-//        User user = userRepository.findUser(id);
-//        return user;
-//    }
-
     @GetMapping("getEmail/{email}")
     @ResponseBody
     public String checkIfEmailIsValid(@PathVariable String email) {
@@ -116,19 +81,31 @@ public class UserController {
         return "Valid: email does not exist";
     }
 
-    @PutMapping("/editPersonalDetails/{address}/{firstName}/{lastName}/{phone}/{email}")
+    @PutMapping("/editPersonalDetails")
     @ResponseBody
-    public void updatePersonaDetails(@PathVariable String address, @PathVariable String firstName, @PathVariable String lastName,
-                                     @PathVariable String phone, @PathVariable String email) {
-        userRepository.updateUserId(address, email, firstName, lastName, phone);
-        System.out.println("Address: "+address);
+    public void updatePersonaDetails(@RequestBody User updatedUser) {
+        userRepository.updateUserId(updatedUser.getAddress(), updatedUser.getFirstName(), updatedUser.getLastName(),
+                updatedUser.getPhoneNum(), updatedUser.getEmail());
     }
 
-    @PostMapping("/creditCard")
-    @ResponseBody
-    public String addCreditCard(@RequestBody CreditCard creditCard){
-        creditCardRepository.save(creditCard);
-        return "Credit Card Created";
+    @GetMapping("/registerCard")
+    public String registerCard(Model model) {
+        model.addAttribute("cardCredentials", new CreditCard());
+        return "user/cardRegistration";
+    }
+
+    @RequestMapping(value = "/creditCard", method = RequestMethod.POST)
+    public String addCreditCard(@ModelAttribute("cardCredentials") CreditCard cardCredentials,
+            BindingResult bindingResult, Model model) {
+        cardValidator.validate(cardCredentials, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            return "user/viewCards";
+        }
+        model.addAttribute("cardCredentials", cardCredentials);
+        model.addAttribute("msg", "Successfully added card " + cardCredentials.getCardNum() + ".");
+
+        return "user/viewCards";
     }
 
     @GetMapping("/creditCard/{cardNum}")
@@ -138,42 +115,17 @@ public class UserController {
         return "creditCard";
     }
 
-    @PutMapping("/editCreditCardDetails/{num}/{name}/{cvv}/{year}/{month}/{day}/{hour}/{min}")
+    @PutMapping("/editCreditCardDetails")
     @ResponseBody
-    public void updateCreditCard(@PathVariable String num, @PathVariable String name, @PathVariable String cvv,
-                                 @PathVariable int year, @PathVariable int month, @PathVariable int day, @PathVariable int hour, @PathVariable int min ){
-        LocalDate localDate = LocalDate.of(year,month,day);
-        LocalTime localTime = LocalTime.of(hour,min);
-        LocalDateTime ldt = LocalDateTime.of(localDate,localTime);
-        creditCardRepository.updateCreditCardInfo(num, name, cvv, ldt);
+    public void updateCreditCard(@RequestBody CreditCard creditCard) {
+        creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(),
+                creditCard.getSecurityCode(), creditCard.getExpiryDate());
     }
-
-
-
-
-//    @DeleteMapping("/deleteMember/{id}")
-//    @ResponseBody
-//    public void deleteMember(@PathVariable int id){
-////        User user = userRepository.findUser(id).orElseThrow(() -> new UserNotFoundException(id));
-//        User user = userRepository.findUser(id);
-//        userRepository.delete(user);
-//    }
-
-//    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-//    @ResponseStatus(value = HttpStatus.OK)
-//    public User getUser(@PathVariable String id) {
-//        //
-//        // return userRepository.findUser(id);
-//        return null;
-//    }
-
-
-
 
     @GetMapping("/register")
     public String register(Model model) {
         model.addAttribute("userCredentials", new User());
-        return "register";
+        return "user/register";
     }
 
     @RequestMapping(value = "/secureRegister", method = RequestMethod.POST)
@@ -182,7 +134,7 @@ public class UserController {
         loginValidator.validate(userCredentials, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "register";
+            return "user/register";
         }
 
         SecurityContext context = SecurityContextHolder.getContext();
@@ -190,19 +142,15 @@ public class UserController {
 
         userService.saveExecUser(userCredentials);
 
-        // loginService.autoLogin(userCredentials.getEmail(),
-        // userCredentials.getPassword());
-
         model.addAttribute("userCredentials", userCredentials);
         model.addAttribute("msg", "Successfully created user " + userCredentials.getEmail() + ".");
 
-        return "success";
-
+        return "redirect:/login";
     }
 
     @GetMapping("/login")
     public String login(Model model) {
-        return "login";
+        return "user/login";
     }
 
     @RequestMapping(value = "/secureLogin", method = RequestMethod.POST)
@@ -210,36 +158,39 @@ public class UserController {
         boolean exists = securityService.login(email, password);
 
         if (exists) {
-            model.addAttribute("msg", "Logged in successfully as " + userRepository.findByEmail(email));
-            return "success";
+            model.addAttribute("msg", "Logged in successfully as " + userRepository.findByEmail(email).getEmail());
+            model.addAttribute("userCredentials", userRepository.findByEmail(email));
+            return "user/user";
         } else {
             model.addAttribute("msg", "User " + email + " does not exist");
-            return "fail";
+            return "user/fail";
         }
     }
 
     @PreAuthorize("hasRole('EXEC')")
     @RequestMapping(value = "/deleteAccount", method = RequestMethod.GET)
     public String deleteAccount(Model model) {
-        return "deleteAccount";
+        return "user/deleteAccount";
     }
 
-
     @RequestMapping(value = "/deleteAccount", method = RequestMethod.POST)
-    public String deleteAccount(@RequestParam("email") String email, @RequestParam("password") String password, Model model) {
+    public String deleteAccount(@RequestParam("email") String email, @RequestParam("password") String password,
+            Model model) {
         User user = userService.findByEmail(email);
 
-        if (user != null){
-            if(userService.deleteExecUser(user, password)) {
-                model.addAttribute("msg", "Successfully removed executive privileges from user " + user.getEmail() + ".");
-                return "success";
+        if (user != null) {
+            if (userService.deleteExecUser(user, password)) {
+                model.addAttribute("msg",
+                        "Successfully removed executive privileges from user " + user.getEmail() + ".");
+                return "user/success";
             } else {
-                model.addAttribute("msg", "Could not remove executive privileges for user" + user.getEmail() + ". Password doesn't match");
-                return "fail";
+                model.addAttribute("msg", "Could not remove executive privileges for user" + user.getEmail()
+                        + ". Password doesn't match");
+                return "user/fail";
             }
         } else {
             model.addAttribute("msg", "User " + email + " does not exist.");
-            return "fail";
+            return "user/fail";
         }
     }
 }

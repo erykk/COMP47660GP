@@ -12,7 +12,7 @@
 <jsp:include page="../nav.jsp"/>
 <div style="text-align: center;">
 
-    <table>
+    <table style="margin-left: auto; margin-right: auto">
         <caption><h2>Flights</h2></caption>
         <tr>
             <th style="border: 1px solid black;">Origin</th>
@@ -30,28 +30,32 @@
 
     <%--@elvariable id="booking" type="ie.ucd.COMP47660GP.model.Booking"--%>
     <form:form method="post" modelAttribute="booking" action="/create-reservation">
-        <table>
+        <table style="margin-left: auto; margin-right: auto">
             <tr><td><h3>Passenger Information</h3></td></tr>
-            <tr>
-                <td>First Name:</td>
-                <td><form:input path="user.firstName"/></td>
-            </tr>
-            <tr>
-                <td>Last Name:</td>
-                <td><form:input path="user.lastName"/></td>
-            </tr>
-            <tr>
-                <td>Email:</td>
-                <td><form:input type="email" path="user.email"/></td>
-            </tr>
-            <tr>
-                <td>Address:</td>
-                <td><form:input path="user.address"/></td>
-            </tr>
-            <tr>
-                <td>Phone Number:</td>
-                <td><form:input type="tel" path="user.phoneNum"/></td>
-            </tr>
+            <c:forEach items="${booking.users}" var="user" varStatus="status">
+                <tr><td><h4>Passenger ${status.count}</h4></td></tr>
+                <tr>
+                    <td>First Name:</td>
+                    <td><input name="users[${status.index}].firstName" value="${user.firstName}"/></td>
+                </tr>
+                <tr>
+                    <td>Last Name:</td>
+                    <td><input name="users[${status.index}].lastName" value="${user.lastName}"/></td>
+                </tr>
+                <tr>
+                    <td>Email:</td>
+                    <td><input name="users[${status.index}].email" value="${user.email}"/></td>
+                </tr>
+                <tr>
+                    <td>Address:</td>
+                    <td><input name="users[${status.index}].address" value="${user.address}"/></td>
+                </tr>
+                <tr>
+                    <td>Phone Number:</td>
+                    <td><input name="users[${status.index}].phoneNum" value="${user.phoneNum}"/></td>
+                </tr>
+            </c:forEach>
+
             <tr><td><h3>Payment Information</h3></td></tr>
             <tr>
                 <td>Card number:</td>

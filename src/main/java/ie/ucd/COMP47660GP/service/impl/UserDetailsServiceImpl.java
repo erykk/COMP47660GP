@@ -19,8 +19,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    // treat Username as Email
-    // TODO update query to use email, !username
 
     public UserDetails loadUserByUsername(String email){
         User user = userRepository.findByEmail(email);
