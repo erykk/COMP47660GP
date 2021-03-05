@@ -75,30 +75,9 @@
             </tr>
         </table>
     </form:form>
-
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
-
-    <script>
-        function updateUserDetails(address, firstName, lastName, phone, email) {
-            <%--id = ${reservation.reservation_id}--%>
-
-            // fetch(window.location.protocol + '://' + window.location.hostname + ':' + window.location.port + '/reservation/' + id, {
-            fetch(window.location.protocol + 'editPersonalDetails/' + address + '/' + firstName + '/' + lastName + '/' + phone + '/' + email, {
-                method: 'PUT',
-                body: JSON.stringify({
-                    completed: true
-                }),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8"
-                }
-            })
-
-            location.reload()
-        }
-
-    </script>
 </body>
 </html>
