@@ -11,6 +11,7 @@ public class Booking {
     private CreditCard creditCard;
     int flightID;
     String dateStr;
+    String savedCard;
 
     public Booking() {
         users = new LinkedList<>();
@@ -55,5 +56,13 @@ public class Booking {
 
     public void setFlightID(int flightID) {
         this.flightID = flightID;
+    }
+
+    public String getSavedCard() {
+        return savedCard;
+    }
+
+    public void setSavedCard(String savedCard) {
+        this.savedCard = savedCard;
     }
 }

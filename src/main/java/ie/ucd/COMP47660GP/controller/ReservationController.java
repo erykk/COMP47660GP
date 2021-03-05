@@ -17,10 +17,13 @@ import ie.ucd.COMP47660GP.service.impl.SecurityService;
 import ie.ucd.COMP47660GP.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Book;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -66,7 +69,23 @@ public class ReservationController {
         Flight flight = flightRepository.findById(id).
                 orElseThrow(() -> new NoSuchFlightException(id));
 
-        model.addAttribute("booking", new Booking(numPassengers));
+        Booking booking = new Booking(numPassengers);
+
+        SecurityContext context = SecurityContextHolder.getContext();
+        User user = userRepository.findEmail(context.getAuthentication().getName());
+
+        if (user != null) {
+            booking.getUsers().remove(0);
+            booking.getUsers().add(0, user);
+
+            List<CreditCard> creditcards = creditCardRepository.findAllByUser(user);
+
+            if (creditcards != null && !creditcards.isEmpty()) {
+                model.addAttribute("creditcards", creditcards);
+            }
+        }
+
+        model.addAttribute("booking", booking);
         model.addAttribute("flight", flight);
         securityService.checkLoggedInStatus(model);
 
@@ -97,25 +116,26 @@ public class ReservationController {
             savedUsers.add(user);
         }
 
+        if (booking.getSavedCard() == null || booking.getSavedCard().equals("")) {
+            DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").
+                    parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
 
-        DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").
-                parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
+            LocalDate expiry = LocalDate.parse(booking.getDateStr(), formatter);
 
-        LocalDate expiry = LocalDate.parse(booking.getDateStr(), formatter);
-
-        CreditCard creditCard = booking.getCreditCard();
-        try {
-            creditCard = creditCardRepository.findByCardNum(creditCard.getCardNum());
-            if (creditCard == null) {
-                throw new NoSuchCreditCardException();
+            CreditCard creditCard = booking.getCreditCard();
+            try {
+                creditCard = creditCardRepository.findByCardNum(creditCard.getCardNum());
+                if (creditCard == null) {
+                    throw new NoSuchCreditCardException();
+                }
+            } catch (NoSuchCreditCardException e) {
+                creditCard = booking.getCreditCard();
             }
-        } catch (NoSuchCreditCardException e) {
-            creditCard = booking.getCreditCard();
-        }
 
-        creditCard.setUser(user);
-        creditCard.setExpiryDate(expiry.atStartOfDay().toString());
-        creditCardRepository.save(creditCard);
+            creditCard.setUser(savedUsers.get(0));
+            creditCard.setExpiryDate(expiry.atStartOfDay().toString());
+            creditCardRepository.save(creditCard);
+        }
 
         Flight flight = flightRepository.findById(booking.getFlightID()).
                 orElseThrow(() -> new NoSuchFlightException(booking.getFlightID()));

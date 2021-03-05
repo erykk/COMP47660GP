@@ -23,9 +23,7 @@ public class SecurityService {
 
         try {
             authenticationManager.authenticate(token);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception ignored) {}
 
         state = token.isAuthenticated();
 

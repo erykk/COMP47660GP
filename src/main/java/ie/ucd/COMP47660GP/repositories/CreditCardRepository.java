@@ -1,6 +1,7 @@
 package ie.ucd.COMP47660GP.repositories;
 
 import ie.ucd.COMP47660GP.entities.CreditCard;
+import ie.ucd.COMP47660GP.entities.User;
 import ie.ucd.COMP47660GP.exception.NoSuchCreditCardException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -17,6 +18,9 @@ public interface CreditCardRepository extends JpaRepository<CreditCard, Integer>
 
     @Query("Select c from CreditCard c where c.cardNum  = :cardNum")
     CreditCard findByCardNum(String cardNum) throws NoSuchCreditCardException;
+
+    @Query("select c from CreditCard c where c.user = :user")
+    List<CreditCard> findAllByUser(User user);
 
     @Transactional
     @Modifying

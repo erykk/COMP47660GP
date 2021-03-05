@@ -115,6 +115,10 @@ public class UserController {
             return "user/cardRegistration";
         }
 
+        SecurityContext context = SecurityContextHolder.getContext();
+        User user = userRepository.findEmail(context.getAuthentication().getName());
+        cardCredentials.setUser(user);
+
         cardService.save(cardCredentials);
 
         model.addAttribute("cardCredentials", cardCredentials);
@@ -127,6 +131,12 @@ public class UserController {
     @GetMapping("/viewCards")
     public String cards(Model model) {
         securityService.checkLoggedInStatus(model);
+
+        SecurityContext context = SecurityContextHolder.getContext();
+        User user = userRepository.findEmail(context.getAuthentication().getName());
+
+        List<CreditCard> creditCards = creditCardRepository.findAllByUser(user);
+        model.addAttribute("creditCards", creditCards);
         return "user/viewCards";
     }
 
@@ -186,7 +196,7 @@ public class UserController {
         securityService.checkLoggedInStatus(model);
         SecurityContext context = SecurityContextHolder.getContext();
         User currentUser = userRepository.findEmail(context.getAuthentication().getName());
-        model.addAttribute("userCredentials", currentUser);
+        model.addAttribute("user", currentUser);
         return "user/user";
     }
 
