@@ -13,7 +13,7 @@ import ie.ucd.COMP47660GP.repositories.CreditCardRepository;
 import ie.ucd.COMP47660GP.repositories.FlightRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
-import ie.ucd.COMP47660GP.service.impl.SecurityService;
+import ie.ucd.COMP47660GP.service.impl.SecurityServiceImpl;
 import ie.ucd.COMP47660GP.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,7 +49,7 @@ public class ReservationController {
     CreditCardRepository creditCardRepository;
 
     @Autowired
-    SecurityService securityService;
+    SecurityServiceImpl securityService;
 
 
     @GetMapping(value = "/create-reservation/{id}")
@@ -186,7 +186,7 @@ public class ReservationController {
 
     // GET all reservations associated with given user id
     @GetMapping(value = "/reservation/{id}")
-    public List<Reservation> getReservations(@PathVariable("id") int id) {
+    public List<Reservation> getReservations(@PathVariable("id") Long id) {
 
         return reservationRepository.findUsersReservations(id);
     }

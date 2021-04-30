@@ -1,5 +1,6 @@
 package ie.ucd.COMP47660GP.config;
 
+import ie.ucd.COMP47660GP.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -39,19 +40,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    AuthenticationManager customAuthenticationManager() throws Exception {
+    public AuthenticationManager customAuthenticationManager() throws Exception {
         return authenticationManager();
     }
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return super.userDetailsService();
+        return new UserDetailsServiceImpl();
     }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
-        auth.inMemoryAuthentication().withUser("user").password("pass").roles("USER").and().withUser("admin")
-                .password("pass").roles("ADMIN");
     }
 }
