@@ -21,9 +21,12 @@ The application can be run by navigating to the application folder and running
     mvn spring-boot:run
 ```
 
-Following initialization, navigate to 
+Following initialization, navigate to
 
 ```
-    localhost:8080
+    https://localhost:8080
 ```
 
+You may want to add the certificate to the browser's keystore.
+If so, add the keystore/solarwinds.p12 file to browser keystore. Password is in 
+application.properties file.
