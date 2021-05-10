@@ -1,7 +1,7 @@
 package ie.ucd.COMP47660GP.controller;
 
 import ie.ucd.COMP47660GP.entities.Flight;
-import ie.ucd.COMP47660GP.service.impl.SecurityService;
+import ie.ucd.COMP47660GP.service.impl.SecurityServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +14,7 @@ import java.util.List;
 public class GeneralController {
 
     @Autowired
-    SecurityService securityService;
+    SecurityServiceImpl securityService;
 
     @GetMapping("/")
     public String getLanding(Model model) {

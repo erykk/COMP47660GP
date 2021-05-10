@@ -11,7 +11,7 @@ import ie.ucd.COMP47660GP.repositories.ReservationRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
 import ie.ucd.COMP47660GP.service.LoginService;
 import ie.ucd.COMP47660GP.service.impl.CreditCardService;
-import ie.ucd.COMP47660GP.service.impl.SecurityService;
+import ie.ucd.COMP47660GP.service.impl.SecurityServiceImpl;
 import ie.ucd.COMP47660GP.service.impl.UserService;
 import ie.ucd.COMP47660GP.validator.CreditCardValidator;
 import ie.ucd.COMP47660GP.validator.LoginValidator;
@@ -52,7 +52,7 @@ public class UserController {
     @Qualifier("loginServiceImpl")
     LoginService loginService;
     @Autowired
-    SecurityService securityService;
+    SecurityServiceImpl securityService;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -119,8 +119,8 @@ public class UserController {
     }
 
     @GetMapping("/reservationHistory/{id}")
-    public String history(@PathVariable("id") int id, Model model) {
-        securityService.checkLoggedInStatus(model);
+    public String history(@PathVariable("id") Long id, Model model) {
+//        securityService.checkLoggedInStatus(model);
         List<Reservation> reservations = reservationRepository.findUsersReservations(id);
         model.addAttribute("reservations", reservations);
         return "user/reservationHistory";
@@ -128,7 +128,7 @@ public class UserController {
 
     @GetMapping("/creditCard/{cardNum}")
     public String getCreditCard(@PathVariable String cardNum, Model model) {
-        securityService.checkLoggedInStatus(model);
+//        securityService.checkLoggedInStatus(model);
         CreditCard creditCard = creditCardRepository.findByCardNum(cardNum);
         model.addAttribute("creditcard", new CreditCard());
         return "user/viewCard";
@@ -152,14 +152,14 @@ public class UserController {
     @GetMapping("/register")
     public String register(Model model) {
         model.addAttribute("userCredentials", new User());
-        securityService.checkLoggedInStatus(model);
+//        securityService.checkLoggedInStatus(model);
         return "user/register";
     }
 
     @RequestMapping(value = "/secureRegister", method = RequestMethod.POST)
     public String register(@ModelAttribute("userCredentials") User userCredentials, BindingResult bindingResult,
             Model model) {
-        securityService.checkLoggedInStatus(model);
+//        securityService.checkLoggedInStatus(model);
         loginValidator.validate(userCredentials, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -196,7 +196,7 @@ public class UserController {
     public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model) {
         securityService.checkLoggedInStatus(model);
         try {
-            securityService.login(email, password);
+            securityService.autoLogin(email, password);
             model.addAttribute("msg", "Logged in successfully as " + userRepository.findByEmail(email).getEmail());
             model.addAttribute("user", userRepository.findByEmail(email));
             return "user/user";

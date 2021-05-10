@@ -24,7 +24,7 @@ The application can be run by navigating to the application folder and running
 Following initialization, navigate to
 
 ```
-    https://localhost:8080
+    https://localhost:8443
 ```
 
 You may want to add the certificate to the browser's keystore.

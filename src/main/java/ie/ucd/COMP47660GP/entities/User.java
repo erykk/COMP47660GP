@@ -9,14 +9,17 @@ import org.springframework.data.annotation.Transient;
 @Table( name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;
     private String address;
     private String phoneNum;
     private Boolean exec;
+    private String password;
+    @Transient
+    private String verifyPassword;
 
     @ManyToMany
     @JoinTable(
@@ -36,19 +39,13 @@ public class User {
         this.phoneNum = phoneNum;
     }
 
-    public User() {
+    public User() { }
 
-    }
-
-    private String password;
-    @Transient
-    private String verifyPassword;
-
-    public int getId() {
+    public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
         this.id = id;
     }
 

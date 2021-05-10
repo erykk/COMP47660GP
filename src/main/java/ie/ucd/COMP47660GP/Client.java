@@ -23,7 +23,7 @@ public class Client {
         LocalDateTime ldt = LocalDateTime.of(localDate,localTime);
 
         User user = new User("Barry", "Murphy", "bbe@gmail.com", "46 Hillside", "0845637893");
-        user.setId(6);
+        user.setId(6L);
 
         CreditCard creditCard = new CreditCard(1,user,"TEST","Mr Debit",ldt.toString(),"TEST");
 
