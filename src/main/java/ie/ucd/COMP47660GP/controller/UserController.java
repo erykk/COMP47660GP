@@ -15,6 +15,7 @@ import ie.ucd.COMP47660GP.service.impl.SecurityServiceImpl;
 import ie.ucd.COMP47660GP.service.impl.UserService;
 import ie.ucd.COMP47660GP.validator.CreditCardValidator;
 import ie.ucd.COMP47660GP.validator.LoginValidator;
+import ie.ucd.COMP47660GP.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -58,6 +59,10 @@ public class UserController {
 
     @Autowired
     CreditCardRepository creditCardRepository;
+
+    // Assignment 3
+    @Autowired
+    UserValidator userValidator;
 
     @GetMapping("getEmail/{email}")
     @ResponseBody
@@ -160,7 +165,8 @@ public class UserController {
     public String register(@ModelAttribute("userCredentials") User userCredentials, BindingResult bindingResult,
             Model model) {
 //        securityService.checkLoggedInStatus(model);
-        loginValidator.validate(userCredentials, bindingResult);
+//        loginValidator.validate(userCredentials, bindingResult);
+          userValidator.validate(userCredentials,bindingResult);
 
         if (bindingResult.hasErrors()) {
             return "user/register";

@@ -15,6 +15,28 @@
     <br>
     <div class="container">
 
+        <script>
+            function myFunction() {
+                var x = document.getElementById("txtPassword");
+                if (x.type === "password") {
+                    x.type = "text";
+                } else {
+                    x.type = "password";
+                }
+                clear()
+            }
+        </script>
+        <script>
+
+            function clear() {
+                document.getElementById("perrors").innerHTML = '';
+
+            }
+
+
+        </script>
+
+
         <form:form method="post" modelAttribute="userCredentials" action="${contextPath}/secureRegister">
             <table style="margin: 0 auto">
                 <tr><td colspan="2"><h3>Sign Up for our Executive member account.</h3></td></tr>
@@ -39,11 +61,25 @@
                     <td><form:input class="form-control" type="tel" path="phoneNum"/></td>
                 </tr>
                 <tr>
+                    <td>Username:</td>
+                    <td>
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                            <form:input type="text" path="username" class="form-control" placeholder="Username"  onkeypress="clear()"></form:input>
+                            <br>
+
+                        </div>
+                    </td>
+                </tr>
+                <tr>
                     <td>Password</td>
                     <td>
                         <div class="form-group ${status.error ? 'has-error' : ''}">
-                            <form:input type="password" path="password" class="form-control" placeholder="Password"></form:input>
-                            <form:errors path="password"></form:errors>
+
+                            <form:input type="password" path="password" class="form-control" placeholder="Password" id="txtPassword" onkeyup="CheckPasswordStrength(this.value)"></form:input>
+
+                            <input type="checkbox" onclick="myFunction()">Show Password
+                            <br>
+
                         </div>
                     </td>
                 </tr>
@@ -51,12 +87,18 @@
                     <td>Verify Password</td>
                     <td>
                         <div class="form-group ${status.error ? 'has-error' : ''}">
-                            <form:input type="password" path="verifyPassword" class="form-control"
-                                        placeholder="Verify your password"></form:input>
-                            <form:errors path="verifyPassword"></form:errors>
+
+                            <form:input type="password" path="passwordConfirm" class="form-control" placeholder="Confirm your password" onkeydown="clear()"></form:input>
+                            <br>
+
+                            <form:errors path="passwordConfirm" id="perrors"></form:errors>
+
                         </div>
                     </td>
                 </tr>
+                <br>
+                <span  id="password_strength"></span>
+                <br>
                 <tr>
                     <td></td>
                     <td><form:button class="btn btn-lg btn-outline-primary btn-block" type="submit">Submit</form:button></td>
