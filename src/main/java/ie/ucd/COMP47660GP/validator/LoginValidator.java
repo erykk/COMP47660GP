@@ -104,4 +104,8 @@ public class LoginValidator implements Validator {
         }
         return validEmail;
     }
+
+    public void test(){
+
+    }
 }
