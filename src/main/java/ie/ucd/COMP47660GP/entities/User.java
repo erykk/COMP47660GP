@@ -20,7 +20,12 @@ public class User {
     private String password;
     @Transient
     private String verifyPassword;
+    // Assignment 3
+    @Transient
+    private String passwordConfirm;
+    // Assignment 3
     private String username;
+
     @ManyToMany
     @JoinTable(
             name = "user_roles",
@@ -121,9 +126,21 @@ public class User {
         this.roles = roles;
     }
 
+    /**
+     *   Assignment 3
+      */
+
     public String getUsername(){ return username;}
 
     public void setUsername(String username){
         this.username = username;
+    }
+
+    public String getPasswordConfirm() {
+        return passwordConfirm;
+    }
+
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
     }
 }
