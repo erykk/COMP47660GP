@@ -11,7 +11,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
-public class LoginValidator implements Validator {
+public class
+LoginValidator implements Validator {
 
     @Autowired
     private UserService userService;
@@ -103,5 +104,9 @@ public class LoginValidator implements Validator {
             validEmail = true;
         }
         return validEmail;
+    }
+
+    public void testing(){
+
     }
 }
