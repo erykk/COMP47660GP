@@ -20,6 +20,7 @@ public class User {
     private String password;
     @Transient
     private String verifyPassword;
+
     // Assignment 3
     @Transient
     private String passwordConfirm;
@@ -127,7 +128,7 @@ public class User {
     }
 
     /**
-     *   Assignment 3
+     *   Assignment 3 Methods
       */
 
     public String getUsername(){ return username;}
