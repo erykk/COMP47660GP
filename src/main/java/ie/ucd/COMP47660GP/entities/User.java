@@ -37,12 +37,15 @@ public class User {
     private Collection<Role> roles;
 
 
-    public User(String firstName, String lastName, String email, String address, String phoneNum) {
+    public User(String firstName, String lastName, String email, String address, String phoneNum, String username, String password, String passwordConfirm) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.address = address;
         this.phoneNum = phoneNum;
+        this.username = username;
+        this.password = password;
+        this.passwordConfirm = passwordConfirm;
     }
 
     public User() { }

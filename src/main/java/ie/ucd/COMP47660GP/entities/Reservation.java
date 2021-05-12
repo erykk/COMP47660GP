@@ -26,7 +26,7 @@ public class Reservation {
 
     public Reservation() {
         this.flight = new Flight();
-        this.user = new User("Mr test", "test", "test113", "testidge", "test");
+        this.user = new User("Mr test", "test", "test113", "testidge", "test","usertest", "Pass123(", "Pass123(");
         this.cancelled = false;
     }
 

@@ -66,7 +66,7 @@
                         <div class="form-group ${status.error ? 'has-error' : ''}">
                             <form:input type="text" path="username" class="form-control" placeholder="Username"  onkeypress="clear()"></form:input>
                             <br>
-
+                            <form:errors path="username"></form:errors>
                         </div>
                     </td>
                 </tr>
@@ -79,7 +79,7 @@
 
                             <input type="checkbox" onclick="myFunction()">Show Password
                             <br>
-
+                            <form:errors path="password"></form:errors>
                         </div>
                     </td>
                 </tr>
@@ -101,7 +101,7 @@
                 <br>
                 <tr>
                     <td></td>
-                    <td><form:button class="btn btn-lg btn-outline-primary btn-block" type="submit">Submit</form:button></td>
+                    <td><form:button type="submit">Submit</form:button></td>
                 </tr>
             </table>
         </form:form>
