@@ -76,6 +76,7 @@ public class UserController {
 
     @PostMapping(value = "/editPersonalDetails", consumes = "application/x-www-form-urlencoded")
     public String updatePersonaDetails(User user) {
+        System.out.println("/editPersonalDetail method");
         userRepository.updateUserId(user.getAddress(), user.getEmail(), user.getFirstName(), user.getLastName(),
                 user.getPhoneNum());
         return "redirect:/user";
@@ -194,6 +195,7 @@ public class UserController {
 
     @GetMapping("/login")
     public String login(Model model) {
+//        model.addAttribute("login", new Login());
         securityService.checkLoggedInStatus(model);
         return "user/login";
     }

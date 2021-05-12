@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -24,14 +25,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
 
-        http.authorizeRequests()
+        http.   csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .and()
+                .authorizeRequests()
                 .antMatchers("/register", "/", "/login", "/secureRegister", "/secureLogin", "/resources/**",
                         "/images/**", "/reservation", "/mem/{id}", "/creditCard", "/creditCard/{cardNum}", "/editCreditCardDetails",
                         "/registerCard", "/editPersonalDetails", "/flight", "/create-reservation", "/createMember",
                         "/create-reservation/*", "/deleteAccount", "/success", "/fail")
                 .permitAll().anyRequest().authenticated().and().formLogin().loginPage("/login")
                 .loginProcessingUrl("/loginSecure").usernameParameter("email").passwordParameter("password").and()
-                .logout().logoutSuccessUrl("/logoutSuccess").permitAll().and().csrf().disable();
+                .logout().logoutSuccessUrl("/logoutSuccess").permitAll().and();
     }
 
     @Bean
