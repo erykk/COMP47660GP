@@ -178,7 +178,7 @@ public class UserController {
         userService.saveExecUser(userCredentials);
 
         model.addAttribute("userCredentials", userCredentials);
-        model.addAttribute("msg", "Successfully created user " + userCredentials.getEmail() + ".");
+        model.addAttribute("msg", "Successfully created user " + userCredentials.getUsername() + ".");
 
         return "redirect:/login";
     }
