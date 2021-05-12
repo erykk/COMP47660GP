@@ -200,6 +200,8 @@ public class UserController {
 
     @RequestMapping(value = "/secureLogin", method = RequestMethod.POST)
     public String login(@RequestParam("username") String username, @RequestParam("password") String password, Model model) {
+        System.out.println("/secureLogin Username:" + username);
+        System.out.println("/secureLogin Password: " + password);
         securityService.checkLoggedInStatus(model);
         try {
             securityService.autoLogin(username, password);

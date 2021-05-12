@@ -22,8 +22,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String email){
-        User user = userRepository.findByEmail(email);
+    public UserDetails loadUserByUsername(String username){
+        User user = userRepository.findByUsername(username);
         if (user == null) throw new NoSuchUserException();
 
         Set<GrantedAuthority> authoritySet = new HashSet<GrantedAuthority>();
@@ -31,7 +31,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             authoritySet.add(new SimpleGrantedAuthority(role.getName()));
         }
 
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authoritySet);
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authoritySet);
     }
 
 }
