@@ -68,11 +68,6 @@ public class UserServiceImpl implements UserService{
     // Assignment 3
     @Override
     public User findByUsername(String username) {
-        System.out.println("FindByUsername CALL");
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
-            System.out.println("User is null");
-        }
         return userRepository.findByUsername(username);
     }
 
