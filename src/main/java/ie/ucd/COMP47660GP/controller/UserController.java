@@ -15,6 +15,7 @@ import ie.ucd.COMP47660GP.service.impl.SecurityServiceImpl;
 import ie.ucd.COMP47660GP.service.impl.UserService;
 import ie.ucd.COMP47660GP.validator.CreditCardValidator;
 import ie.ucd.COMP47660GP.validator.LoginValidator;
+import ie.ucd.COMP47660GP.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -58,6 +59,10 @@ public class UserController {
 
     @Autowired
     CreditCardRepository creditCardRepository;
+
+    // Assignment 3
+    @Autowired
+    UserValidator userValidator;
 
     @GetMapping("getEmail/{email}")
     @ResponseBody
@@ -160,7 +165,8 @@ public class UserController {
     public String register(@ModelAttribute("userCredentials") User userCredentials, BindingResult bindingResult,
             Model model) {
 //        securityService.checkLoggedInStatus(model);
-        loginValidator.validate(userCredentials, bindingResult);
+//        loginValidator.validate(userCredentials, bindingResult);
+          userValidator.validate(userCredentials,bindingResult);
 
         if (bindingResult.hasErrors()) {
             return "user/register";
@@ -172,7 +178,7 @@ public class UserController {
         userService.saveExecUser(userCredentials);
 
         model.addAttribute("userCredentials", userCredentials);
-        model.addAttribute("msg", "Successfully created user " + userCredentials.getEmail() + ".");
+        model.addAttribute("msg", "Successfully created user " + userCredentials.getUsername() + ".");
 
         return "redirect:/login";
     }
@@ -193,15 +199,15 @@ public class UserController {
     }
 
     @RequestMapping(value = "/secureLogin", method = RequestMethod.POST)
-    public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model) {
+    public String login(@RequestParam("username") String username, @RequestParam("password") String password, Model model) {
         securityService.checkLoggedInStatus(model);
         try {
-            securityService.autoLogin(email, password);
-            model.addAttribute("msg", "Logged in successfully as " + userRepository.findByEmail(email).getEmail());
-            model.addAttribute("user", userRepository.findByEmail(email));
+            securityService.autoLogin(username, password);
+            model.addAttribute("msg", "Logged in successfully as " + userRepository.findByUsername(username).getUsername());
+            model.addAttribute("user", userRepository.findByUsername(username));
             return "user/user";
         } catch (NoSuchUserException e) {
-            model.addAttribute("msg", "User " + email + " does not exist");
+            model.addAttribute("msg", "User " + username + " does not exist");
             return "user/fail";
         }
     }

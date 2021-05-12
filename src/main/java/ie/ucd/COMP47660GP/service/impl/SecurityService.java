@@ -10,4 +10,6 @@ public interface SecurityService {
     void autoLogin(String email, String password);
 
     void forceLogout (Model model);
+
+    String findLoggedInUsername();
 }

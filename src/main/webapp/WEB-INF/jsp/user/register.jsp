@@ -8,12 +8,40 @@
 <head>
     <meta charset="utf-8">
     <title>Create Executive Account</title>
+
+    <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
+    <script src="${contextPath}/resources/js/password_validation.js"></script>
 </head>
 
 <body>
     <jsp:include page="../nav.jsp"/>
     <br>
     <div class="container">
+
+        <script>
+            function myFunction() {
+                var x = document.getElementById("txtPassword");
+                if (x.type === "password") {
+                    x.type = "text";
+                } else {
+                    x.type = "password";
+                }
+                clear()
+            }
+        </script>
+        <script>
+
+            function clear() {
+                document.getElementById("perrors").innerHTML = '';
+
+            }
+
+
+        </script>
+
 
         <form:form method="post" modelAttribute="userCredentials" action="${contextPath}/secureRegister">
             <table style="margin: 0 auto">
@@ -39,27 +67,55 @@
                     <td><form:input class="form-control" type="tel" path="phoneNum"/></td>
                 </tr>
                 <tr>
+                    <td>Username:</td>
+                    <td>
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                            <form:input type="text" path="username" class="form-control" placeholder="Username"  onkeypress="clear()"></form:input>
+                            <br>
+                            <form:errors path="username"></form:errors>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
                     <td>Password</td>
                     <td>
                         <div class="form-group ${status.error ? 'has-error' : ''}">
-                            <form:input type="password" path="password" class="form-control" placeholder="Password"></form:input>
+
+                            <form:input type="password" path="password" class="form-control" placeholder="Password" id="txtPassword" onkeyup="CheckPasswordStrength(this.value)"></form:input>
+
+                            <input type="checkbox" onclick="myFunction()">Show Password
+                            <br>
                             <form:errors path="password"></form:errors>
                         </div>
                     </td>
                 </tr>
+
+                <tr>
+                    <td>Password Strength:</td>
+                    <td>
+                        <br>
+                        <span  id="password_strength"></span>
+                        <br>
+                    </td>
+                </tr>
+
                 <tr>
                     <td>Verify Password</td>
                     <td>
                         <div class="form-group ${status.error ? 'has-error' : ''}">
-                            <form:input type="password" path="verifyPassword" class="form-control"
-                                        placeholder="Verify your password"></form:input>
-                            <form:errors path="verifyPassword"></form:errors>
+
+                            <form:input type="password" path="passwordConfirm" class="form-control" placeholder="Confirm your password" onkeydown="clear()"></form:input>
+                            <br>
+
+                            <form:errors path="passwordConfirm" id="perrors"></form:errors>
+
                         </div>
                     </td>
                 </tr>
+
                 <tr>
                     <td></td>
-                    <td><form:button class="btn btn-lg btn-outline-primary btn-block" type="submit">Submit</form:button></td>
+                    <td><form:button type="submit">Submit</form:button></td>
                 </tr>
             </table>
         </form:form>

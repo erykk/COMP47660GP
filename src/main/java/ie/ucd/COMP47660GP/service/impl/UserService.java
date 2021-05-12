@@ -18,6 +18,14 @@ public interface UserService {
     void saveGuestUser(User user);
     void saveExecUser(User user);
     boolean deleteExecUser(User user, String password);
+
+    // Assignment 3
+    User findByUsername(String username);
+
+
+
+
+
 //    User findByUsername(String username);
 
 
