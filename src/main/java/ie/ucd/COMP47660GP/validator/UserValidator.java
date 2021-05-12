@@ -26,7 +26,13 @@ public class UserValidator implements Validator {
         User user = (User) o;
 
         //ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "NotEmpty");
-
+        System.out.println("Validate: Username is "+user.getUsername());
+        System.out.println("Username is valid: "+isUserValid(user.getUsername()));
+        System.out.println(userService.findByUsername(user.getUsername()) != null);
+        System.out.println("PasswordConfirm: "+user.getPasswordConfirm());
+        System.out.println("Password: "+user.getPassword());
+        System.out.println(user.getPasswordConfirm().equals(user.getPassword()));
+        System.out.println(isStrong(user.getPassword()));
         if ((user.getUsername().length() < 6 || user.getUsername().length() > 32) ||
                 (!isUserValid(user.getUsername())) ||
                 (userService.findByUsername(user.getUsername()) != null) ||

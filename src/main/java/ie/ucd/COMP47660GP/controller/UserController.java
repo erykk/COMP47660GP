@@ -199,15 +199,15 @@ public class UserController {
     }
 
     @RequestMapping(value = "/secureLogin", method = RequestMethod.POST)
-    public String login(@RequestParam("email") String email, @RequestParam("password") String password, Model model) {
+    public String login(@RequestParam("username") String username, @RequestParam("password") String password, Model model) {
         securityService.checkLoggedInStatus(model);
         try {
-            securityService.autoLogin(email, password);
-            model.addAttribute("msg", "Logged in successfully as " + userRepository.findByEmail(email).getEmail());
-            model.addAttribute("user", userRepository.findByEmail(email));
+            securityService.autoLogin(username, password);
+            model.addAttribute("msg", "Logged in successfully as " + userRepository.findByUsername(username).getUsername());
+            model.addAttribute("user", userRepository.findByUsername(username));
             return "user/user";
         } catch (NoSuchUserException e) {
-            model.addAttribute("msg", "User " + email + " does not exist");
+            model.addAttribute("msg", "User " + username + " does not exist");
             return "user/fail";
         }
     }

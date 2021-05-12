@@ -8,6 +8,12 @@
 <head>
     <meta charset="utf-8">
     <title>Create Executive Account</title>
+
+    <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
+    <script src="${contextPath}/resources/js/password_validation.js"></script>
 </head>
 
 <body>
@@ -83,6 +89,16 @@
                         </div>
                     </td>
                 </tr>
+
+                <tr>
+                    <td>Password Strength:</td>
+                    <td>
+                        <br>
+                        <span  id="password_strength"></span>
+                        <br>
+                    </td>
+                </tr>
+
                 <tr>
                     <td>Verify Password</td>
                     <td>
@@ -96,9 +112,7 @@
                         </div>
                     </td>
                 </tr>
-                <br>
-                <span  id="password_strength"></span>
-                <br>
+
                 <tr>
                     <td></td>
                     <td><form:button type="submit">Submit</form:button></td>
