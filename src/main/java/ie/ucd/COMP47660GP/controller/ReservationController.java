@@ -71,7 +71,7 @@ public class ReservationController {
         Booking booking = new Booking(numPassengers);
 
         SecurityContext context = SecurityContextHolder.getContext();
-        User user = userRepository.findEmail(context.getAuthentication().getName());
+        User user = userRepository.findByUsername(context.getAuthentication().getName());
 
         if (user != null) {
             booking.getUsers().remove(0);
@@ -101,7 +101,7 @@ public class ReservationController {
 
         for (User receivedUser: users) {
             try {
-                user = userRepository.findEmail(receivedUser.getEmail());
+                user = userRepository.findByUsername(receivedUser.getEmail());
                 if (user == null) {
                     throw new NoSuchUserException();
                 }

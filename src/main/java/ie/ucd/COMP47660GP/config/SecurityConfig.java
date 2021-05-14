@@ -44,6 +44,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .sessionFixation().newSession()
                 .invalidSessionUrl("/login");
+//        http.authorizeRequests().
+//                antMatchers("/editPersonalDetails").authenticated().
+//                antMatchers("/creditCard").authenticated().
+//                antMatchers("/reservation").authenticated().
+//                antMatchers("/reservation/{id}").authenticated().
+//                antMatchers("/reservationHistory/{id}").authenticated().
+//                antMatchers("/creditCard/{cardNum}").authenticated().
+//                antMatchers("/viewCards").permitAll().
+//                antMatchers("/editCreditCardDetails/{id}").authenticated().
+//                antMatchers("/secureRegister").permitAll().
+//                antMatchers("/secureLogin").authenticated().
+//                antMatchers("/register").permitAll().
+//                antMatchers("/login").permitAll().
+//                and().formLogin().and().httpBasic();
     }
 
     @Bean

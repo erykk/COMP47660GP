@@ -94,13 +94,13 @@ public class UserController {
             BindingResult bindingResult, Model model) {
         securityService.checkLoggedInStatus(model);
         cardValidator.validate(cardCredentials, bindingResult);
-
+        System.out.println("/creditCard TESTING");
         if (bindingResult.hasErrors()) {
             return "user/cardRegistration";
         }
 
         SecurityContext context = SecurityContextHolder.getContext();
-        User user = userRepository.findEmail(context.getAuthentication().getName());
+        User user = userRepository.findByUsername(context.getAuthentication().getName());
         System.out.println("/creditcard username: "+user.getUsername());
         cardCredentials.setUser(user);
 
@@ -118,7 +118,7 @@ public class UserController {
         securityService.checkLoggedInStatus(model);
 
         SecurityContext context = SecurityContextHolder.getContext();
-        User user = userRepository.findEmail(context.getAuthentication().getName());
+        User user = userRepository.findByUsername(context.getAuthentication().getName());
 
         List<CreditCard> creditCards = creditCardRepository.findAllByUser(user);
         model.addAttribute("creditCards", creditCards);
