@@ -101,6 +101,7 @@ public class UserController {
 
         SecurityContext context = SecurityContextHolder.getContext();
         User user = userRepository.findEmail(context.getAuthentication().getName());
+        System.out.println("/creditcard username: "+user.getUsername());
         cardCredentials.setUser(user);
 
         cardService.save(cardCredentials);
