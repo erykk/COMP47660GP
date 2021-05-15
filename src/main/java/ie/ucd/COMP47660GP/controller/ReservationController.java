@@ -141,6 +141,15 @@ public class ReservationController {
 
         List<Reservation> reservations = new LinkedList<>();
 
+        SecurityContext context = SecurityContextHolder.getContext();
+        User user2 = userRepository.findByUsername(context.getAuthentication().getName());
+        if(user2 != null){
+            savedUsers.clear();
+            savedUsers.add(user2);
+            System.out.println("/create-res user not null");
+        }
+
+
         for (User receivedUser: savedUsers) {
             Reservation reservation = new Reservation();
             reservation.setUser(receivedUser);

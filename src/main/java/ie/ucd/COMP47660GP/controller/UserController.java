@@ -6,6 +6,7 @@ import ie.ucd.COMP47660GP.entities.Reservation;
 import ie.ucd.COMP47660GP.entities.User;
 import ie.ucd.COMP47660GP.exception.NoSuchCreditCardException;
 import ie.ucd.COMP47660GP.exception.NoSuchUserException;
+import ie.ucd.COMP47660GP.exception.UnauthorisedUserException;
 import ie.ucd.COMP47660GP.repositories.CreditCardRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
@@ -144,9 +145,12 @@ public class UserController {
     @GetMapping("/editCreditCardDetails/{id}")
     public String editCreditCard(@PathVariable("id") int id, Model model) {
         SecurityContext context = SecurityContextHolder.getContext();
-        User user2 = userRepository.findByUsername(context.getAuthentication().getName());
-        System.out.println("/editcreditcardDetails username: "+user2.getUsername());
+        User user = userRepository.findByUsername(context.getAuthentication().getName());
         CreditCard card = creditCardRepository.findById(id).orElseThrow(() -> new NoSuchCreditCardException());
+        if(user.getId() != card.getUser().getId()){
+            System.out.println("Unauthorised access");
+            throw new UnauthorisedUserException();
+        }
         model.addAttribute("cardCredentials", card);
 
         return "user/editCard";
