@@ -143,6 +143,9 @@ public class UserController {
 
     @GetMapping("/editCreditCardDetails/{id}")
     public String editCreditCard(@PathVariable("id") int id, Model model) {
+        SecurityContext context = SecurityContextHolder.getContext();
+        User user2 = userRepository.findByUsername(context.getAuthentication().getName());
+        System.out.println("/editcreditcardDetails username: "+user2.getUsername());
         CreditCard card = creditCardRepository.findById(id).orElseThrow(() -> new NoSuchCreditCardException());
         model.addAttribute("cardCredentials", card);
 
@@ -151,6 +154,7 @@ public class UserController {
 
     @PostMapping(value = "/editCreditCardDetails")
     public String updateCreditCard(CreditCard creditCard) {
+
         creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(),
                 creditCard.getSecurityCode(), creditCard.getExpiryDate());
         return "redirect:/viewCards";

@@ -101,7 +101,7 @@ public class ReservationController {
 
         for (User receivedUser: users) {
             try {
-                user = userRepository.findByUsername(receivedUser.getEmail());
+                user = userRepository.findByUsername(receivedUser.getUsername());
                 if (user == null) {
                     throw new NoSuchUserException();
                 }
