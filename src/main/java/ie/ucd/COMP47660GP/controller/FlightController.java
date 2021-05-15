@@ -1,5 +1,6 @@
 package ie.ucd.COMP47660GP.controller;
 
+import ie.ucd.COMP47660GP.CLogger;
 import ie.ucd.COMP47660GP.entities.Flight;
 import ie.ucd.COMP47660GP.repositories.FlightRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
@@ -54,6 +55,7 @@ public class FlightController{
         Flight flight = new Flight();
         model.addAttribute("flight", flight);
         securityService.checkLoggedInStatus(model);
+        CLogger.info("Requesting all flight information");
         return "flight/flightslist";
     }
 
@@ -85,6 +87,9 @@ public class FlightController{
         Flight flight = new Flight();
         model.addAttribute("flight", flight);
         securityService.checkLoggedInStatus(model);
+
+        CLogger.info("Retrieving flight: " + origin + " " + dest + " " + dateStr);
+
 
         return "flight/flightslist";
     }

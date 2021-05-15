@@ -86,4 +86,8 @@ public class CreditCard {
         this.securityCode = securityCode;
     }
 
+    public String toString(){
+        return "************" + cardNum.substring(12,15);
+    }
+
 }

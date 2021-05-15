@@ -1,6 +1,7 @@
 package ie.ucd.COMP47660GP.controller;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import ie.ucd.COMP47660GP.CLogger;
 import ie.ucd.COMP47660GP.entities.CreditCard;
 import ie.ucd.COMP47660GP.entities.Reservation;
 import ie.ucd.COMP47660GP.entities.User;
@@ -70,6 +71,7 @@ public class UserController {
     public String checkIfEmailIsValid(@PathVariable String email) {
         User user = userRepository.findEmail(email);
         if (user == null) {
+            CLogger.error("Email already exists:" + email);
             return "Invalid: Email already exists";
         }
         return "Valid: email does not exist";
@@ -87,6 +89,7 @@ public class UserController {
 //        }
         userRepository.updateUserId(user.getAddress(), user.getEmail(), user.getFirstName(), user.getLastName(),
                 user.getPhoneNum());
+        CLogger.info("/editPersonalDetails, cancel: id: " + user.getId());
         return "redirect:/user";
     }
 
@@ -94,6 +97,7 @@ public class UserController {
     public String registerCard(Model model) {
         model.addAttribute("cardCredentials", new CreditCard());
         securityService.checkLoggedInStatus(model);
+        CLogger.info("/registerCard, new");
         return "user/cardRegistration";
     }
 
@@ -104,6 +108,7 @@ public class UserController {
         cardValidator.validate(cardCredentials, bindingResult);
         System.out.println("/creditCard TESTING");
         if (bindingResult.hasErrors()) {
+            CLogger.error("/creditCard, failed to add card: id: " + cardCredentials.toString());
             return "user/cardRegistration";
         }
 
@@ -118,6 +123,7 @@ public class UserController {
         model.addAttribute("msg", "Successfully added card " + cardCredentials.getCardNum() + ".");
         creditCards.add(cardCredentials);
         model.addAttribute("creditCards", creditCards);
+        CLogger.info("/creditCard, add: id: " + cardCredentials.toString());
         return "user/viewCards";
     }
 
@@ -130,6 +136,7 @@ public class UserController {
 
         List<CreditCard> creditCards = creditCardRepository.findAllByUser(user);
         model.addAttribute("creditCards", creditCards);
+        CLogger.info("/viewCards, get");
         return "user/viewCards";
     }
 
@@ -139,11 +146,14 @@ public class UserController {
         SecurityContext context = SecurityContextHolder.getContext();
         User user = userRepository.findByUsername(context.getAuthentication().getName());
         if(user.getId() != id){
+            CLogger.info("/editCreditCardDetails, attempted unauthorised reservation history access by user: " + id);
             throw new UnauthorisedUserException();
         }
         List<Reservation> reservations = reservationRepository.findUsersReservations(id);
 
         model.addAttribute("reservations", reservations);
+
+        CLogger.info("/reservationHistory, id: " + id);
         return "user/reservationHistory";
     }
 
@@ -152,6 +162,7 @@ public class UserController {
 //        securityService.checkLoggedInStatus(model);
         CreditCard creditCard = creditCardRepository.findByCardNum(cardNum);
         model.addAttribute("creditcard", new CreditCard());
+        CLogger.info("/creditCard, get: id: " + creditCard.toString());
         return "user/viewCard";
     }
 
@@ -161,10 +172,13 @@ public class UserController {
         User user = userRepository.findByUsername(context.getAuthentication().getName());
         CreditCard card = creditCardRepository.findById(id).orElseThrow(() -> new NoSuchCreditCardException());
         if(user.getId() != card.getUser().getId()){
+            CLogger.info("/editCreditCardDetails, attempted unauthorised access by user: " + user.getId() + " for card: " + card.toString());
             System.out.println("Unauthorised access");
             throw new UnauthorisedUserException();
         }
         model.addAttribute("cardCredentials", card);
+
+        CLogger.info("/editCreditCardDetails, id: " + id);
 
         return "user/editCard";
     }
@@ -174,6 +188,7 @@ public class UserController {
 
         creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(),
                 creditCard.getSecurityCode(), creditCard.getExpiryDate());
+        CLogger.info("/editCreditCardDetails, id: " + creditCard.toString());
         return "redirect:/viewCards";
     }
 
@@ -181,6 +196,7 @@ public class UserController {
     public String register(Model model) {
         model.addAttribute("userCredentials", new User());
 //        securityService.checkLoggedInStatus(model);
+        CLogger.info("/register, view");
         return "user/register";
     }
 
@@ -192,6 +208,7 @@ public class UserController {
           userValidator.validate(userCredentials,bindingResult);
 
         if (bindingResult.hasErrors()) {
+            CLogger.error("/register failed for id: " + userCredentials.getId());
             return "user/register";
         }
 
@@ -203,6 +220,8 @@ public class UserController {
         model.addAttribute("userCredentials", userCredentials);
         model.addAttribute("msg", "Successfully created user " + userCredentials.getUsername() + ".");
 
+        CLogger.info("/register, id: " + userCredentials.getId());
+
         return "redirect:/login";
     }
 
@@ -212,6 +231,7 @@ public class UserController {
         SecurityContext context = SecurityContextHolder.getContext();
         User currentUser = userRepository.findByUsername(context.getAuthentication().getName());
         model.addAttribute("user", currentUser);
+        CLogger.info("/user, id: " + currentUser.getId());
         return "user/user";
     }
 
@@ -219,6 +239,7 @@ public class UserController {
     public String login(Model model) {
 //        model.addAttribute("login", new Login());
         securityService.checkLoggedInStatus(model);
+        CLogger.info("/login, view");
         return "user/login";
     }
 
@@ -229,9 +250,11 @@ public class UserController {
             securityService.autoLogin(username, password);
             model.addAttribute("msg", "Logged in successfully as " + userRepository.findByUsername(username).getUsername());
             model.addAttribute("user", userRepository.findByUsername(username));
+            CLogger.info("/login successful for username: " + username);
             return "user/user";
         } catch (NoSuchUserException e) {
             model.addAttribute("msg", "User " + username + " does not exist");
+            CLogger.error("/login failed for username: " + username);
             return "user/fail";
         }
     }
@@ -240,6 +263,7 @@ public class UserController {
     @RequestMapping(value = "/deleteAccount", method = RequestMethod.GET)
     public String deleteAccount(Model model) {
         securityService.checkLoggedInStatus(model);
+        CLogger.info("/deleteAccount, view");
         return "user/deleteAccount";
     }
 
@@ -251,23 +275,28 @@ public class UserController {
         SecurityContext context = SecurityContextHolder.getContext();
         User user2 = userRepository.findByUsername(context.getAuthentication().getName());
         if(user.getId() != user2.getId()){
+            CLogger.error("/deleteAccount failed for username: " + username);
             throw new UnauthorisedUserException();
         }
 
+        CLogger.info("/deleteAccount successful for username: " + username);
 
         if (user != null) {
             if (userService.deleteExecUser(user, password)) {
                 model.addAttribute("msg",
                         "Successfully removed executive privileges from user " + user.getUsername() + ".");
                 securityService.forceLogout(model);
+                CLogger.info("/deleteAccount successful for username: " + username);
                 return "user/success";
             } else {
                 model.addAttribute("msg", "Could not remove executive privileges for user" + user.getUsername()
                         + ". Password doesn't match");
+                CLogger.error("/deleteAccount failed for username: " + username);
                 return "user/fail";
             }
         } else {
             model.addAttribute("msg", "User " + username + " does not exist.");
+            CLogger.error("/deleteAccount failed for username: " + username);
             return "user/fail";
         }
     }

@@ -39,3 +39,7 @@ application.properties
 
 Dockerfile
 docker-compose.yml
+
+### log file ###
+
+.log

@@ -1,5 +1,6 @@
 package ie.ucd.COMP47660GP.controller;
 
+import ie.ucd.COMP47660GP.CLogger;
 import ie.ucd.COMP47660GP.entities.CreditCard;
 import ie.ucd.COMP47660GP.entities.Flight;
 import ie.ucd.COMP47660GP.entities.Reservation;
@@ -59,6 +60,8 @@ public class ReservationController {
         model.addAttribute("flight", flight);
         securityService.checkLoggedInStatus(model);
 
+        CLogger.info("/create-reservation, id: " + id);
+
         return "reservation/num_passengers";
     }
 
@@ -87,6 +90,8 @@ public class ReservationController {
         model.addAttribute("booking", booking);
         model.addAttribute("flight", flight);
         securityService.checkLoggedInStatus(model);
+
+        CLogger.info("/create-reservation, id: " + id);
 
         return "reservation/create_reservation";
     }
@@ -163,6 +168,8 @@ public class ReservationController {
 
         model.addAttribute("reservations", reservations);
 
+        CLogger.info("/create-reservation, " + booking.toString());
+
         return "reservation/reservation_created";
     }
 
@@ -182,6 +189,7 @@ public class ReservationController {
                 model.addAttribute("flight", flight);
 
             } catch (NoSuchBookingException e) {
+                CLogger.info("/reservations, no such booking for id: " + reservation_id );
                 model.addAttribute("error", e.getMessage());
                 reservation = new Reservation();
             }
@@ -190,13 +198,15 @@ public class ReservationController {
         }
         model.addAttribute("reservation", reservation);
 
+        CLogger.info("/reservations" );
+
         return "reservation/user_reservation";
     }
 
     // GET all reservations associated with given user id
     @GetMapping(value = "/reservation/{id}")
     public List<Reservation> getReservations(@PathVariable("id") Long id) {
-
+        CLogger.info("/reservations, get: id: " + id);
         return reservationRepository.findUsersReservations(id);
     }
 
@@ -210,6 +220,8 @@ public class ReservationController {
             reservation.setCancelled(true);
             reservationRepository.save(reservation);
         }
+
+        CLogger.info("/reservations, cancel: id: " + id);
     }
 
     @GetMapping("/reservation-history")
@@ -217,6 +229,9 @@ public class ReservationController {
         securityService.checkLoggedInStatus(model);
         List<Reservation> reservations = reservationRepository.findUsersReservations(user.getId());
         model.addAttribute("reservations", reservations);
+
+        CLogger.info("/reservations, history: id: " + user.getId());
+
         return "reservation_history";
     }
 }
