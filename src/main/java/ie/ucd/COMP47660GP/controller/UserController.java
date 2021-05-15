@@ -77,7 +77,14 @@ public class UserController {
 
     @PostMapping(value = "/editPersonalDetails", consumes = "application/x-www-form-urlencoded")
     public String updatePersonaDetails(User user) {
-        System.out.println("/editPersonalDetail method");
+//        System.out.println("/editPersonalDetail method");
+//        SecurityContext context = SecurityContextHolder.getContext();
+//        User user2 = userRepository.findByUsername(context.getAuthentication().getName());
+//        if(user.getId() != user2.getId()){
+////            throw new UnauthorisedUserException();
+//            System.out.println(user.getId());
+//            System.out.println(user2.getId());
+//        }
         userRepository.updateUserId(user.getAddress(), user.getEmail(), user.getFirstName(), user.getLastName(),
                 user.getPhoneNum());
         return "redirect:/user";
@@ -237,24 +244,30 @@ public class UserController {
     }
 
     @RequestMapping(value = "/deleteAccount", method = RequestMethod.POST)
-    public String deleteAccount(@RequestParam("email") String email, @RequestParam("password") String password,
+    public String deleteAccount(@RequestParam("username") String username, @RequestParam("password") String password,
             Model model) {
         securityService.checkLoggedInStatus(model);
-        User user = userService.findByEmail(email);
+        User user = userService.findByUsername(username);
+        SecurityContext context = SecurityContextHolder.getContext();
+        User user2 = userRepository.findByUsername(context.getAuthentication().getName());
+        if(user.getId() != user2.getId()){
+            throw new UnauthorisedUserException();
+        }
+
 
         if (user != null) {
             if (userService.deleteExecUser(user, password)) {
                 model.addAttribute("msg",
-                        "Successfully removed executive privileges from user " + user.getEmail() + ".");
+                        "Successfully removed executive privileges from user " + user.getUsername() + ".");
                 securityService.forceLogout(model);
                 return "user/success";
             } else {
-                model.addAttribute("msg", "Could not remove executive privileges for user" + user.getEmail()
+                model.addAttribute("msg", "Could not remove executive privileges for user" + user.getUsername()
                         + ". Password doesn't match");
                 return "user/fail";
             }
         } else {
-            model.addAttribute("msg", "User " + email + " does not exist.");
+            model.addAttribute("msg", "User " + username + " does not exist.");
             return "user/fail";
         }
     }
