@@ -129,7 +129,13 @@ public class UserController {
     @GetMapping("/reservationHistory/{id}")
     public String history(@PathVariable("id") Long id, Model model) {
 //        securityService.checkLoggedInStatus(model);
+        SecurityContext context = SecurityContextHolder.getContext();
+        User user = userRepository.findByUsername(context.getAuthentication().getName());
+        if(user.getId() != id){
+            throw new UnauthorisedUserException();
+        }
         List<Reservation> reservations = reservationRepository.findUsersReservations(id);
+
         model.addAttribute("reservations", reservations);
         return "user/reservationHistory";
     }
