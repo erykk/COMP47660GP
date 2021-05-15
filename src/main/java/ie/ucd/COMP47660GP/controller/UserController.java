@@ -197,7 +197,7 @@ public class UserController {
 
         SecurityContext context = SecurityContextHolder.getContext();
         model.addAttribute("currentUser", context.getAuthentication().getName());
-
+        userCredentials.setRole("USER");
         userService.saveExecUser(userCredentials);
 
         model.addAttribute("userCredentials", userCredentials);
