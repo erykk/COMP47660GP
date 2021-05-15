@@ -77,7 +77,14 @@ public class UserController {
 
     @PostMapping(value = "/editPersonalDetails", consumes = "application/x-www-form-urlencoded")
     public String updatePersonaDetails(User user) {
-        System.out.println("/editPersonalDetail method");
+//        System.out.println("/editPersonalDetail method");
+//        SecurityContext context = SecurityContextHolder.getContext();
+//        User user2 = userRepository.findByUsername(context.getAuthentication().getName());
+//        if(user.getId() != user2.getId()){
+////            throw new UnauthorisedUserException();
+//            System.out.println(user.getId());
+//            System.out.println(user2.getId());
+//        }
         userRepository.updateUserId(user.getAddress(), user.getEmail(), user.getFirstName(), user.getLastName(),
                 user.getPhoneNum());
         return "redirect:/user";
