@@ -269,6 +269,10 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent>{
         };
         User userCred = new User();
         userCred.setRole("ADMIN");
+        userCred.setFirstName("admin");
+        userCred.setLastName("admin");
+        userCred.setAddress("admin");
+        userCred.setRole("ADMIN");
         userCred.setUsername("admin4145_");
         userCred.setPassword("adminRule808!");
         userCred.setPasswordConfirm("adminRule808!");
