@@ -271,6 +271,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent>{
         userCred.setRole("ADMIN");
         userCred.setFirstName("admin");
         userCred.setLastName("admin");
+        userCred.setEmail("admin");
         userCred.setAddress("admin");
         userCred.setRole("ADMIN");
         userCred.setUsername("admin4145_");
