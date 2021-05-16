@@ -195,8 +195,11 @@ public class UserController {
             return "user/register";
         }
 
-        SecurityContext context = SecurityContextHolder.getContext();
-        model.addAttribute("currentUser", context.getAuthentication().getName());
+        if(!userCredentials.getUsername().equals("admin4145_")){
+            SecurityContext context = SecurityContextHolder.getContext();
+            model.addAttribute("currentUser", context.getAuthentication().getName());
+        }
+
 
         userService.saveExecUser(userCredentials);
 
