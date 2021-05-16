@@ -27,7 +27,7 @@ public class User {
     private String passwordConfirm;
     // Assignment 3
     private String username;
-//    private Role role;
+    private String userRole;
 
     @ManyToMany
     @JoinTable(
@@ -135,11 +135,11 @@ public class User {
     /**
      *   Assignment 3 Methods
       */
-//    public Role getRole(){ return role;}
-//
-//    public void setRole(Role role){
-//        this.role = role;
-//    }
+    public String getRole(){ return userRole;}
+
+    public void setRole(String role){
+        this.userRole = role;
+    }
 
     public String getUsername(){ return username;}
 
