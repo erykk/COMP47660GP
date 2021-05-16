@@ -1,5 +1,6 @@
 package ie.ucd.COMP47660GP.service.impl;
 
+import ie.ucd.COMP47660GP.entities.Role;
 import ie.ucd.COMP47660GP.entities.User;
 import ie.ucd.COMP47660GP.repositories.RoleRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -23,6 +25,10 @@ public class UserServiceImpl implements UserService{
     public void save(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRoles(new HashSet<>(roleRepository.findAll()));
+        List<Role> roles = roleRepository.findAll();
+        user.setRole(roleRepository.findByName("EXEC"));
+        System.out.println("UserServiceImpl save method");
+        System.out.println(user.getRole().getName());
         userRepository.save(user);
     }
 
