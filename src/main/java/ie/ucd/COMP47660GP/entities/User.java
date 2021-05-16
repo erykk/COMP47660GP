@@ -2,6 +2,7 @@ package ie.ucd.COMP47660GP.entities;
 
 import java.util.Collection;
 import javax.persistence.*;
+import ie.ucd.COMP47660GP.entities.Role;
 
 import org.springframework.data.annotation.Transient;
 
@@ -26,6 +27,7 @@ public class User {
     private String passwordConfirm;
     // Assignment 3
     private String username;
+//    private Role role;
 
     @ManyToMany
     @JoinTable(
@@ -133,6 +135,11 @@ public class User {
     /**
      *   Assignment 3 Methods
       */
+//    public Role getRole(){ return role;}
+//
+//    public void setRole(Role role){
+//        this.role = role;
+//    }
 
     public String getUsername(){ return username;}
 
