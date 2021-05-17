@@ -32,6 +32,7 @@ public class UserServiceImpl implements UserService{
             user.setRoles(execRoles);
         }
         else if(user.getRole() != null && user.getRole().equals("ADMIN")){     // set ADMIN role if user is ADMIN user
+            user.setExec(false);
             Role role = roleRepository.findByName("ADMIN");
             HashSet<Role> adminRoles = new HashSet<>();
             adminRoles.add(role);
