@@ -24,7 +24,25 @@ public class UserServiceImpl implements UserService{
     @Override
     public void save(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setRoles(new HashSet<>(roleRepository.findAll()));
+//        user.setRoles(new HashSet<>(roleRepository.findAll()));
+        if(user.getRole() != null && user.getRole().equals("USER")){   // remove ADMIN role for regular users
+            Role role = roleRepository.findByName("EXEC");
+            HashSet<Role> execRoles = new HashSet<>();
+            execRoles.add(role);
+            user.setRoles(execRoles);
+        }
+        else if(user.getRole() != null && user.getRole().equals("ADMIN")){     // set ADMIN role if user is ADMIN user
+            Role role = roleRepository.findByName("ADMIN");
+            HashSet<Role> adminRoles = new HashSet<>();
+            adminRoles.add(role);
+            user.setRoles(adminRoles);
+        }
+
+        System.out.println("Roles for: "+user.getUsername());
+        for(Role r: user.getRoles()){
+            System.out.println(r.getName());
+        }
+
         List<Role> roles = roleRepository.findAll();
         userRepository.save(user);
     }
