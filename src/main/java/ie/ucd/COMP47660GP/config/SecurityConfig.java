@@ -60,8 +60,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 antMatchers("/viewCards").access("hasAuthority('EXEC')").
                 antMatchers("/creditCard").authenticated().
                 antMatchers("/creditCard").access("hasAuthority('EXEC')").
-                antMatchers("/editCreditCardDetails/{id}").authenticated().
-                antMatchers("/editCreditCardDetails/{id}").access("hasAuthority('EXEC')").
+                antMatchers("/editCreditCardDetails/{username}/{id}").authenticated().
+                antMatchers("/editCreditCardDetails/{username}/{id}").access("hasAuthority('EXEC')").
 
                 antMatchers("/editPersonalDetails").authenticated().
                 antMatchers("/reservationHistory/{id}").authenticated().

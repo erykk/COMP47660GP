@@ -155,15 +155,17 @@ public class UserController {
         return "user/viewCard";
     }
 
-    @GetMapping("/editCreditCardDetails/{id}")
-    public String editCreditCard(@PathVariable("id") int id, Model model) {
-        SecurityContext context = SecurityContextHolder.getContext();
-        User user = userRepository.findByUsername(context.getAuthentication().getName());
+    @PreAuthorize("#username == authentication.name")
+    @GetMapping("/editCreditCardDetails/{username}/{id}")
+    public String editCreditCard(@PathVariable("username") String username,@PathVariable("id") int id, Model model) {
+
+//        SecurityContext context = SecurityContextHolder.getContext();
+//        User user = userRepository.findByUsername(context.getAuthentication().getName());
         CreditCard card = creditCardRepository.findById(id).orElseThrow(() -> new NoSuchCreditCardException());
-        if(user.getId() != card.getUser().getId()){
-            System.out.println("Unauthorised access");
-            throw new UnauthorisedUserException();
-        }
+//        if(user.getId() != card.getUser().getId()){
+//            System.out.println("Unauthorised access");
+//            throw new UnauthorisedUserException();
+//        }
         model.addAttribute("cardCredentials", card);
 
         return "user/editCard";
