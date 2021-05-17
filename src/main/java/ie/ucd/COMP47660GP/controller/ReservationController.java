@@ -218,4 +218,10 @@ public class ReservationController {
         model.addAttribute("reservations", reservations);
         return "reservation_history";
     }
+
+    @GetMapping("/editReservation")
+    public String findReservation(@RequestParam(value = "reservation_id", required = true) Integer reservation_id, Model model)){
+
+    }
+
 }
