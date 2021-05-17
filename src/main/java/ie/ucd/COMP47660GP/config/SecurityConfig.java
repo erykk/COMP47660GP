@@ -45,19 +45,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .sessionFixation().newSession()
 //                .invalidSessionUrl("/login");
         http.authorizeRequests().
-                antMatchers("/editPersonalDetails").authenticated().
+                antMatchers("/landing").permitAll().
+                antMatchers("/register").permitAll().
+                antMatchers("/secureRegister").permitAll().
+                antMatchers("/login").permitAll().
+                antMatchers("/secureLogin").permitAll().
+                antMatchers("/flight").permitAll().
+                antMatchers("/reservation").permitAll().
+                antMatchers("/reservation/{id}").permitAll().
+
+                antMatchers("/viewCards").authenticated().
+                antMatchers("/viewCards").access("hasAuthority('EXEC')").
                 antMatchers("/creditCard").authenticated().
-                antMatchers("/reservation").authenticated().
-                antMatchers("/reservation/{id}").authenticated().
+                antMatchers("/creditCard").access("hasAuthority('EXEC')").
+                antMatchers("/editCreditCardDetails/{id}").authenticated().
+                antMatchers("/editCreditCardDetails/{id}").access("hasAuthority('EXEC')").
+
+                antMatchers("/editPersonalDetails").authenticated().
                 antMatchers("/reservationHistory/{id}").authenticated().
                 antMatchers("/creditCard/{cardNum}").authenticated().
-                antMatchers("/viewCards").permitAll().
-                antMatchers("/editCreditCardDetails/{id}").authenticated().
-                antMatchers("/secureRegister").permitAll().
-                antMatchers("/secureLogin").authenticated().
-                antMatchers("/register").permitAll().
-                antMatchers("/login").permitAll().
-                antMatchers("/flight").access("hasAuthority('ADMIN')").
+
+
+
+
+
+
                 and().formLogin().and().httpBasic();
     }
 

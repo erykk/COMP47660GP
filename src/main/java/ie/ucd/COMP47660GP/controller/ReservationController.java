@@ -96,7 +96,6 @@ public class ReservationController {
         securityService.checkLoggedInStatus(model);
         List<User> users = booking.getUsers();
         User user = null;
-
         List<User> savedUsers = new LinkedList<>();
 
         for (User receivedUser: users) {

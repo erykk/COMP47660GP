@@ -192,6 +192,7 @@ public class UserController {
           userValidator.validate(userCredentials,bindingResult);
 
         if (bindingResult.hasErrors()) {
+            System.out.println("TESTING guest /secureRegister");
             return "user/register";
         }
 
