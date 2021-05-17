@@ -15,5 +15,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     List<Reservation> findUsersReservations(Long user_id);
 
     @Query("select r from Reservation r where r.id = :reservation_id")
-    List<Reservation> findReservationWithReservationNum(Long reservation_id);
+    List<Reservation> findReservationWithReservationID(int reservation_id);
 }
