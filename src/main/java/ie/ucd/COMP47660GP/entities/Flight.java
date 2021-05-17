@@ -14,6 +14,8 @@ public class Flight {
     private String destination;
     private LocalDateTime dateTime;
     private String flightNum;
+    private String date;
+    private String time;
 
     public Flight(String source, String destination, LocalDateTime dateTime, String flightNum) {
         // ID auto gen
@@ -66,4 +68,12 @@ public class Flight {
 	public void setFlightNum(String flightNum) {
         this.flightNum = flightNum;
     }
+
+    public String getDate(){ return date;}
+
+    public void setDate(String date){ this.date = date;}
+
+    public String getTime(){ return time;}
+
+    public void setTime(String time){ this.time = time;}
 }

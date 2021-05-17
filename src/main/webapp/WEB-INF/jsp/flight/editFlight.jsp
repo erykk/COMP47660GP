@@ -19,6 +19,13 @@
         <h2>Edit FLight</h2>
         <table>
             <tr>
+                <td>Flight Number:</td>
+                <td> <div class="form-group ${status.error ? 'has-error' : ''}">
+                    <form:input type="text" path="flightNum" readonly="true" class="form-control"></form:input>
+                    <form:errors path="flightNum"></form:errors>
+                </div></td>
+            </tr>
+            <tr>
                 <td>Source:</td>
                 <td><form:input type="text" path="source" class="form-control"/></td>
             </tr>
@@ -30,17 +37,17 @@
                 </div></td>
             </tr>
             <tr>
-                <td>Flight Number:</td>
-                <td> <div class="form-group ${status.error ? 'has-error' : ''}">
-                    <form:input type="text" path="flightNum" readonly="true" class="form-control"></form:input>
-                    <form:errors path="flightNum"></form:errors>
-                </div></td>
+                <td>Current Date/Time:</td>
+                <td><form:input type="text" path="dateTime"  readonly="true"  class="form-control"/></td>
             </tr>
-
-<%--            <tr>--%>
-<%--                <td>Date:</td>--%>
-<%--                <td><form:input type="text" path="expiryDate" class="form-control"/></td>--%>
-<%--            </tr>--%>
+            <tr>
+                <td>New Date:</td>
+                <td><form:input type="text" path="date" class="form-control"/></td>
+            </tr>
+            <tr>
+                <td>New Time:</td>
+                <td><form:input type="text" path="time" class="form-control"/></td>
+            </tr>
             <tr>
                 <td></td>
                 <td><form:button type="submit">Save Edit</form:button></td>

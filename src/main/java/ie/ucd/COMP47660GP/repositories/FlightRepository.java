@@ -26,6 +26,7 @@ public interface FlightRepository extends JpaRepository<Flight, Integer> {
 
     @Transactional
     @Modifying
-    @Query("update Flight f set f.source = :source, f.destination = :destination where f.flightNum = :flightNum")
-    void updateFlightInfo(String source, String destination, String flightNum) throws NoSuchFlightException;
+    @Query("update Flight f set f.source = :source, f.destination = :destination, f.dateTime = :dateTime, " +
+            " f.date = :date, f.time = :time where f.flightNum = :flightNum")
+    void updateFlightInfo(String source, String destination, LocalDateTime dateTime, String date, String time, String flightNum) throws NoSuchFlightException;
 }
