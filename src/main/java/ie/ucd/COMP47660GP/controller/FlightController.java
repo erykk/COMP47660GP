@@ -1,5 +1,6 @@
 package ie.ucd.COMP47660GP.controller;
 
+import ie.ucd.COMP47660GP.entities.CreditCard;
 import ie.ucd.COMP47660GP.entities.Flight;
 import ie.ucd.COMP47660GP.entities.User;
 import ie.ucd.COMP47660GP.repositories.FlightRepository;
@@ -9,9 +10,8 @@ import ie.ucd.COMP47660GP.service.impl.SecurityServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -91,9 +91,16 @@ public class FlightController{
         return "flight/flightslist";
     }
 
-    @PostMapping(value = "/addFlight")
-    public void addNewFlight(Flight flight) {
+    @GetMapping("/addFlight")
+    public String newFlight(Model model){
+        model.addAttribute("flight", new Flight());
+        return  "flight/addFlight";
+    }
 
+    @PostMapping(value = "/addFlight")
+    public void addNewFlight(@ModelAttribute("flight") Flight flight,
+                BindingResult bindingResult, Model model) {
+        System.out.println(flight.getSource());
     }
 
 }
