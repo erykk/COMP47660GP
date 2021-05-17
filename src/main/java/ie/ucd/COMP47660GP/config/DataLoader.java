@@ -40,6 +40,23 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent>{
     public void onApplicationEvent(ContextRefreshedEvent event){
         if (alreadySetup) return;
 
+        createRoleIfNotExists("GUEST");
+        createRoleIfNotExists("EXEC");
+        createRoleIfNotExists("ADMIN");
+        Role role = roleRepository.findByName("EXEC");
+        if (userRepository.findByEmail("test@test.com") == null) {
+            User user = new User();
+            user.setFirstName("Test");
+            user.setLastName("McTest");
+            user.setEmail("test@test.com");
+            user.setPassword("test");
+            user.setExec(true);
+            user.setRoles(Arrays.asList(role));
+            userRepository.save(user);
+        }
+
+        alreadySetup = true;
+
         Model model = new Model() {
             @Override
             public Model addAttribute(String attributeName, Object attributeValue) {
@@ -279,22 +296,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent>{
         userCred.setPasswordConfirm("adminRule808!");
         uc.register(userCred,bindingResult, model);
 
-        createRoleIfNotExists("GUEST");
-        createRoleIfNotExists("EXEC");
-        createRoleIfNotExists("ADMIN");
-        Role role = roleRepository.findByName("EXEC");
-        if (userRepository.findByEmail("test@test.com") == null) {
-            User user = new User();
-            user.setFirstName("Test");
-            user.setLastName("McTest");
-            user.setEmail("test@test.com");
-            user.setPassword("test");
-            user.setExec(true);
-            user.setRoles(Arrays.asList(role));
-            userRepository.save(user);
-        }
 
-        alreadySetup = true;
     }
 
     @Transactional

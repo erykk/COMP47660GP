@@ -200,6 +200,9 @@ public class UserController {
             model.addAttribute("currentUser", context.getAuthentication().getName());
         }
 
+        if(userCredentials.getRole() == null){
+            userCredentials.setRole("USER");
+        }
 
         userService.saveExecUser(userCredentials);
 
