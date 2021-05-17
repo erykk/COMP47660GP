@@ -15,13 +15,14 @@
 <div class="container">
 
 
-    <form:form method="DELETE" action="${contexPath}/deleteFlight/" modelAttribute="flight" >
+    <form:form method="POST" action="${contexPath}/deleteFlight" modelAttribute="flight" >
         <h2>Delete Flight</h2>
         <table>
             <tr>
                 <td>Enter Flight Number:</td>
                 <td><form:input type="text" path="flightNum" class="form-control"/></td>
             </tr>
+            <tr>
                 <td></td>
                 <td><form:button type="submit">Delete</form:button></td>
             </tr>

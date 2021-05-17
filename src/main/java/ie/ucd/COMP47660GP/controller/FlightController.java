@@ -109,7 +109,7 @@ public class FlightController{
         return  "flight/deleteFlight";
     }
 
-    @DeleteMapping(value = "/deleteFlight/{id}")
+    @PostMapping(value = "/deleteFlight")
     public void deleteFlight(@ModelAttribute("flight") Flight flight, BindingResult bindingResult, Model model){
         System.out.println("Flight Number is :"+flight.getFlightNum());
     }
