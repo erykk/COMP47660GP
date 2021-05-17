@@ -103,4 +103,15 @@ public class FlightController{
         System.out.println(flight.getSource());
     }
 
+    @GetMapping("/deleteFlight")
+    public String deleteFlight(Model model){
+        model.addAttribute("flight", new Flight());
+        return  "flight/deleteFlight";
+    }
+
+    @DeleteMapping(value = "/deleteFlight/{id}")
+    public void deleteFlight(@ModelAttribute("flight") Flight flight, BindingResult bindingResult, Model model){
+        System.out.println("Flight Number is :"+flight.getFlightNum());
+    }
+
 }
