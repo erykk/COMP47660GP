@@ -7,6 +7,7 @@ import ie.ucd.COMP47660GP.repositories.FlightRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
 import ie.ucd.COMP47660GP.service.impl.SecurityServiceImpl;
+import org.apache.jasper.compiler.JspUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -100,7 +101,7 @@ public class FlightController{
     @PostMapping(value = "/addFlight")
     public void addNewFlight(@ModelAttribute("flight") Flight flight,
                 BindingResult bindingResult, Model model) {
-        System.out.println(flight.getSource());
+        flightRepository.save(flight);
     }
 
     @GetMapping("/deleteFlight")
@@ -111,7 +112,34 @@ public class FlightController{
 
     @PostMapping(value = "/deleteFlight")
     public void deleteFlight(@ModelAttribute("flight") Flight flight, BindingResult bindingResult, Model model){
-        System.out.println("Flight Number is :"+flight.getFlightNum());
+        List<Flight> flights = flightRepository.findFlightByFlightNum(flight.getFlightNum());
+        flightRepository.delete(flights.get(0));
     }
 
+    @GetMapping("/findFlight")
+    public String findFlight(Model model){
+        model.addAttribute("flight", new Flight());
+        return "flight/findFlight";
+    }
+
+    @PostMapping("/findFlight")
+    public String findFlight(@ModelAttribute("flight") Flight flight, BindingResult bindingResult, Model model){
+        List<Flight> flights = flightRepository.findFlightByFlightNum(flight.getFlightNum());
+        model.addAttribute("flight",flights.get(0));
+        return "flight/editFlight";
+    }
+
+//    @PreAuthorize("#username == authentication.name")
+//    @GetMapping("/editFlight")
+//    public String editFlight(@PathVariable("flightNum") String flightNum, Model model) {
+//        List<Flight> flights = flightRepository.findFlightByFlightNum(flightNum);
+//        model.addAttribute("flight", flights.get(0));
+//        return "flight/editFlight2";
+//    }
+//
+     @PostMapping(value = "/editFlight")
+     public void updateFlight(@ModelAttribute("flight") Flight flight, BindingResult bindingResult, Model model) {
+        flightRepository.updateFlightInfo(flight.getSource(), flight.getDestination(), flight.getFlightNum());
+//        return "flight/editFlight2";
+    }
 }
