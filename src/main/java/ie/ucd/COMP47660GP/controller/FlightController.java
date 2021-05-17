@@ -151,4 +151,6 @@ public class FlightController{
                  flight.getDate(), flight.getTime(),flight.getFlightNum());
 //         return "flight/editFlight2";
     }
+
+
 }

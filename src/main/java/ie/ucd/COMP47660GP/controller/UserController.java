@@ -65,6 +65,12 @@ public class UserController {
     @Autowired
     UserValidator userValidator;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/admin")
+    public String getAdminPage(){
+        return  "admin";
+    }
+
     @GetMapping("getEmail/{email}")
     @ResponseBody
     public String checkIfEmailIsValid(@PathVariable String email) {
