@@ -1,22 +1,24 @@
 ## COMP47660 Group Project
 
+###  Checklist:
+1. Update MySQL credentials in application.properties
+2. After first startup, comment out _spring.datasource.initialization-mode=always in application.properties_
+3. After first startup, change _create_ to _update_ to make database storage persistent: _spring.jpa.hibernate.ddl-auto=create_
+
 ### Instructions:
 
 The service requires for a MySQL server to be running prior to start up. One way to do this is to start a MySQL instance on port 3306 using XAMPP: https://www.apachefriends.org/index.html
 
-The DBMS username and password **must** be updated in the application.properties file with credentials usable with your local MySQL server.
+The DBMS username and password **MUST** be updated in the application.properties file with credentials usable with your local MySQL server.
+It is advised to encrypt the DB user's password rather store it in plaintext in a config file, but it will work encrypted or in plaintext.
+If encrypting the DB user's password, it should be encrypted using the steps below and added to application.properties as:
+```
+    spring.datasource.password=ENC(CIPHER_TEXT)
+```
 
 No secrets are stored in code or configuration files. Jasypt is used to allow for required passwords to be stored in 
 configuration files and used by the application. The password to decrypt the secrets is provided as a command line argument
 at runtime.
-
-The application will create the database schema and all required tables, and will fill them
-with some data. After the first run, the following line in application.properties **must** be
-commented out to allow for persistent data storage:
-
-```
-    spring.datasource.initialization-mode=always
-```
 
 The application can be run by navigating to the application folder and running
 
@@ -30,9 +32,29 @@ Following initialization, navigate to
     https://localhost:8443
 ```
 
+After initialization, the application will have created the database schema and all required tables, and will fill them
+with some data. After the first run, the following line in application.properties **MUST** be
+commented out to prevent attempts of adding data when the DB data is persistent:
 
-### Secrets Encryption:
+```
+    spring.datasource.initialization-mode=always
+```
+The following line should be changed from _create_ to _update_:
+```
+    spring.jpa.hibernate.ddl-auto=create
+```
+
+
+### Encrypting Secrets:
 Encrypted secrets stored in configuration files are encrypted using JasyptPBEStringEncryptionCLI from jasypt 1.9.3.
+
+Jasypt 1.9.3 is downloaded when dependencies used are downloaded. Run the following command which will compile the 
+application and also download the necessary dependencies, including Jasypt:
+
+```
+    mvn compile
+```
+
 In order to encrypt a secret, you must first navigate to the jasypt directory using the following command:
 
 ```

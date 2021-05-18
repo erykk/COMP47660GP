@@ -20,9 +20,9 @@ public class AttributeEncryptor implements AttributeConverter<String, String> {
     private Key key;
     private Cipher cipher;
 
-    public AttributeEncryptor(@Value("${my.property}") String secret) throws NoSuchPaddingException, NoSuchAlgorithmException {
+    public AttributeEncryptor(@Value("${encryption.key}") String secret) throws NoSuchPaddingException, NoSuchAlgorithmException {
         key = new SecretKeySpec(secret.getBytes(), "AES");
-        cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
     }
 
     @Override
