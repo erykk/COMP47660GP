@@ -45,11 +45,11 @@
                 </tr>
                 <tr>
                     <td style="border: 1px solid black;"> Reservation </td>
-                    <td style="border: 1px solid black;"><a href="/findFlight">Edit Reservation</a></td>
+                    <td style="border: 1px solid black;"><a href="/admin/reservation">Edit Reservation</a></td>
                 </tr>
                 <tr>
                     <td style="border: 1px solid black;"> Reservation </td>
-                    <td style="border: 1px solid black;"><a href="/deleteFlight">Delete Reservation</a></td>
+                    <td style="border: 1px solid black;"><a href="/reservation">Delete Reservation</a></td>
                 </tr>
             </table>
 </div>

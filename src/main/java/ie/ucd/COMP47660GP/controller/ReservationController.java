@@ -17,10 +17,12 @@ import ie.ucd.COMP47660GP.service.impl.SecurityServiceImpl;
 import ie.ucd.COMP47660GP.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -192,6 +194,7 @@ public class ReservationController {
         return "reservation/user_reservation";
     }
 
+
     // GET all reservations associated with given user id
     @GetMapping(value = "/reservation/{id}")
     public List<Reservation> getReservations(@PathVariable("id") Long id) {
@@ -218,4 +221,57 @@ public class ReservationController {
         model.addAttribute("reservations", reservations);
         return "reservation_history";
     }
+
+    /**
+     * Admin methods
+     *
+     */
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/admin/reservation")
+    public String findReservation(@RequestParam(value = "reservation_id", required = false) Integer reservation_id,
+                                     Model model) {
+        securityService.checkLoggedInStatus(model);
+        Reservation reservation;
+        if (reservation_id != null) {
+            try {
+                reservation = reservationRepository.findById(reservation_id).
+                        orElseThrow(() -> new NoSuchBookingException(reservation_id));
+                User user = reservation.getUser();
+                Flight flight = reservation.getFlight();
+
+                model.addAttribute("user", user);
+                model.addAttribute("flight", flight);
+
+            } catch (NoSuchBookingException e) {
+                model.addAttribute("error", e.getMessage());
+                reservation = new Reservation();
+            }
+        } else {
+            reservation = new Reservation();
+        }
+        model.addAttribute("reservation", reservation);
+
+        return "reservation/findReservation";
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/editReservation/{id}")
+    public String editReservation(@PathVariable("id") int id, Model model){
+        System.out.println("/edit Res testing");
+        System.out.println(id);
+        List<Reservation> reservations = reservationRepository.findReservationWithReservationID(id);
+        Reservation reservation = reservations.get(0);
+        model.addAttribute("reservation", reservation);
+        return "reservation/editReservation";
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/editReservation")
+    public String editReservation(@ModelAttribute("reservation") Reservation reservation,
+                                  BindingResult bindingResult, Model model){
+        System.out.println("/edit Res POST testing");
+        List<Reservation> reservations = reservationRepository.findReservationWithReservationID(reservation.getReservation_id());
+        return "admin";
+    }
+
 }
