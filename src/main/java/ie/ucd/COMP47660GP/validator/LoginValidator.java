@@ -105,8 +105,4 @@ LoginValidator implements Validator {
         }
         return validEmail;
     }
-
-    public void testing(){
-        //testing
-    }
 }
