@@ -108,13 +108,14 @@ public class FlightController{
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping(value = "/addFlight")
-    public void addNewFlight(@ModelAttribute("flight") Flight flight,
+    public String addNewFlight(@ModelAttribute("flight") Flight flight,
                 BindingResult bindingResult, Model model) {
         LocalDate date = LocalDate.parse(flight.getDate());
         LocalTime time = LocalTime.parse(flight.getTime());
         LocalDateTime localDateTime = LocalDateTime.of(date,time);
         flight.setDateTime(localDateTime);
         flightRepository.save(flight);
+        return "admin";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -143,8 +144,12 @@ public class FlightController{
     @PostMapping("/findFlight")
     public String findFlight(@ModelAttribute("flight") Flight flight, BindingResult bindingResult, Model model){
         List<Flight> flights = flightRepository.findFlightByFlightNum(flight.getFlightNum());
-        model.addAttribute("flight",flights.get(0));
-        return "flight/editFlight";
+        System.out.println(flights.size());
+        if(flights.size() > 0){
+            model.addAttribute("flight",flights.get(0));
+            return "flight/editFlight";
+        }
+        return "flight/flightNotFound";
     }
 
      @PreAuthorize("hasAuthority('ADMIN')")
