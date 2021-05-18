@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
-public class UserValidator implements Validator {
+public class UserEditValidator implements Validator {
     @Autowired
     private UserService userService;
 
@@ -38,19 +38,6 @@ public class UserValidator implements Validator {
         }
         if(userService.findByUsername(user.getUsername()) != null){
             errors.rejectValue("username", "userCredentials.username", "Username taken");
-        }
-        if (user.getPassword().length() < 6 || user.getPassword().length() > 32) {
-            errors.rejectValue("password", "userCredentials.password", "Password must be between 6 and 32 characters");
-        }
-
-        if ((!isStrong(user.getPassword()))) {
-            errors.rejectValue("password", "userCredentials.password", "Password must contain 1 lowercase, 1 uppercase and 1 numeric character");
-        }
-
-        if (user.getPasswordConfirm() != null) {
-            if (!user.getPasswordConfirm().equals(user.getPassword())) {
-                errors.rejectValue("password", "userCredentials.password", "Passwords do not match");
-            }
         }
     }
 

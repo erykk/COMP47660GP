@@ -15,7 +15,14 @@
 <body>
     <div class="container">
         <h2><c:out value="${msg}"/></h2>
-        <a class="btn btn-lg btn-outline-secondary" href="${pageContext.request.contextPath}/">Back to main</a>
+        <c:choose>
+            <c:when test="${not empty flightID}">
+                <a class="btn btn-lg btn-outline-secondary" href="${pageContext.request.contextPath}/create-reservation/${flightID}">Back to reservation</a>
+            </c:when>
+            <c:when test="${empty flightID}">
+                    <a class="btn btn-lg btn-outline-secondary" href="${pageContext.request.contextPath}/">Back to main</a>
+            </c:when>
+        </c:choose>
     </div>
 </body>
 </html>

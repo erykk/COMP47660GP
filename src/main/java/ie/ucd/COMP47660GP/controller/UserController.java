@@ -17,6 +17,7 @@ import ie.ucd.COMP47660GP.service.impl.SecurityServiceImpl;
 import ie.ucd.COMP47660GP.service.impl.UserService;
 import ie.ucd.COMP47660GP.validator.CreditCardValidator;
 import ie.ucd.COMP47660GP.validator.LoginValidator;
+import ie.ucd.COMP47660GP.validator.UserEditValidator;
 import ie.ucd.COMP47660GP.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -66,6 +67,8 @@ public class UserController {
     // Assignment 3
     @Autowired
     UserValidator userValidator;
+    @Autowired
+    UserEditValidator userEditValidator;
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin")
@@ -94,7 +97,7 @@ public class UserController {
 //            System.out.println(user.getId());
 //            System.out.println(user2.getId());
 //        }
-        userValidator.validate(user,bindingResult);
+        userEditValidator.validate(user,bindingResult);
         userRepository.updateUserId(user.getAddress(), user.getEmail(), user.getFirstName(), user.getLastName(),
                 user.getPhoneNum());
         CLogger.info("/editPersonalDetails, cancel: id: " + user.getId());

@@ -65,6 +65,7 @@
             <tr>
                 <td>Card owner's name:</td>
                 <td><form:input path="creditCard.name"/></td>
+                <form:errors value="name"></form:errors>
             </tr>
             <tr>
                 <td>CVV:</td>

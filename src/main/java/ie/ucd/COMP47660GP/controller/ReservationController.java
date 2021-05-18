@@ -17,6 +17,8 @@ import ie.ucd.COMP47660GP.repositories.UserRepository;
 import ie.ucd.COMP47660GP.service.impl.SecurityServiceImpl;
 import ie.ucd.COMP47660GP.service.impl.UserService;
 import ie.ucd.COMP47660GP.validator.BookingValidator;
+import ie.ucd.COMP47660GP.validator.CreditCardValidator;
+import ie.ucd.COMP47660GP.validator.UserEditValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,6 +27,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Max;
@@ -60,6 +63,12 @@ public class ReservationController {
 
     @Autowired
     BookingValidator bookingValidator;
+
+    @Autowired
+    CreditCardValidator cardValidator;
+
+    @Autowired
+    UserEditValidator userEditValidator;
 
     @GetMapping(value = "/create-reservation/{id}")
     public String addReservation(
@@ -124,7 +133,14 @@ public class ReservationController {
         User user = null;
         List<User> savedUsers = new LinkedList<>();
 
-        bookingValidator.validate(booking, bindingResult);
+        String errorCode = bookingValidator.validateAll(booking);
+
+        if (!errorCode.contains("ok")){
+            CLogger.error("Booking error");
+            model.addAttribute("msg", errorCode);
+            model.addAttribute("flightID", booking.getFlightID());
+            return "user/fail";
+        }
 
         for (User receivedUser: users) {
             try {

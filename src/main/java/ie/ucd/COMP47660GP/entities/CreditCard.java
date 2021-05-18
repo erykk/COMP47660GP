@@ -92,7 +92,7 @@ public class CreditCard {
     }
 
     public String toString(){
-        return "************" + cardNum.substring(12,15);
+        return "************" + (cardNum.length() >= 15 ? cardNum.substring(11,15) : "****");
     }
 
 }
