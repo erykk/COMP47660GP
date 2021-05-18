@@ -13,7 +13,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
+    //@NotNull
     private String firstName;
     //@NotBlank
     private String lastName;

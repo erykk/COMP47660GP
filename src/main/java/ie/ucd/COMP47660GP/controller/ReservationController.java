@@ -26,6 +26,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -70,7 +72,7 @@ public class ReservationController {
     }
 
     @GetMapping(value = "/create-reservation/{id}", params = {"num_passengers"})
-    public String addReservation(@PathVariable("id") int id, @RequestParam(value = "num_passengers") int numPassengers,
+    public String addReservation(@PathVariable("id") int id, @RequestParam(value = "num_passengers") @Min(value=1, message="Need at least 1 passenger to book") @Max(value=30, message="Cannot make booking for more than 30 passengers") int numPassengers,
                                  Model model) {
         Flight flight = flightRepository.findById(id).
                 orElseThrow(() -> new NoSuchFlightException(id));
