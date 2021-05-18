@@ -29,6 +29,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -141,7 +142,7 @@ public class UserController {
     }
 
     @GetMapping("/reservationHistory/{id}")
-    public String history(@PathVariable("id") Long id, Model model) {
+    public String history(@PathVariable("id") @NotNull Long id, Model model) {
 //        securityService.checkLoggedInStatus(model);
         SecurityContext context = SecurityContextHolder.getContext();
         User user = userRepository.findByUsername(context.getAuthentication().getName());
@@ -167,7 +168,7 @@ public class UserController {
     }
 
     @GetMapping("/editCreditCardDetails/{id}")
-    public String editCreditCard(@PathVariable("id") int id, Model model) {
+    public String editCreditCard(@PathVariable("id") @NotNull int id, Model model) {
         SecurityContext context = SecurityContextHolder.getContext();
         User user = userRepository.findByUsername(context.getAuthentication().getName());
         CreditCard card = creditCardRepository.findById(id).orElseThrow(() -> new NoSuchCreditCardException());
@@ -244,7 +245,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/secureLogin", method = RequestMethod.POST)
-    public String login(@RequestParam("username") String username, @RequestParam("password") String password, Model model) {
+    public String login(@RequestParam("username") @NotNull String username, @RequestParam("password") String password, Model model) {
         securityService.checkLoggedInStatus(model);
         try {
             securityService.autoLogin(username, password);
@@ -268,7 +269,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/deleteAccount", method = RequestMethod.POST)
-    public String deleteAccount(@RequestParam("username") String username, @RequestParam("password") String password,
+    public String deleteAccount(@RequestParam("username") @NotNull String username, @RequestParam("password") String password,
             Model model) {
         securityService.checkLoggedInStatus(model);
         User user = userService.findByUsername(username);

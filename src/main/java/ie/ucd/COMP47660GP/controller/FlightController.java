@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -61,9 +63,9 @@ public class FlightController{
 
     // GET all flights for given airports and between now and given date.
     @GetMapping(value = "/flight", params = {"source", "destination", "dateTime"})
-    public String getFlights(@RequestParam("source") String origin,
-                             @RequestParam(value = "destination") String dest,
-                             @RequestParam(value = "dateTime") String dateStr,
+    public String getFlights(@RequestParam("source") @NotNull String origin,
+                             @RequestParam(value = "destination") @NotNull String dest,
+                             @RequestParam(value = "dateTime") @NotNull String dateStr,
                              Model model) {
         LocalDateTime now = LocalDateTime.now();
         // Add one day to include all flights of selected date
