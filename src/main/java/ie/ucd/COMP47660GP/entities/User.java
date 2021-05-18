@@ -3,6 +3,9 @@ package ie.ucd.COMP47660GP.entities;
 import javax.persistence.*;
 import java.util.Collection;
 
+import javax.validation.constraints.NotNull;
+
+import org.springframework.data.annotation.Transient;
 
 @Entity
 @Table( name = "users")
@@ -10,10 +13,15 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    //@NotNull
     private String firstName;
+    //@NotBlank
     private String lastName;
+    //@Email
     private String email;
+    //@Min(min = 3, max = 60)
     private String address;
+    //@Min(min = 3, max = 60)
     private String phoneNum;
     private Boolean exec;
     private String password;

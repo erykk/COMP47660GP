@@ -48,23 +48,38 @@
                 <tr><td colspan="2"><h3>Sign Up for our Executive member account.</h3></td></tr>
                 <tr>
                     <td>First Name:</td>
-                    <td><form:input class="form-control" path="firstName"/></td>
+                    <td>
+                        <form:input class="form-control" path="firstName"/>
+                        <form:errors path="firstName"></form:errors>
+                    </td>
                 </tr>
                 <tr>
                     <td>Last Name:</td>
-                    <td><form:input class="form-control" path="lastName"/></td>
+                    <td>
+                        <form:input class="form-control" path="lastName"/>
+                        <form:errors path="lastName"></form:errors>
+                    </td>
                 </tr>
                 <tr>
                     <td>Email:</td>
-                    <td><form:input class="form-control" type="email" path="email"/></td>
+                    <td>
+                        <form:input class="form-control" type="email" path="email"/>
+                        <form:errors path="email"></form:errors>
+                    </td>
                 </tr>
                 <tr>
                     <td>Address:</td>
-                    <td><form:input class="form-control" path="address"/></td>
+                     <td>
+                        <form:input class="form-control" path="address"/>
+                        <form:errors path="address"></form:errors>
+                    </td>
                 </tr>
                 <tr>
                     <td>Phone Number:</td>
-                    <td><form:input class="form-control" type="tel" path="phoneNum"/></td>
+                    <td>
+                    <form:input class="form-control" type="tel" path="phoneNum"/>
+                        <form:errors path="phoneNum"></form:errors>
+                    </td>
                 </tr>
                 <tr>
                     <td>Username:</td>

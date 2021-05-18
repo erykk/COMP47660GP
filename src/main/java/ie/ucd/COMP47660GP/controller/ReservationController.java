@@ -1,5 +1,6 @@
 package ie.ucd.COMP47660GP.controller;
 
+import ie.ucd.COMP47660GP.CLogger;
 import ie.ucd.COMP47660GP.entities.CreditCard;
 import ie.ucd.COMP47660GP.entities.Flight;
 import ie.ucd.COMP47660GP.entities.Reservation;
@@ -15,6 +16,7 @@ import ie.ucd.COMP47660GP.repositories.ReservationRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
 import ie.ucd.COMP47660GP.service.impl.SecurityServiceImpl;
 import ie.ucd.COMP47660GP.service.impl.UserService;
+import ie.ucd.COMP47660GP.validator.BookingValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,6 +27,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -53,20 +58,37 @@ public class ReservationController {
     @Autowired
     SecurityServiceImpl securityService;
 
+    @Autowired
+    BookingValidator bookingValidator;
 
     @GetMapping(value = "/create-reservation/{id}")
-    public String addReservation(@PathVariable("id") int id, Model model) {
+    public String addReservation(
+        @PathVariable("id")
+        @NotNull
+        @Min(value=1)
+        int id,
+        Model model
+    )
+    {
         Flight flight = flightRepository.findById(id).
                 orElseThrow(() -> new NoSuchFlightException(id));
         model.addAttribute("flight", flight);
         securityService.checkLoggedInStatus(model);
 
+        CLogger.info("/create-reservation, id: " + id);
+
         return "reservation/num_passengers";
     }
 
     @GetMapping(value = "/create-reservation/{id}", params = {"num_passengers"})
-    public String addReservation(@PathVariable("id") int id, @RequestParam(value = "num_passengers") int numPassengers,
-                                 Model model) {
+    public String addReservation(
+        @PathVariable("id") int id, @RequestParam(value = "num_passengers")
+        @Min(value=1, message="Need at least 1 passenger to book")
+        @Max(value=30, message="Cannot make booking for more than 30 passengers")
+        @NotNull int numPassengers,
+        Model model
+    )
+    {
         Flight flight = flightRepository.findById(id).
                 orElseThrow(() -> new NoSuchFlightException(id));
 
@@ -90,15 +112,19 @@ public class ReservationController {
         model.addAttribute("flight", flight);
         securityService.checkLoggedInStatus(model);
 
+        CLogger.info("/create-reservation, id: " + id);
+
         return "reservation/create_reservation";
     }
 
     @PostMapping(value = "/create-reservation", consumes = "application/x-www-form-urlencoded")
-    public String addReservation(Booking booking, Model model) {
+    public String addReservation(Booking booking, Model model, BindingResult bindingResult) {
         securityService.checkLoggedInStatus(model);
         List<User> users = booking.getUsers();
         User user = null;
         List<User> savedUsers = new LinkedList<>();
+
+        bookingValidator.validate(booking, bindingResult);
 
         for (User receivedUser: users) {
             try {
@@ -164,12 +190,19 @@ public class ReservationController {
 
         model.addAttribute("reservations", reservations);
 
+        CLogger.info("/create-reservation, " + booking.toString());
+
         return "reservation/reservation_created";
     }
 
     @GetMapping("/reservation")
-    public String displayReservation(@RequestParam(value = "reservation_id", required = false) Integer reservation_id,
-                                     Model model) {
+    public String displayReservation(
+        @RequestParam(value = "reservation_id", required = false)
+        @NotNull
+        Integer reservation_id,
+        Model model
+    )
+    {
         securityService.checkLoggedInStatus(model);
         Reservation reservation;
         if (reservation_id != null) {
@@ -183,6 +216,7 @@ public class ReservationController {
                 model.addAttribute("flight", flight);
 
             } catch (NoSuchBookingException e) {
+                CLogger.info("/reservations, no such booking for id: " + reservation_id );
                 model.addAttribute("error", e.getMessage());
                 reservation = new Reservation();
             }
@@ -191,20 +225,22 @@ public class ReservationController {
         }
         model.addAttribute("reservation", reservation);
 
+        CLogger.info("/reservations" );
+
         return "reservation/user_reservation";
     }
 
 
     // GET all reservations associated with given user id
     @GetMapping(value = "/reservation/{id}")
-    public List<Reservation> getReservations(@PathVariable("id") Long id) {
-
+    public List<Reservation> getReservations(@PathVariable("id") @NotNull Long id) {
+        CLogger.info("/reservations, get: id: " + id);
         return reservationRepository.findUsersReservations(id);
     }
 
     @PatchMapping("/reservation/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void cancelReservation(@PathVariable("id") int id) {
+    public void cancelReservation(@PathVariable("id") @NotNull int id) {
         Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new NoSuchBookingException(id));
         LocalDateTime flightTime = reservation.getFlight().getDateTime();
         // Can only cancel if flight is more than 24 hours away.
@@ -212,6 +248,8 @@ public class ReservationController {
             reservation.setCancelled(true);
             reservationRepository.save(reservation);
         }
+
+        CLogger.info("/reservations, cancel: id: " + id);
     }
 
     @GetMapping("/reservation-history")
@@ -219,6 +257,9 @@ public class ReservationController {
         securityService.checkLoggedInStatus(model);
         List<Reservation> reservations = reservationRepository.findUsersReservations(user.getId());
         model.addAttribute("reservations", reservations);
+
+        CLogger.info("/reservations, history: id: " + user.getId());
+
         return "reservation_history";
     }
 

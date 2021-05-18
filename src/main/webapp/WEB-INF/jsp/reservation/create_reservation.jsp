@@ -36,7 +36,8 @@
                 <tr><td><h4>Passenger ${status.count}</h4></td></tr>
                 <tr>
                     <td>First Name:</td>
-                    <td><input name="users[${status.index}].firstName" value="${user.firstName}"/></td>
+                    <td><input name="users[${status.index}].firstName" value="${user.firstName}" path="users[${status.index}].firstName"/></td>
+                    <form:errors path="users[${status.index}].firstName"></form:errors>
                 </tr>
                 <tr>
                     <td>Last Name:</td>

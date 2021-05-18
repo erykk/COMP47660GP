@@ -65,4 +65,14 @@ public class Booking {
     public void setSavedCard(String savedCard) {
         this.savedCard = savedCard;
     }
+
+    public String toString() {
+        String op = "";
+        op+= "Users: ";
+        for (User user: users){
+            op+= user.getId() + ", ";
+        }
+        op+= ". Credit Card: " + creditCard.toString() + ", Flight ID: " + flightID + ", Date: " + dateStr;
+        return op;
+    }
 }
