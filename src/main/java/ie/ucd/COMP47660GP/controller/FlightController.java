@@ -94,6 +94,11 @@ public class FlightController{
         return "flight/flightslist";
     }
 
+    /**
+     *
+     * Admin Methods
+     */
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/addFlight")
     public String newFlight(Model model){
@@ -121,9 +126,10 @@ public class FlightController{
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping(value = "/deleteFlight")
-    public void deleteFlight(@ModelAttribute("flight") Flight flight, BindingResult bindingResult, Model model){
+    public String deleteFlight(@ModelAttribute("flight") Flight flight, BindingResult bindingResult, Model model){
         List<Flight> flights = flightRepository.findFlightByFlightNum(flight.getFlightNum());
         flightRepository.delete(flights.get(0));
+        return "admin";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -143,13 +149,13 @@ public class FlightController{
 
      @PreAuthorize("hasAuthority('ADMIN')")
      @PostMapping(value = "/editFlight")
-     public void updateFlight(@ModelAttribute("flight") Flight flight, BindingResult bindingResult, Model model) {
+     public String updateFlight(@ModelAttribute("flight") Flight flight, BindingResult bindingResult, Model model) {
          LocalDate date = LocalDate.parse(flight.getDate());
          LocalTime time = LocalTime.parse(flight.getTime());
          LocalDateTime localDateTime = LocalDateTime.of(date,time);
          flightRepository.updateFlightInfo(flight.getSource(), flight.getDestination(), localDateTime,
                  flight.getDate(), flight.getTime(),flight.getFlightNum());
-//         return "flight/editFlight2";
+         return "admin";
     }
 
 

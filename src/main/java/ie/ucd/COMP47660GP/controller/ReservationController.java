@@ -17,6 +17,7 @@ import ie.ucd.COMP47660GP.service.impl.SecurityServiceImpl;
 import ie.ucd.COMP47660GP.service.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -221,6 +222,11 @@ public class ReservationController {
         return "reservation_history";
     }
 
+    /**
+     * Admin methods
+     *
+     */
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin/reservation")
     public String findReservation(@RequestParam(value = "reservation_id", required = false) Integer reservation_id,
                                      Model model) {
@@ -248,6 +254,7 @@ public class ReservationController {
         return "reservation/findReservation";
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/editReservation/{id}")
     public String editReservation(@PathVariable("id") int id, Model model){
         System.out.println("/edit Res testing");
@@ -258,12 +265,13 @@ public class ReservationController {
         return "reservation/editReservation";
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/editReservation")
     public String editReservation(@ModelAttribute("reservation") Reservation reservation,
                                   BindingResult bindingResult, Model model){
         System.out.println("/edit Res POST testing");
         List<Reservation> reservations = reservationRepository.findReservationWithReservationID(reservation.getReservation_id());
-        return "reservation/editReservation";
+        return "admin";
     }
 
 }
