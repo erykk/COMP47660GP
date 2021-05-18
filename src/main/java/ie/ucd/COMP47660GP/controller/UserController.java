@@ -67,7 +67,8 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin")
-    public String getAdminPage(){
+    public String getAdminPage(Model model){
+        securityService.checkLoggedInStatus(model);
         return  "admin";
     }
 
@@ -81,6 +82,7 @@ public class UserController {
         return "Valid: email does not exist";
     }
 
+//    @PreAuthorize("#username == authentication.name")
     @PostMapping(value = "/editPersonalDetails", consumes = "application/x-www-form-urlencoded")
     public String updatePersonaDetails(User user) {
 //        System.out.println("/editPersonalDetail method");
@@ -153,6 +155,7 @@ public class UserController {
         return "user/reservationHistory";
     }
 
+
     @GetMapping("/creditCard/{cardNum}")
     public String getCreditCard(@PathVariable String cardNum, Model model) {
 //        securityService.checkLoggedInStatus(model);
@@ -177,9 +180,9 @@ public class UserController {
         return "user/editCard";
     }
 
-    @PostMapping(value = "/editCreditCardDetails")
-    public String updateCreditCard(CreditCard creditCard) {
-
+    @PreAuthorize("#username == authentication.name")
+    @PostMapping(value = "/editCreditCardDetails/{username}")
+    public String updateCreditCard(CreditCard creditCard, @PathVariable("username") String username) {
         creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(),
                 creditCard.getSecurityCode(), creditCard.getExpiryDate());
         return "redirect:/viewCards";
@@ -251,24 +254,19 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("hasRole('EXEC')")
+//    @PreAuthorize("#username == authentication.name or hasRole('EXEC') or hasRole('ADMIN')")
     @RequestMapping(value = "/deleteAccount", method = RequestMethod.GET)
     public String deleteAccount(Model model) {
         securityService.checkLoggedInStatus(model);
         return "user/deleteAccount";
     }
 
+    @PreAuthorize("#username == authentication.name")
     @RequestMapping(value = "/deleteAccount", method = RequestMethod.POST)
     public String deleteAccount(@RequestParam("username") String username, @RequestParam("password") String password,
             Model model) {
         securityService.checkLoggedInStatus(model);
         User user = userService.findByUsername(username);
-        SecurityContext context = SecurityContextHolder.getContext();
-        User user2 = userRepository.findByUsername(context.getAuthentication().getName());
-        if(user.getId() != user2.getId()){
-            throw new UnauthorisedUserException();
-        }
-
 
         if (user != null) {
             if (userService.deleteExecUser(user, password)) {

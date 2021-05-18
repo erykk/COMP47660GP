@@ -167,6 +167,7 @@ public class ReservationController {
         return "reservation/reservation_created";
     }
 
+//    @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")
     @GetMapping("/reservation")
     public String displayReservation(@RequestParam(value = "reservation_id", required = false) Integer reservation_id,
                                      Model model) {
@@ -193,6 +194,8 @@ public class ReservationController {
 
         return "reservation/user_reservation";
     }
+
+
 
 
     // GET all reservations associated with given user id

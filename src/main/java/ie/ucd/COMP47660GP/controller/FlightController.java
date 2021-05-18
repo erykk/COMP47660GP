@@ -105,6 +105,7 @@ public class FlightController{
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/addFlight")
     public String newFlight(Model model){
+        securityService.checkLoggedInStatus(model);
         model.addAttribute("flight", new Flight());
         return  "flight/addFlight";
     }
@@ -113,6 +114,7 @@ public class FlightController{
     @PostMapping(value = "/addFlight")
     public String addNewFlight(@ModelAttribute("flight") Flight flight,
                 BindingResult bindingResult, Model model) {
+        securityService.checkLoggedInStatus(model);
         String dateAndTime = flight.getDate() + " " + flight.getTime();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime dateTime = LocalDateTime.parse(dateAndTime, formatter);
@@ -124,6 +126,7 @@ public class FlightController{
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/deleteFlight")
     public String deleteFlight(Model model){
+        securityService.checkLoggedInStatus(model);
         model.addAttribute("flight", new Flight());
         return  "flight/deleteFlight";
     }
@@ -131,6 +134,7 @@ public class FlightController{
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping(value = "/deleteFlight")
     public String deleteFlight(@ModelAttribute("flight") Flight flight, BindingResult bindingResult, Model model){
+        securityService.checkLoggedInStatus(model);
         List<Flight> flights = flightRepository.findFlightByFlightNum(flight.getFlightNum());
         flightRepository.delete(flights.get(0));
         return "admin";
@@ -139,6 +143,7 @@ public class FlightController{
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/findFlight")
     public String findFlight(Model model){
+        securityService.checkLoggedInStatus(model);
         model.addAttribute("flight", new Flight());
         return "flight/findFlight";
     }
@@ -147,6 +152,7 @@ public class FlightController{
     @PostMapping("/findFlight")
     @ResponseStatus(HttpStatus.OK)
     public String findFlight(@ModelAttribute("flight") Flight flight, BindingResult bindingResult, Model model){
+        securityService.checkLoggedInStatus(model);
         List<Flight> flights = flightRepository.findFlightByFlightNum(flight.getFlightNum());
         if(flights.size() > 0){
             model.addAttribute("flight",flights.get(0));
@@ -160,6 +166,7 @@ public class FlightController{
      @PostMapping(value = "/editFlight")
      @ResponseStatus(HttpStatus.OK)
      public String updateFlight(@ModelAttribute("flight") Flight flight, BindingResult bindingResult, Model model) {
+         securityService.checkLoggedInStatus(model);
         LocalDateTime dateTime;
         if(flight.getDate() != null && flight.getTime() != null){
             String dateAndTime = flight.getDate() + " " + flight.getTime();
