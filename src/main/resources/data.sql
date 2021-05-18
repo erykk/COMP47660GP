@@ -1,9 +1,9 @@
 INSERT INTO flights (flight_id, source, destination, date_time, flight_num)
     VALUES
-           (1,"Dublin", "London", "21-05-21, 14:30", "FR587L"),
-           (2,"Dublin", "Paris", "21-05-21, 9:00", "FR827P"),
-           (3,"Dublin", "Madrid", "21-05-21, 17:30", "FR256M"),
-           (4,"Dublin", "New York", "21-05-21, 8:30", "FR927NY");
+           (1,"Dublin", "London", "2021-05-21 14:30", "FR587L"),
+           (2,"Dublin", "Paris", "2021-05-21 9:00", "FR827P"),
+           (3,"Dublin", "Madrid", "2021-05-21 17:30", "FR256M"),
+           (4,"Dublin", "New York", "2021-05-21 8:30", "FR927NY");
 
 
 INSERT INTO users(id,  first_name, last_name, email, address, phone_num, exec)

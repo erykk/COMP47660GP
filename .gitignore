@@ -43,3 +43,9 @@ docker-compose.yml
 ### log file ###
 
 .log
+.gz
+
+### properties files ###
+
+.sql
+.properties

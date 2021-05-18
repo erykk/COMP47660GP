@@ -16,12 +16,14 @@ import ie.ucd.COMP47660GP.repositories.ReservationRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
 import ie.ucd.COMP47660GP.service.impl.SecurityServiceImpl;
 import ie.ucd.COMP47660GP.service.impl.UserService;
+import ie.ucd.COMP47660GP.validator.BookingValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -52,6 +54,8 @@ public class ReservationController {
     @Autowired
     SecurityServiceImpl securityService;
 
+    @Autowired
+    BookingValidator bookingValidator;
 
     @GetMapping(value = "/create-reservation/{id}")
     public String addReservation(@PathVariable("id") int id, Model model) {
@@ -97,12 +101,14 @@ public class ReservationController {
     }
 
     @PostMapping(value = "/create-reservation", consumes = "application/x-www-form-urlencoded")
-    public String addReservation(Booking booking, Model model) {
+    public String addReservation(Booking booking, Model model, BindingResult bindingResult) {
         securityService.checkLoggedInStatus(model);
         List<User> users = booking.getUsers();
         User user = null;
 
         List<User> savedUsers = new LinkedList<>();
+
+        bookingValidator.validate(booking, bindingResult);
 
         for (User receivedUser: users) {
             try {
