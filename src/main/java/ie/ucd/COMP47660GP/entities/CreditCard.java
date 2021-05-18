@@ -1,6 +1,7 @@
 package ie.ucd.COMP47660GP.entities;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import ie.ucd.COMP47660GP.service.AttributeEncryptor;
 
 import javax.persistence.*;
 
@@ -18,12 +19,16 @@ public class CreditCard {
     @JoinColumn(name = "user_id")
     private User user;
     @Column(name = "card_num", unique = true, nullable = false)
+    @Convert(converter = AttributeEncryptor.class)
     private String cardNum;
     @Column(name = "card_name")
+    @Convert(converter = AttributeEncryptor.class)
     private String name;
     @Column(name = "expiry_date")
+    @Convert(converter = AttributeEncryptor.class)
     private String expiryDate;
     @Column(name = "cvv")
+    @Convert(converter = AttributeEncryptor.class)
     private String securityCode;
 
     public CreditCard(int id, User user, String cardNum, String name, String expiryDate, String securityCode) {
