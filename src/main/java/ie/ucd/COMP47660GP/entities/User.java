@@ -1,10 +1,8 @@
 package ie.ucd.COMP47660GP.entities;
 
-import java.util.Collection;
 import javax.persistence.*;
-import ie.ucd.COMP47660GP.entities.Role;
+import java.util.Collection;
 
-import org.springframework.data.annotation.Transient;
 
 @Entity
 @Table( name = "users")
