@@ -1,6 +1,7 @@
 package ie.ucd.COMP47660GP.controller;
 
 import ie.ucd.COMP47660GP.entities.Flight;
+import ie.ucd.COMP47660GP.model.FlightDetails;
 import ie.ucd.COMP47660GP.service.impl.SecurityServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,8 @@ public class GeneralController {
     public String getLanding(Model model) {
         List<String> origins = new LinkedList<>();
         List<String> destinations = new LinkedList<>();
+
+        model.addAttribute("flightDetails", new FlightDetails());
 
         origins.add("Dublin");
         destinations.add("London");

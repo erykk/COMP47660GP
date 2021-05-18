@@ -12,8 +12,8 @@
     <jsp:include page="nav.jsp"/>
     <br>
     <div class="container">
-        <%--@elvariable id="flight" type="ie.ucd.COMP47660GP.entities.Flight"--%>
-        <form:form method="get" modelAttribute="flight" action="/flight">
+        <%--@elvariable id="flightDetails" type="ie.ucd.COMP47660GP.model.FlightDetails"--%>
+        <form:form method="get" modelAttribute="flightDetails" action="/flight2">
             <table style="margin: 0 auto; width: 80%">
                 <tr class="form-group">
                     <td>Origin:</td>
@@ -22,6 +22,7 @@
                             <form:option value="Select" label="--Select--" />
                             <form:options items="${origins}" />
                         </form:select>
+                        <form:errors path="source"></form:errors>
                     </td>
                 </tr>
 
@@ -32,6 +33,7 @@
                             <form:option value="Select" label="--Select--" />
                             <form:options items="${destinations}" />
                         </form:select>
+                        <form:errors path="destination"></form:errors>
                     </td>
                 </tr>
                 <tr>
@@ -40,6 +42,7 @@
                     </td>
                     <td>
                         <form:input class="form-control" path="dateTime" type="date"/>
+                        <form:errors path="dateTime"></form:errors>
                     </td>
                 </tr>
                 <tr>

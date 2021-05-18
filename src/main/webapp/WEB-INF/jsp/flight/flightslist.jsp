@@ -13,8 +13,8 @@
 <br>
 <div style="text-align: center;">
 
-    <%--@elvariable id="flight" type="ie.ucd.COMP47660GP.entities.Flight"--%>
-    <form:form method="get" modelAttribute="flight" action="/flight">
+    <%--@elvariable id="flightDetails" type="ie.ucd.COMP47660GP.model.FlightDetails"--%>
+    <form:form method="get" modelAttribute="flightDetails" action="/flight2">
         <table>
             <tr>
                 <td>Origin:</td>
