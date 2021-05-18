@@ -48,6 +48,7 @@
                     <input class="btn btn-lg btn-outline-primary btn-block" type="submit" value="Submit"/>
                 </td>
             </tr>
+            <tr><td><c:out value="${msg}"/></td></tr>
         </table>
     </form:form>
 

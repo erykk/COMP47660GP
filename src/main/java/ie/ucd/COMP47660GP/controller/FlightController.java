@@ -9,10 +9,12 @@ import ie.ucd.COMP47660GP.service.impl.SecurityServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.constraints.Future;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -63,10 +65,19 @@ public class FlightController{
 
     // GET all flights for given airports and between now and given date.
     @GetMapping(value = "/flight", params = {"source", "destination", "dateTime"})
-    public String getFlights(@RequestParam("source") @NotNull String origin,
-                             @RequestParam(value = "destination") @NotNull String dest,
+    @Validated
+    public String getFlights(@RequestParam("source") @NotNull @Min(1) String origin,
+                             @RequestParam(value = "destination") @NotNull @Min(1) String dest,
                              @RequestParam(value = "dateTime") @NotNull String dateStr,
                              Model model) {
+
+        if (dateStr.length() < 2){
+            model.addAttribute("msg", "Enter a valid date");
+            Flight flight = new Flight();
+            model.addAttribute("flight", flight);
+            return "flight/flightslist";
+        }
+
         LocalDateTime now = LocalDateTime.now();
         // Add one day to include all flights of selected date
         LocalDate date = LocalDate.parse(dateStr).plusDays(1);
