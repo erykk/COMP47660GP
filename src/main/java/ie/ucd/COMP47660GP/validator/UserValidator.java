@@ -28,12 +28,27 @@ public class UserValidator implements Validator {
         //ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "NotEmpty");
 
         if ((user.getUsername().length() < 6 || user.getUsername().length() > 32) ||
-                (!isUserValid(user.getUsername())) ||
-                (userService.findByUsername(user.getUsername()) != null) ||
-                (!user.getPasswordConfirm().equals(user.getPassword())) ||
-                (!isStrong(user.getPassword()))
+            (!isUserValid(user.getUsername())) ||
+            (userService.findByUsername(user.getUsername()) != null) ||
+            (!user.getPasswordConfirm().equals(user.getPassword())) ||
+            (!isStrong(user.getPassword()))
         )
-            errors.rejectValue("passwordConfirm", "Diff.userForm.passwordConfirm");
+
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"firstName","NotEmpty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"lastName","NotEmpty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"email","NotEmpty");
+        if (!user.getEmail().matches("^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")) {
+            errors.rejectValue("email", "userCredentials.email", "Invalid email");
+        }
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"address","NotEmpty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"phoneNum","NotEmpty");
+        if (!user.getPhoneNum().matches("[0-9]+") || user.getPhoneNum().length() < 4) {
+            errors.rejectValue("phoneNum", "userCredentials.tel", "Invalid phone number");
+        }
+        if(userService.findByUsername(user.getUsername()) != null){
+            errors.rejectValue("username", "userCredentials.username", "Username already exists");
+        }
+
     }
 
     private boolean isUserValid(String username){
