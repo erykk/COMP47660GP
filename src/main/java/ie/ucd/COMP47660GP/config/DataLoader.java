@@ -294,6 +294,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent>{
         userCred.setUsername("admin4145_");
         userCred.setPassword("adminRule808!");
         userCred.setPasswordConfirm("adminRule808!");
+        userCred.setPhoneNum("000000000");
         uc.register(userCred,bindingResult, model);
 
 
