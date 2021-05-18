@@ -49,3 +49,8 @@ docker-compose.yml
 
 .sql
 .properties
+
+
+application.log
+src/main/resources/application.properties
+src/main/resources/data.sql
