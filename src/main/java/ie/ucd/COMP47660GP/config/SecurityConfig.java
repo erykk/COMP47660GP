@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
             .antMatchers("/register", "/", "/login", "/secureRegister", "/secureLogin", "/resources/**",
                     "/images/**", "/reservation", "/mem/{id}", "/creditCard", "/creditCard/{cardNum}", "/editCreditCardDetails",
-                    "/registerCard", "/editPersonalDetails", "/flight", "/flight2", "/create-reservation", "/createMember",
+                    "/registerCard", "/editPersonalDetails", "/flight", "/flights", "/create-reservation", "/createMember",
                     "/create-reservation/*", "/deleteAccount", "/success", "/fail")
             .permitAll().anyRequest().authenticated().and()
             .formLogin().loginPage("/login")

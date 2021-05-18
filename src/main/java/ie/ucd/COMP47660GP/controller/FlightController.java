@@ -84,7 +84,7 @@ public class FlightController{
     }
 
     // GET all flights for given airports and between now and given date.
-    @GetMapping(value = "/flight2")
+    @GetMapping(value = "/flights")
     public String getFlights(@Valid FlightDetails flightDetails,
                              Model model,
                              BindingResult bindingResult) {
@@ -109,6 +109,7 @@ public class FlightController{
         } catch (DateTimeParseException e) {
             CLogger.error(e.toString());
             model.addAttribute("msg", "Please enter a valid date");
+            securityService.checkLoggedInStatus(model);
             return "flight/flightslist";
         }
 

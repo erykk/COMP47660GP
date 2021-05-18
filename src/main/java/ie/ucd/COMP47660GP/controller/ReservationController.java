@@ -30,6 +30,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -215,6 +216,7 @@ public class ReservationController {
     public String displayReservation(
         @RequestParam(value = "reservation_id", required = false)
         @NotNull
+        @Digits(integer=6, fraction = 0)
         Integer reservation_id,
         Model model
     )
