@@ -85,7 +85,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/editPersonalDetails", consumes = "application/x-www-form-urlencoded")
-    public String updatePersonaDetails(User user) {
+    public String updatePersonaDetails(User user, BindingResult bindingResult) {
 //        System.out.println("/editPersonalDetail method");
 //        SecurityContext context = SecurityContextHolder.getContext();
 //        User user2 = userRepository.findByUsername(context.getAuthentication().getName());
@@ -94,10 +94,11 @@ public class UserController {
 //            System.out.println(user.getId());
 //            System.out.println(user2.getId());
 //        }
+        userValidator.validate(user,bindingResult);
         userRepository.updateUserId(user.getAddress(), user.getEmail(), user.getFirstName(), user.getLastName(),
                 user.getPhoneNum());
         CLogger.info("/editPersonalDetails, cancel: id: " + user.getId());
-        return "redirect:/user";
+        return "user/user";
     }
 
     @GetMapping("/registerCard")
@@ -286,6 +287,10 @@ public class UserController {
     public String deleteAccount(@RequestParam("username") @NotNull String username, @RequestParam("password") String password,
             Model model) {
         securityService.checkLoggedInStatus(model);
+        if (!userValidator.validDelete(username, password)){
+            model.addAttribute("msg", "Invalid credentials");
+            return "user/deleteAccount";
+        }
         User user = userService.findByUsername(username);
         SecurityContext context = SecurityContextHolder.getContext();
         User user2 = userRepository.findByUsername(context.getAuthentication().getName());

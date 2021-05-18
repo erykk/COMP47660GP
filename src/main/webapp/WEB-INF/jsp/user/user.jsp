@@ -22,33 +22,44 @@
                     <td>
                             <form:input type="text" path="email" class="form-control" placeholder="${email}"
                                 autofocus="true"></form:input>
+                            <form:errors path="email"></form:errors>
                     </td>
                 </tr>
                 <tr>
                     <td>First Name:</td>
                     <td><form:input type="text" path="firstName" class="form-control" placeholder="${firstName}"
-                        autofocus="true"></form:input></td>
+                        autofocus="true"></form:input>
+                        <form:errors path="firstName"></form:errors>
+                    </td>
+
                 </tr>
                 <tr>
                     <td>Last Name:</td>
                     <td><form:input type="text" path="lastName" class="form-control" placeholder="${lastName}"
-                        autofocus="true"></form:input></td>
+                        autofocus="true"></form:input>
+                        <form:errors path="lastName"></form:errors>
+                    </td>
                 </tr>
                 <tr>
                     <td>Address:</td>
                     <td><form:input type="text" path="address" class="form-control" placeholder="${address}"
-                        autofocus="true"></form:input></td>
+                        autofocus="true"></form:input>
+                        <form:errors path="address"></form:errors>
+                    </td>
                 </tr>
                 <tr>
                     <td>Phone Number:</td>
                     <td><form:input type="text" path="phoneNum" class="form-control" placeholder="${phoneNum}"
-                        autofocus="true"></form:input></td>
+                        autofocus="true"></form:input>
+                        <form:errors path="phoneNum"></form:errors>
+                    </td>
                 </tr>
 
                 <tr>
                     <td>Password:</td>
                     <td>
-                            <form:input type="password" path="password" class="form-control" placeholder="${password}"></form:input>
+                            <form:input type="password" path="password" class="form-control" ></form:input>
+                            <form:errors path="password"></form:errors>
                     </td>
                 </tr>
                 <tr>

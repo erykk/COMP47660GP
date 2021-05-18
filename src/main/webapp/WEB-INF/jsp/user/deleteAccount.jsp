@@ -28,6 +28,7 @@
 
                 <button class="btn btn-lg btn-outline-primary btn-block" type="submit">Delete</button>
             </div>
+            <span><c:out value="${msg}"/></span>
         </form>
     </div>
 

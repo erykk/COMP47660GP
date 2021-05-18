@@ -20,7 +20,10 @@
     <table style="margin: 0 auto">
         <tr>
             <td>Name on Card:</td>
-            <td><form:input type="text" path="name" class="form-control" placeholder="Name"/></td>
+            <td>
+                <form:input type="text" path="name" class="form-control" placeholder="Name"/>
+                <form:errors path="name"></form:errors>
+            </td>
         </tr>
         <tr>
             <td>Card Number:</td>
