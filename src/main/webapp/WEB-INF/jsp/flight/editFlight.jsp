@@ -15,7 +15,7 @@
 <div class="container">
 
 
-    <form:form method="POST" action="${contexPath}/editFlight" modelAttribute="flight" onsubmit="return ajaxpost()">
+    <form:form method="POST" action="${contexPath}/editFlight" modelAttribute="flight" >
         <h2>Edit FLight</h2>
         <table>
             <tr>
@@ -56,11 +56,17 @@
     </form:form>
 </div>
 <script>
+
+    // onsubmit="return ajaxpost()"
 function ajaxpost () {
 // (A) GET FORM DATA
 var data = new FormData();
-data.append("name", document.getElementById("user-name").value);
-data.append("email", document.getElementById("user-email").value);
+data.append("source", document.getElementById("source").value);
+data.append("destination", document.getElementById("destination").value);
+data.append("date", document.getElementById("date").value);
+data.append("time", document.getElementById("time").value);
+    data.append("dateTime", document.getElementById("dateTime").value);
+    data.append("flightNum", document.getElementById("flightNum").value);
 
 // (B) AJAX REQUEST
 // NOTE - AJAX WILL NOT WORK WITH file://
@@ -73,13 +79,15 @@ console.log(this.status);
 // (B1) SERVER NOT RESPONDING OR SOMETHING
 // HTTP response 200 is OK
 // See https://developer.mozilla.org/en-US/docs/Web/HTTP/Status for more
-if (xhr.status != 200) {
+if (xhr.status !== 200) {
+
 alert("SERVER ERROR");
+alert(xhr.status);
 }
 
 // (B2) WHEN SERVER IS DONE
 else {
-if (xhr.response == "OK") {
+if (xhr.response === "OK") {
 alert("SUCCESSFUL!");
 } else {
 alert("FAILURE!");
