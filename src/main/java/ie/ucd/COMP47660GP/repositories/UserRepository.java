@@ -18,6 +18,9 @@ public interface UserRepository extends JpaRepository<User, Integer>{
     @Query("select u from User u where u.id = :id")
     User findUser(int id) throws NoSuchUserException;
 
+    @Query("select u from User u where u.id = :id")
+    User findUserByID(Long id) throws NoSuchUserException;
+
     @Query("select u from User u where u.email = :email")
     User findEmail(String email) throws NoSuchUserException;
 

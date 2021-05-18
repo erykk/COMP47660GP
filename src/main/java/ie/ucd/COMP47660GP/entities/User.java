@@ -5,12 +5,14 @@ import javax.persistence.*;
 import ie.ucd.COMP47660GP.entities.Role;
 
 import org.springframework.data.annotation.Transient;
+import org.springframework.transaction.annotation.Transactional;
 
 @Entity
 @Table( name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "user_id")
     private Long id;
     private String firstName;
     private String lastName;
@@ -29,13 +31,13 @@ public class User {
     private String username;
     private String userRole;
 
-    @ManyToMany
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(
                     name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(
                     name = "role_id", referencedColumnName = "id"))
+    @ManyToMany(cascade=CascadeType.ALL)
     private Collection<Role> roles;
 
 

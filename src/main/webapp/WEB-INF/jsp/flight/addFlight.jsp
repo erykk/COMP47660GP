@@ -39,7 +39,7 @@
             </tr>
             <tr>
                 <td>Time:</td>
-                <td><form:input type="text" path="time" placeholder="HH:MM:SS" class="form-control"/></td>
+                <td><form:input type="text" path="time" placeholder="HH:MM" class="form-control"/></td>
             </tr>
             <tr>
                 <td></td>

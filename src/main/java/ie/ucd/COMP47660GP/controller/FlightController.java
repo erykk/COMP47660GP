@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -112,10 +113,10 @@ public class FlightController{
     @PostMapping(value = "/addFlight")
     public String addNewFlight(@ModelAttribute("flight") Flight flight,
                 BindingResult bindingResult, Model model) {
-        LocalDate date = LocalDate.parse(flight.getDate());
-        LocalTime time = LocalTime.parse(flight.getTime());
-        LocalDateTime localDateTime = LocalDateTime.of(date,time);
-        flight.setDateTime(localDateTime);
+        String dateAndTime = flight.getDate() + " " + flight.getTime();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime dateTime = LocalDateTime.parse(dateAndTime, formatter);
+        flight.setDateTime(dateTime);
         flightRepository.save(flight);
         return "admin";
     }
@@ -147,18 +148,7 @@ public class FlightController{
     @ResponseStatus(HttpStatus.OK)
     public String findFlight(@ModelAttribute("flight") Flight flight, BindingResult bindingResult, Model model){
         List<Flight> flights = flightRepository.findFlightByFlightNum(flight.getFlightNum());
-        flights.get(0).setDateTime(flights.get(0).getDateTime().minusHours(1));
-        System.out.println(flights.get(0).getTime());
-        System.out.println(flights.get(0).getDateTime());
         if(flights.size() > 0){
-//            System.out.println(java.sql.Timestamp.valueOf(flights.get(0).getDateTime()));
-//            if(flights.get(0).getDateTime() != null && flights.get(0).getDate() == null && flights.get(0).getTime() == null){
-//                DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-//                LocalDateTime ldt = flights.get(0).getDateTime();
-//                ldt = ldt.minusHours(1);
-//                String formattedDateTime = ldt.format(formatter);
-//                flights.get(0).setDate(formattedDateTime.substring(0,10));
-//                flights.get(0).setTime(formattedDateTime.substring(11));
             model.addAttribute("flight",flights.get(0));
             return "flight/editFlight";
             }
@@ -166,30 +156,22 @@ public class FlightController{
         }
 
 
-//     @PreAuthorize("hasAuthority('ADMIN')")
+     @PreAuthorize("hasAuthority('ADMIN')")
      @PostMapping(value = "/editFlight")
      @ResponseStatus(HttpStatus.OK)
      public String updateFlight(@ModelAttribute("flight") Flight flight, BindingResult bindingResult, Model model) {
-        LocalDate date;
-        LocalTime time;
-        LocalDateTime localDateTime = LocalDateTime.now();
+        LocalDateTime dateTime;
         if(flight.getDate() != null && flight.getTime() != null){
-             date = LocalDate.parse(flight.getDate());
-             time = LocalTime.parse(flight.getTime());
-             localDateTime = LocalDateTime.of(date,time);
-            localDateTime = localDateTime.plusHours(1);
-//             List<Flight> flights = flightRepository.findFlightByFlightNum(flight.getFlightNum());
-//             if(flights.size() > 0){
-//                 if(flights.get(0).getTime() != null && (!flights.get(0).getTime().equals(flight.getTime()))){
-//                     localDateTime = localDateTime.plusHours(1);
-//                 }
-//             }
-
+            String dateAndTime = flight.getDate() + " " + flight.getTime();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            dateTime = LocalDateTime.parse(dateAndTime, formatter);
+            dateTime = dateTime.plusHours(1);
          }
-         flightRepository.updateFlightInfo(flight.getSource(), flight.getDestination(), localDateTime,
+        else{
+            dateTime = flight.getDateTime();
+        }
+         flightRepository.updateFlightInfo(flight.getSource(), flight.getDestination(), dateTime,
                  flight.getDate(), flight.getTime(),flight.getFlightNum());
          return "admin";
     }
-
-
 }
