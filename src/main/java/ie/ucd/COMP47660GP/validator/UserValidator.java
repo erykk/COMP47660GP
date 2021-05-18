@@ -33,6 +33,17 @@ public class UserValidator implements Validator {
             (!user.getPasswordConfirm().equals(user.getPassword())) ||
             (!isStrong(user.getPassword()))
         )
+        if (user.getUsername().length() < 6 || user.getUsername().length() > 32) {
+            errors.rejectValue("password", "userCredentials.password", "Password must be between 6 and 32 characters");
+        }
+
+        if ((!isStrong(user.getPassword()))) {
+            errors.rejectValue("password", "userCredentials.password", "Password must contain 1 lowercase, 1 uppercase and 1 numeric character");
+        }
+
+        if (!user.getPasswordConfirm().equals(user.getPassword())) {
+            errors.rejectValue("password", "userCredentials.password", "Passwords do not match");
+        }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors,"firstName","NotEmpty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors,"lastName","NotEmpty");
@@ -46,7 +57,7 @@ public class UserValidator implements Validator {
             errors.rejectValue("phoneNum", "userCredentials.tel", "Invalid phone number");
         }
         if(userService.findByUsername(user.getUsername()) != null){
-            errors.rejectValue("username", "userCredentials.username", "Username already exists");
+            errors.rejectValue("username", "userCredentials.username", "Username taken");
         }
 
     }
