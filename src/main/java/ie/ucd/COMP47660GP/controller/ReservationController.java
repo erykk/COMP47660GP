@@ -4,10 +4,7 @@ import ie.ucd.COMP47660GP.entities.CreditCard;
 import ie.ucd.COMP47660GP.entities.Flight;
 import ie.ucd.COMP47660GP.entities.Reservation;
 import ie.ucd.COMP47660GP.entities.User;
-import ie.ucd.COMP47660GP.exception.NoSuchBookingException;
-import ie.ucd.COMP47660GP.exception.NoSuchCreditCardException;
-import ie.ucd.COMP47660GP.exception.NoSuchFlightException;
-import ie.ucd.COMP47660GP.exception.NoSuchUserException;
+import ie.ucd.COMP47660GP.exception.*;
 import ie.ucd.COMP47660GP.model.Booking;
 import ie.ucd.COMP47660GP.repositories.CreditCardRepository;
 import ie.ucd.COMP47660GP.repositories.FlightRepository;
@@ -167,7 +164,7 @@ public class ReservationController {
         return "reservation/reservation_created";
     }
 
-//    @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")
+    @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")
     @GetMapping("/reservation")
     public String displayReservation(@RequestParam(value = "reservation_id", required = false) Integer reservation_id,
                                      Model model) {
@@ -217,18 +214,36 @@ public class ReservationController {
         }
     }
 
-    @GetMapping("/reservation-history")
-    public String getReservationHistory(User user, Model model) {
-        securityService.checkLoggedInStatus(model);
-        List<Reservation> reservations = reservationRepository.findUsersReservations(user.getId());
+    @PreAuthorize("#username == authentication.name")
+    @GetMapping("/reservationHistory/{username]/{id}")
+    public String history(@PathVariable("id") Long id, Model model, @PathVariable("username") String username) {
+//        securityService.checkLoggedInStatus(model);
+        System.out.println("TESting \resHistory");
+        System.out.println(username);
+        SecurityContext context = SecurityContextHolder.getContext();
+        User user = userRepository.findByUsername(context.getAuthentication().getName());
+        if(user.getId() != id){
+            throw new UnauthorisedUserException();
+        }
+        List<Reservation> reservations = reservationRepository.findUsersReservations(id);
+
         model.addAttribute("reservations", reservations);
-        return "reservation_history";
+        return "user/reservationHistory";
     }
 
-    /**
-     * Admin methods
-     *
-     */
+//    @GetMapping("/reservation-history")
+//    public String getReservationHistory(User user, Model model) {
+//        securityService.checkLoggedInStatus(model);
+//        List<Reservation> reservations = reservationRepository.findUsersReservations(user.getId());
+//        model.addAttribute("reservations", reservations);
+//        return "reservation_history";
+//    }
+
+    /****************************
+     *           START
+     *        ADMIN Requests
+     ****************************/
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin/reservation")
     public String findReservation(@RequestParam(value = "reservation_id", required = false) Integer reservation_id,
@@ -316,5 +331,10 @@ public class ReservationController {
         }
         return "admin";
     }
+
+    /****************************
+     *           END
+     *        ADMIN Requests
+     ****************************/
 
 }

@@ -65,6 +65,16 @@ public class UserController {
     @Autowired
     UserValidator userValidator;
 
+
+
+
+
+
+    /**************************************
+     *               START
+     *           ADMIN Requests
+     **************************************/
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin")
     public String getAdminPage(Model model){
@@ -72,17 +82,31 @@ public class UserController {
         return  "admin";
     }
 
-    @GetMapping("getEmail/{email}")
-    @ResponseBody
-    public String checkIfEmailIsValid(@PathVariable String email) {
-        User user = userRepository.findEmail(email);
-        if (user == null) {
-            return "Invalid: Email already exists";
-        }
-        return "Valid: email does not exist";
+    /**************************************
+     *               END
+     *           ADMIN Requests
+     **************************************/
+
+
+
+
+
+
+    /**************************************
+     *               START
+     *           USER Requests
+     **************************************/
+
+    @GetMapping("/user")
+    public String user(Model model) {
+        securityService.checkLoggedInStatus(model);
+        SecurityContext context = SecurityContextHolder.getContext();
+        User currentUser = userRepository.findByUsername(context.getAuthentication().getName());
+        model.addAttribute("user", currentUser);
+        return "user/user";
     }
 
-//    @PreAuthorize("#username == authentication.name")
+    //    @PreAuthorize("#username == authentication.name")
     @PostMapping(value = "/editPersonalDetails", consumes = "application/x-www-form-urlencoded")
     public String updatePersonaDetails(User user) {
 //        System.out.println("/editPersonalDetail method");
@@ -98,26 +122,98 @@ public class UserController {
         return "redirect:/user";
     }
 
-    @GetMapping("/registerCard")
-    public String registerCard(Model model) {
-        model.addAttribute("cardCredentials", new CreditCard());
+    //    @PreAuthorize("#username == authentication.name or hasRole('EXEC') or hasRole('ADMIN')")
+    @RequestMapping(value = "/deleteAccount", method = RequestMethod.GET)
+    public String deleteAccount(Model model) {
+        securityService.checkLoggedInStatus(model);
+        return "user/deleteAccount";
+    }
+
+    @PreAuthorize("#username == authentication.name")
+    @RequestMapping(value = "/deleteAccount", method = RequestMethod.POST)
+    public String deleteAccount(@RequestParam("username") String username, @RequestParam("password") String password,
+                                Model model) {
+        securityService.checkLoggedInStatus(model);
+        User user = userService.findByUsername(username);
+
+        if (user != null) {
+            if (userService.deleteExecUser(user, password)) {
+                model.addAttribute("msg",
+                        "Successfully removed executive privileges from user " + user.getUsername() + ".");
+                securityService.forceLogout(model);
+                return "user/success";
+            } else {
+                model.addAttribute("msg", "Could not remove executive privileges for user" + user.getUsername()
+                        + ". Password doesn't match");
+                return "user/fail";
+            }
+        } else {
+            model.addAttribute("msg", "User " + username + " does not exist.");
+            return "user/fail";
+        }
+    }
+
+
+    /**************************************
+     *               END
+     *           USER Requests
+     **************************************/
+
+
+
+//    @PreAuthorize("#username == authentication.name")
+//    @GetMapping("/reservationHistory/{username]/{id}")
+//    public String history(@PathVariable("id") Long id, Model model, @PathVariable("username") String username) {
+////        securityService.checkLoggedInStatus(model);
+//        System.out.println("TESting \resHistory");
+//        System.out.println(username);
+//        SecurityContext context = SecurityContextHolder.getContext();
+//        User user = userRepository.findByUsername(context.getAuthentication().getName());
+//        if(user.getId() != id){
+//            throw new UnauthorisedUserException();
+//        }
+//        List<Reservation> reservations = reservationRepository.findUsersReservations(id);
+//
+//        model.addAttribute("reservations", reservations);
+//        return "user/reservationHistory";
+//    }
+
+
+
+
+
+    /**********************************
+     *               START
+     *        CREDIT CARD Requests
+     **********************************/
+
+    @PreAuthorize("#username == authentication.name")
+    @GetMapping("/registerCard/{username}")
+    public String registerCard(Model model, @PathVariable("username") String username) {
+        CreditCard card = new CreditCard();
+        User u = new User();
+        u.setUsername(username);
+        card.setUser(u);
+        System.out.println("TEsting \registerCard "+username);
+        model.addAttribute("cardCredentials", card);
         securityService.checkLoggedInStatus(model);
         return "user/cardRegistration";
     }
 
-    @RequestMapping(value = "/creditCard", method = RequestMethod.POST)
+    @PreAuthorize("#username == authentication.name")
+    @RequestMapping(value = "/creditCard/{username}", method = RequestMethod.POST)
     public String addCreditCard(@ModelAttribute("cardCredentials") CreditCard cardCredentials,
-            BindingResult bindingResult, Model model) {
+                                BindingResult bindingResult, Model model, @PathVariable("username") String username) {
         securityService.checkLoggedInStatus(model);
         cardValidator.validate(cardCredentials, bindingResult);
         System.out.println("/creditCard TESTING");
+        System.out.println(username);
         if (bindingResult.hasErrors()) {
             return "user/cardRegistration";
         }
 
         SecurityContext context = SecurityContextHolder.getContext();
         User user = userRepository.findByUsername(context.getAuthentication().getName());
-        System.out.println("/creditcard username: "+user.getUsername());
         cardCredentials.setUser(user);
 
         cardService.save(cardCredentials);
@@ -129,39 +225,18 @@ public class UserController {
         return "user/viewCards";
     }
 
-    @GetMapping("/viewCards")
-    public String cards(Model model) {
+    @PreAuthorize("#username == authentication.name")
+    @GetMapping("/viewCards/{username}")
+    public String cards(Model model, @PathVariable("username") String username) {
         securityService.checkLoggedInStatus(model);
-
+        System.out.println("/viewcards Testing");
+        System.out.println(username);
         SecurityContext context = SecurityContextHolder.getContext();
         User user = userRepository.findByUsername(context.getAuthentication().getName());
 
         List<CreditCard> creditCards = creditCardRepository.findAllByUser(user);
         model.addAttribute("creditCards", creditCards);
         return "user/viewCards";
-    }
-
-    @GetMapping("/reservationHistory/{id}")
-    public String history(@PathVariable("id") Long id, Model model) {
-//        securityService.checkLoggedInStatus(model);
-        SecurityContext context = SecurityContextHolder.getContext();
-        User user = userRepository.findByUsername(context.getAuthentication().getName());
-        if(user.getId() != id){
-            throw new UnauthorisedUserException();
-        }
-        List<Reservation> reservations = reservationRepository.findUsersReservations(id);
-
-        model.addAttribute("reservations", reservations);
-        return "user/reservationHistory";
-    }
-
-
-    @GetMapping("/creditCard/{cardNum}")
-    public String getCreditCard(@PathVariable String cardNum, Model model) {
-//        securityService.checkLoggedInStatus(model);
-        CreditCard creditCard = creditCardRepository.findByCardNum(cardNum);
-        model.addAttribute("creditcard", new CreditCard());
-        return "user/viewCard";
     }
 
     @PreAuthorize("#username == authentication.name")
@@ -187,6 +262,40 @@ public class UserController {
                 creditCard.getSecurityCode(), creditCard.getExpiryDate());
         return "redirect:/viewCards";
     }
+//
+//    @GetMapping("/creditCard/{cardNum}")
+//    public String getCreditCard(@PathVariable String cardNum, Model model) {
+////        securityService.checkLoggedInStatus(model);
+//        CreditCard creditCard = creditCardRepository.findByCardNum(cardNum);
+//        model.addAttribute("creditcard", new CreditCard());
+//        return "user/viewCard";
+//    }
+//
+
+    /**********************************
+     *               END
+     *        CREDIT CARD Requests
+     **********************************/
+
+
+
+
+
+    /**************************************
+     *               START
+     *        REGISTRATION/LOGIN Requests
+     **************************************/
+
+    @GetMapping("getEmail/{email}")
+    @ResponseBody
+    public String checkIfEmailIsValid(@PathVariable String email) {
+        User user = userRepository.findEmail(email);
+        if (user == null) {
+            return "Invalid: Email already exists";
+        }
+        return "Valid: email does not exist";
+    }
+
 
     @GetMapping("/register")
     public String register(Model model) {
@@ -224,15 +333,6 @@ public class UserController {
         return "redirect:/login";
     }
 
-    @GetMapping("/user")
-    public String user(Model model) {
-        securityService.checkLoggedInStatus(model);
-        SecurityContext context = SecurityContextHolder.getContext();
-        User currentUser = userRepository.findByUsername(context.getAuthentication().getName());
-        model.addAttribute("user", currentUser);
-        return "user/user";
-    }
-
     @GetMapping("/login")
     public String login(Model model) {
 //        model.addAttribute("login", new Login());
@@ -254,34 +354,10 @@ public class UserController {
         }
     }
 
-//    @PreAuthorize("#username == authentication.name or hasRole('EXEC') or hasRole('ADMIN')")
-    @RequestMapping(value = "/deleteAccount", method = RequestMethod.GET)
-    public String deleteAccount(Model model) {
-        securityService.checkLoggedInStatus(model);
-        return "user/deleteAccount";
-    }
+    /**************************************
+     *               END
+     *        REGISTRATION/LOGIN Requests
+     **************************************/
 
-    @PreAuthorize("#username == authentication.name")
-    @RequestMapping(value = "/deleteAccount", method = RequestMethod.POST)
-    public String deleteAccount(@RequestParam("username") String username, @RequestParam("password") String password,
-            Model model) {
-        securityService.checkLoggedInStatus(model);
-        User user = userService.findByUsername(username);
 
-        if (user != null) {
-            if (userService.deleteExecUser(user, password)) {
-                model.addAttribute("msg",
-                        "Successfully removed executive privileges from user " + user.getUsername() + ".");
-                securityService.forceLogout(model);
-                return "user/success";
-            } else {
-                model.addAttribute("msg", "Could not remove executive privileges for user" + user.getUsername()
-                        + ". Password doesn't match");
-                return "user/fail";
-            }
-        } else {
-            model.addAttribute("msg", "User " + username + " does not exist.");
-            return "user/fail";
-        }
-    }
 }

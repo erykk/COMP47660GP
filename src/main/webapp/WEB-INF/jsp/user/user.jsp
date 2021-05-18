@@ -64,7 +64,7 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <h4 class="text-center form-control"><a href="${contextPath}/registerCard">Add Card</a></h4>
+                        <h4 class="text-center form-control"><a href="${contextPath}/registerCard/${user.username}">Add Card</a></h4>
                     </td>
                 </tr>
                 <tr>

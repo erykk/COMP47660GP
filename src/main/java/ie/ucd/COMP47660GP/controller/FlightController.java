@@ -97,10 +97,10 @@ public class FlightController{
         return "flight/flightslist";
     }
 
-    /**
-     *
-     * Admin Methods
-     */
+    /****************************
+     *           START
+     *        ADMIN Requests
+     ****************************/
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/addFlight")
@@ -181,4 +181,10 @@ public class FlightController{
                  flight.getDate(), flight.getTime(),flight.getFlightNum());
          return "admin";
     }
+
+
+    /****************************
+     *           END
+     *        ADMIN Requests
+     ****************************/
 }
