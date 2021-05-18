@@ -124,7 +124,7 @@ public class UserController {
         }
 
         SecurityContext context = SecurityContextHolder.getContext();
-        User user = userRepository.findByUsername(context.getAuthentication().getName());
+        User user = userRepository.findByEmail(context.getAuthentication().getName());
         System.out.println("/creditcard username: "+user.getUsername());
         cardCredentials.setUser(user);
 
@@ -143,7 +143,7 @@ public class UserController {
         securityService.checkLoggedInStatus(model);
 
         SecurityContext context = SecurityContextHolder.getContext();
-        User user = userRepository.findByUsername(context.getAuthentication().getName());
+        User user = userRepository.findByEmail(context.getAuthentication().getName());
 
         List<CreditCard> creditCards = creditCardRepository.findAllByUser(user);
         model.addAttribute("creditCards", creditCards);
@@ -155,7 +155,7 @@ public class UserController {
     public String history(@PathVariable("id") @NotNull Long id, Model model) {
 //        securityService.checkLoggedInStatus(model);
         SecurityContext context = SecurityContextHolder.getContext();
-        User user = userRepository.findByUsername(context.getAuthentication().getName());
+        User user = userRepository.findByEmail(context.getAuthentication().getName());
         if(user.getId() != id){
             CLogger.info("/editCreditCardDetails, attempted unauthorised reservation history access by user: " + id);
             throw new UnauthorisedUserException();
@@ -181,7 +181,7 @@ public class UserController {
     @GetMapping("/editCreditCardDetails/{username}/{id}")
     public String editCreditCard(@PathVariable("username") String username,@PathVariable("id") int id, Model model) {
         SecurityContext context = SecurityContextHolder.getContext();
-        User user = userRepository.findByUsername(context.getAuthentication().getName());
+        User user = userRepository.findByEmail(context.getAuthentication().getName());
         CreditCard card = creditCardRepository.findById(id).orElseThrow(() -> new NoSuchCreditCardException());
         if(user.getId() != card.getUser().getId()){
             CLogger.info("/editCreditCardDetails, attempted unauthorised access by user: " + user.getId() + " for card: " + card.toString());
@@ -193,6 +193,25 @@ public class UserController {
         CLogger.info("/editCreditCardDetails, id: " + id);
 
         return "user/editCard";
+    }
+
+    @PreAuthorize("#username == authentication.name")
+    @GetMapping("/editCreditCardDetails/{username}/{id}/delete")
+    public String deleteCreditCard(@PathVariable("username") String username,@PathVariable("id") int id, Model model) {
+        SecurityContext context = SecurityContextHolder.getContext();
+        User user = userRepository.findByEmail(context.getAuthentication().getName());
+        CreditCard card = creditCardRepository.findById(id).orElseThrow(() -> new NoSuchCreditCardException());
+        if(user.getId() != card.getUser().getId()){
+            CLogger.info("/editCreditCardDetails, attempted unauthorised access by user: " + user.getId() + " for card: " + card.toString());
+            System.out.println("Unauthorised access");
+            throw new UnauthorisedUserException();
+        }
+        creditCardRepository.deleteById(card.getId());
+        model.addAttribute("cardCredentials", card);
+
+        CLogger.info("/editCreditCardDetails, delete: id: " + id);
+
+        return "user/viewCards";
     }
 
     @PostMapping(value = "/editCreditCardDetails")
@@ -248,7 +267,7 @@ public class UserController {
     public String user(Model model) {
         securityService.checkLoggedInStatus(model);
         SecurityContext context = SecurityContextHolder.getContext();
-        User currentUser = userRepository.findByUsername(context.getAuthentication().getName());
+        User currentUser = userRepository.findByEmail(context.getAuthentication().getName());
         model.addAttribute("user", currentUser);
         CLogger.info("/user, id: " + currentUser.getId());
         return "user/user";
@@ -267,8 +286,8 @@ public class UserController {
         securityService.checkLoggedInStatus(model);
         try {
             securityService.autoLogin(username, password);
-            model.addAttribute("msg", "Logged in successfully as " + userRepository.findByUsername(username).getUsername());
-            model.addAttribute("user", userRepository.findByUsername(username));
+            model.addAttribute("msg", "Logged in successfully as " + userRepository.findByEmail(username).getUsername());
+            model.addAttribute("user", userRepository.findByEmail(username));
             CLogger.info("/login successful for username: " + username);
             return "user/user";
         } catch (NoSuchUserException e) {
@@ -294,9 +313,9 @@ public class UserController {
             model.addAttribute("msg", "Invalid credentials");
             return "user/deleteAccount";
         }
-        User user = userService.findByUsername(username);
+        User user = userService.findByEmail(username);
         SecurityContext context = SecurityContextHolder.getContext();
-        User user2 = userRepository.findByUsername(context.getAuthentication().getName());
+        User user2 = userRepository.findByEmail(context.getAuthentication().getName());
         if(user.getId() != user2.getId()){
             CLogger.error("/deleteAccount failed for username: " + username);
             throw new UnauthorisedUserException();
