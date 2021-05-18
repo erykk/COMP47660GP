@@ -17,6 +17,8 @@ public class Reservation {
     @Column(name = "cancelled")
     private Boolean cancelled;
 
+    private Long userID;
+
     public Reservation(Flight flight, User user) {
         // ID auto gen
         this.flight = flight;
@@ -61,4 +63,8 @@ public class Reservation {
     public int getReservation_id() {
         return id;
     }
+
+    public Long getUserID(){ return this.userID;}
+
+    public void setUserID(Long userID){ this.userID = userID; }
 }

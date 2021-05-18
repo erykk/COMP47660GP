@@ -257,10 +257,9 @@ public class ReservationController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/editReservation/{id}")
     public String editReservation(@PathVariable("id") int id, Model model){
-        System.out.println("/edit Res testing");
-        System.out.println(id);
         List<Reservation> reservations = reservationRepository.findReservationWithReservationID(id);
         Reservation reservation = reservations.get(0);
+        reservation.setUserID(reservation.getUser().getId());
         model.addAttribute("reservation", reservation);
         return "reservation/editReservation";
     }
@@ -269,8 +268,49 @@ public class ReservationController {
     @PostMapping("/editReservation")
     public String editReservation(@ModelAttribute("reservation") Reservation reservation,
                                   BindingResult bindingResult, Model model){
-        System.out.println("/edit Res POST testing");
-        List<Reservation> reservations = reservationRepository.findReservationWithReservationID(reservation.getReservation_id());
+        User user = userRepository.findUserByID(reservation.getUserID());
+        reservationRepository.updateReservationInfo(reservation.getCancelled(),reservation.getFlight(), user, reservation.getId());
+        return "admin";
+    }
+
+
+
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/admin/deleteReservation")
+    public String removeReservation(@RequestParam(value = "reservation_id", required = false) Integer reservation_id,
+                                  Model model) {
+        securityService.checkLoggedInStatus(model);
+        Reservation reservation;
+        if (reservation_id != null) {
+            try {
+                reservation = reservationRepository.findById(reservation_id).
+                        orElseThrow(() -> new NoSuchBookingException(reservation_id));
+                User user = reservation.getUser();
+                Flight flight = reservation.getFlight();
+
+                model.addAttribute("user", user);
+                model.addAttribute("flight", flight);
+
+            } catch (NoSuchBookingException e) {
+                model.addAttribute("error", e.getMessage());
+                reservation = new Reservation();
+            }
+        } else {
+            reservation = new Reservation();
+        }
+        model.addAttribute("reservation", reservation);
+        return "reservation/deleteReservation";
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/deleteReservation/{id}")
+    public String removeReservation(@PathVariable("id") int id, Model model){
+        List<Reservation> reservations = reservationRepository.findReservationWithReservationID(id);
+        if(reservations.size() > 0){
+            Reservation reservation = reservations.get(0);
+            reservationRepository.delete(reservation);
+        }
         return "admin";
     }
 

@@ -49,7 +49,7 @@
                 </tr>
                 <tr>
                     <td style="border: 1px solid black;"> Reservation </td>
-                    <td style="border: 1px solid black;"><a href="/reservation">Delete Reservation</a></td>
+                    <td style="border: 1px solid black;"><a href="/admin/deleteReservation">Delete Reservation</a></td>
                 </tr>
             </table>
 </div>

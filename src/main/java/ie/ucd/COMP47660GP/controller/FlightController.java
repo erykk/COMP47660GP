@@ -9,6 +9,7 @@ import ie.ucd.COMP47660GP.repositories.UserRepository;
 import ie.ucd.COMP47660GP.service.impl.SecurityServiceImpl;
 import org.apache.jasper.compiler.JspUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -108,13 +111,14 @@ public class FlightController{
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping(value = "/addFlight")
-    public void addNewFlight(@ModelAttribute("flight") Flight flight,
+    public String addNewFlight(@ModelAttribute("flight") Flight flight,
                 BindingResult bindingResult, Model model) {
-        LocalDate date = LocalDate.parse(flight.getDate());
-        LocalTime time = LocalTime.parse(flight.getTime());
-        LocalDateTime localDateTime = LocalDateTime.of(date,time);
-        flight.setDateTime(localDateTime);
+        String dateAndTime = flight.getDate() + " " + flight.getTime();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime dateTime = LocalDateTime.parse(dateAndTime, formatter);
+        flight.setDateTime(dateTime);
         flightRepository.save(flight);
+        return "admin";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -141,22 +145,33 @@ public class FlightController{
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/findFlight")
+    @ResponseStatus(HttpStatus.OK)
     public String findFlight(@ModelAttribute("flight") Flight flight, BindingResult bindingResult, Model model){
         List<Flight> flights = flightRepository.findFlightByFlightNum(flight.getFlightNum());
-        model.addAttribute("flight",flights.get(0));
-        return "flight/editFlight";
-    }
+        if(flights.size() > 0){
+            model.addAttribute("flight",flights.get(0));
+            return "flight/editFlight";
+            }
+        return "flight/flightNotFound";
+        }
+
 
      @PreAuthorize("hasAuthority('ADMIN')")
      @PostMapping(value = "/editFlight")
+     @ResponseStatus(HttpStatus.OK)
      public String updateFlight(@ModelAttribute("flight") Flight flight, BindingResult bindingResult, Model model) {
-         LocalDate date = LocalDate.parse(flight.getDate());
-         LocalTime time = LocalTime.parse(flight.getTime());
-         LocalDateTime localDateTime = LocalDateTime.of(date,time);
-         flightRepository.updateFlightInfo(flight.getSource(), flight.getDestination(), localDateTime,
+        LocalDateTime dateTime;
+        if(flight.getDate() != null && flight.getTime() != null){
+            String dateAndTime = flight.getDate() + " " + flight.getTime();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            dateTime = LocalDateTime.parse(dateAndTime, formatter);
+            dateTime = dateTime.plusHours(1);
+         }
+        else{
+            dateTime = flight.getDateTime();
+        }
+         flightRepository.updateFlightInfo(flight.getSource(), flight.getDestination(), dateTime,
                  flight.getDate(), flight.getTime(),flight.getFlightNum());
          return "admin";
     }
-
-
 }

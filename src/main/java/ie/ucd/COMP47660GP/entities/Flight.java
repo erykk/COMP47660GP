@@ -17,7 +17,7 @@ public class Flight {
     private String date;
     private String time;
 
-    public Flight(String source, String destination, LocalDateTime dateTime, String flightNum) {
+    public Flight(String source, String destination, LocalDateTime dateTime, String flightNum, String date, String time) {
         // ID auto gen
         this.source = source;
         this.destination = destination;
