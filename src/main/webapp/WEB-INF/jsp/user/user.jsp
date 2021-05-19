@@ -69,9 +69,9 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <h4 class="text-center form-control"><a href="${contextPath}/reservationHistory/${user.id}">View Your Reservation History</a></h4>
+                        <h4 class="text-center form-control"><a href="${contextPath}/reservationHistory/${user.username}">View Your Reservation History</a></h4>
                     </td>
-                    <td><a href="/user/${user.username}">Edit</a></td>
+<%--                    <td><a href="/user/${user.username}">Edit</a></td>--%>
                 </tr>
             </table>
         </form:form>

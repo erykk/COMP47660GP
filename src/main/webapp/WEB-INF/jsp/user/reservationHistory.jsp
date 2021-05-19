@@ -32,9 +32,14 @@
                         <td style="border: 1px solid black;"><c:out value="${reservation.flight.destination}"/> </td>
                         <td style="border: 1px solid black;"><c:out value="${reservation.flight.dateTime}"/> </td>
                         <td style="border: 1px solid black;"><c:out value="${reservation.cancelled}"/> </td>
+                        <td style="border: 1px solid black;"><a href="/user/deleteReservation/${reservation.user.username}/${reservation.reservation_id}">Cancel Reservation</a></td>
                     </tr>
                 </tbody>
             </c:forEach>
             </table>
+<%--    <form:form method="POST" action="/user/deleteReservation/${reservation.user.username}">--%>
+<%--        <form:button class="btn btn-lg btn-primary" type="submit">Cancel</form:button>--%>
+<%--    </form:form>--%>
+</div>
 </body>
 </html>
