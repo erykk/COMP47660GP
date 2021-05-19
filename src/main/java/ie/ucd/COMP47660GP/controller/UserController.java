@@ -286,8 +286,8 @@ public class UserController {
         securityService.checkLoggedInStatus(model);
         try {
             securityService.autoLogin(username, password);
-            model.addAttribute("msg", "Logged in successfully as " + userRepository.findByEmail(username).getUsername());
-            model.addAttribute("user", userRepository.findByEmail(username));
+            model.addAttribute("msg", "Logged in successfully as " + userRepository.findByUsername(username).getUsername());
+            model.addAttribute("user", userRepository.findByUsername(username));
             CLogger.info("/login successful for username: " + username);
             return "user/user";
         } catch (NoSuchUserException e) {
