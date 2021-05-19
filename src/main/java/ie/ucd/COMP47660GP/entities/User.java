@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import javax.validation.constraints.NotNull;
 
-import org.springframework.data.annotation.Transient;
+import ie.ucd.COMP47660GP.service.AttributeEncryptor;
 
 @Entity
 @Table( name = "users")
@@ -14,14 +14,18 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     //@NotNull
+    @Convert(converter = AttributeEncryptor.class)
     private String firstName;
     //@NotBlank
+    @Convert(converter = AttributeEncryptor.class)
     private String lastName;
     //@Email
     private String email;
     //@Min(min = 3, max = 60)
+    @Convert(converter = AttributeEncryptor.class)
     private String address;
     //@Min(min = 3, max = 60)
+    @Convert(converter = AttributeEncryptor.class)
     private String phoneNum;
     private Boolean exec;
     private String password;
