@@ -59,7 +59,7 @@
                 <tr></tr>
                 <tr>
                     <td colspan="2">
-                        <h4 class="text-center form-control"><a href="${contextPath}/viewCards">View Saved Cards</a></h4>
+                        <h4 class="text-center form-control"><a href="${contextPath}/viewCards/${user.username}">View Saved Cards</a></h4>
                     </td>
                 </tr>
                 <tr>

@@ -97,6 +97,7 @@ public class UserController {
      *           USER Requests
      **************************************/
 
+    @PreAuthorize("#username == authentication.name")
     @GetMapping("/user")
     public String user(Model model) {
         securityService.checkLoggedInStatus(model);
@@ -194,7 +195,7 @@ public class UserController {
         User u = new User();
         u.setUsername(username);
         card.setUser(u);
-        System.out.println("TEsting \registerCard "+username);
+//        System.out.println("TEsting /registerCard "+username);
         model.addAttribute("cardCredentials", card);
         securityService.checkLoggedInStatus(model);
         return "user/cardRegistration";
@@ -206,8 +207,8 @@ public class UserController {
                                 BindingResult bindingResult, Model model, @PathVariable("username") String username) {
         securityService.checkLoggedInStatus(model);
         cardValidator.validate(cardCredentials, bindingResult);
-        System.out.println("/creditCard TESTING");
-        System.out.println(username);
+//        System.out.println("/creditCard TESTING");
+//        System.out.println(username);
         if (bindingResult.hasErrors()) {
             return "user/cardRegistration";
         }
@@ -229,8 +230,8 @@ public class UserController {
     @GetMapping("/viewCards/{username}")
     public String cards(Model model, @PathVariable("username") String username) {
         securityService.checkLoggedInStatus(model);
-        System.out.println("/viewcards Testing");
-        System.out.println(username);
+//        System.out.println("/viewcards Testing");
+//        System.out.println(username);
         SecurityContext context = SecurityContextHolder.getContext();
         User user = userRepository.findByUsername(context.getAuthentication().getName());
 
@@ -242,7 +243,7 @@ public class UserController {
     @PreAuthorize("#username == authentication.name")
     @GetMapping("/editCreditCardDetails/{username}/{id}")
     public String editCreditCard(@PathVariable("username") String username,@PathVariable("id") int id, Model model) {
-
+//        System.out.println("/editCreditCard() testing "+ username);
 //        SecurityContext context = SecurityContextHolder.getContext();
 //        User user = userRepository.findByUsername(context.getAuthentication().getName());
         CreditCard card = creditCardRepository.findById(id).orElseThrow(() -> new NoSuchCreditCardException());
@@ -258,9 +259,10 @@ public class UserController {
     @PreAuthorize("#username == authentication.name")
     @PostMapping(value = "/editCreditCardDetails/{username}")
     public String updateCreditCard(CreditCard creditCard, @PathVariable("username") String username) {
+//        System.out.println("/editCreditCard() testing POST "+ username);
         creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(),
                 creditCard.getSecurityCode(), creditCard.getExpiryDate());
-        return "redirect:/viewCards";
+        return "redirect:/user";
     }
 //
 //    @GetMapping("/creditCard/{cardNum}")
@@ -333,6 +335,7 @@ public class UserController {
         return "redirect:/login";
     }
 
+
     @GetMapping("/login")
     public String login(Model model) {
 //        model.addAttribute("login", new Login());
@@ -340,6 +343,7 @@ public class UserController {
         return "user/login";
     }
 
+    @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")
     @RequestMapping(value = "/secureLogin", method = RequestMethod.POST)
     public String login(@RequestParam("username") String username, @RequestParam("password") String password, Model model) {
         securityService.checkLoggedInStatus(model);
