@@ -100,6 +100,8 @@ public class UserController {
     @GetMapping("/user")
     public String user(@ModelAttribute("user") User user, BindingResult br, Model model) {
         model.addAttribute("user", user);
+        System.out.println("TESTING /user");
+        System.out.println(user.getUsername());
         securityService.checkLoggedInStatus(model);
         SecurityContext context = SecurityContextHolder.getContext();
         User currentUser = userRepository.findByUsername(context.getAuthentication().getName());

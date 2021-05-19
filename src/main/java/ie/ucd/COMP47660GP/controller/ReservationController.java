@@ -128,6 +128,7 @@ public class ReservationController {
         return "reservation/create_reservation";
     }
 
+
     @PostMapping(value = "/create-reservation", consumes = "application/x-www-form-urlencoded")
     public String addReservation(Booking booking, Model model, BindingResult bindingResult) {
         System.out.println("3 TESTING  POST /create-reservation ");
@@ -147,7 +148,7 @@ public class ReservationController {
 
         for (User receivedUser: users) {
             try {
-                user = userRepository.findByEmail(receivedUser.getUsername());
+                user = userRepository.findByUsername(receivedUser.getUsername());
                 if (user == null) {
                     throw new NoSuchUserException();
                 }
@@ -188,7 +189,7 @@ public class ReservationController {
         List<Reservation> reservations = new LinkedList<>();
 
         SecurityContext context = SecurityContextHolder.getContext();
-        User user2 = userRepository.findByEmail(context.getAuthentication().getName());
+        User user2 = userRepository.findByUsername(context.getAuthentication().getName());
         if(user2 != null){
             savedUsers.clear();
             savedUsers.add(user2);
