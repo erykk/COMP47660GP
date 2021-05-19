@@ -325,10 +325,11 @@ public class ReservationController {
 //        return "reservation_history";
 //    }
 
-    /**
-     * Admin methods
-     *
-     */
+    /****************************
+     *           START
+     *        ADMIN Requests
+     ****************************/
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin/reservation")
     public String findReservation(@RequestParam(value = "reservation_id", required = false) Integer reservation_id,
@@ -416,5 +417,10 @@ public class ReservationController {
         }
         return "admin";
     }
+
+    /****************************
+     *           END
+     *        ADMIN Requests
+     ****************************/
 
 }
