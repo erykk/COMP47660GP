@@ -183,45 +183,61 @@ public class UserController {
      *           USER Requests
      **************************************/
 
+    //    @PreAuthorize("#username == authentication.name")
+////    @GetMapping("/reservationHistory/{username]/{id}")
+////    public String history(@PathVariable("id") Long id, Model model, @PathVariable("username") String username) {
+//////        securityService.checkLoggedInStatus(model);
+////        System.out.println("TESting \resHistory");
+////        System.out.println(username);
+//        SecurityContext context = SecurityContextHolder.getContext();
+//        User user = userRepository.findByUsername(context.getAuthentication().getName());
+//        if(user.getId() != id){
+//            throw new UnauthorisedUserException();
+//        }
+//        List<Reservation> reservations = reservationRepository.findUsersReservations(id);
+//
+//        model.addAttribute("reservations", reservations);
+//        return "user/reservationHistory";
+//    }
 
 
 
 
-    @GetMapping("getEmail/{email}")
-    @ResponseBody
-    public String checkIfEmailIsValid(@PathVariable String email) {
-        User user = userRepository.findEmail(email);
-        if (user == null) {
-            CLogger.error("Email already exists:" + email);
-            return "Invalid: Email already exists";
-        }
-        return "Valid: email does not exist";
-    }
+    /**********************************
+     *               START
+     *        CREDIT CARD Requests
+     **********************************/
 
-
-
-    @GetMapping("/registerCard")
-    public String registerCard(Model model) {
-        model.addAttribute("cardCredentials", new CreditCard());
+    @PreAuthorize("#username == authentication.name")
+    @GetMapping("/registerCard/{username}")
+    public String registerCard(Model model, @PathVariable("username") @NotNull String username) {
+        CreditCard card = new CreditCard();
+        User u = new User();
+        u.setUsername(username);
+        card.setUser(u);
+//        System.out.println("TEsting /registerCard "+username);
+        model.addAttribute("cardCredentials", card);
         securityService.checkLoggedInStatus(model);
         CLogger.info("/registerCard, new");
         return "user/cardRegistration";
     }
 
-    @RequestMapping(value = "/creditCard", method = RequestMethod.POST)
+
+    @PreAuthorize("#username == authentication.name")
+    @RequestMapping(value = "/creditCard/{username}", method = RequestMethod.POST)
     public String addCreditCard(@ModelAttribute("cardCredentials") CreditCard cardCredentials,
-            BindingResult bindingResult, Model model) {
+                                BindingResult bindingResult, Model model, @PathVariable("username") String username) {
         securityService.checkLoggedInStatus(model);
         cardValidator.validate(cardCredentials, bindingResult);
-        System.out.println("/creditCard TESTING");
+//        System.out.println("/creditCard TESTING");
+//        System.out.println(username);
         if (bindingResult.hasErrors()) {
             CLogger.error("/creditCard, failed to add card: id: " + cardCredentials.toString());
             return "user/cardRegistration";
         }
 
         SecurityContext context = SecurityContextHolder.getContext();
-        User user = userRepository.findByEmail(context.getAuthentication().getName());
-        System.out.println("/creditcard username: "+user.getUsername());
+        User user = userRepository.findByUsername(context.getAuthentication().getName());
         cardCredentials.setUser(user);
 
         cardService.save(cardCredentials);
@@ -234,12 +250,14 @@ public class UserController {
         return "user/viewCards";
     }
 
-    @GetMapping("/viewCards")
-    public String cards(Model model) {
+    @PreAuthorize("#username == authentication.name")
+    @GetMapping("/viewCards/{username}")
+    public String cards(Model model, @PathVariable("username") String username) {
         securityService.checkLoggedInStatus(model);
-
+//        System.out.println("/viewcards Testing");
+//        System.out.println(username);
         SecurityContext context = SecurityContextHolder.getContext();
-        User user = userRepository.findByEmail(context.getAuthentication().getName());
+        User user = userRepository.findByUsername(context.getAuthentication().getName());
 
         List<CreditCard> creditCards = creditCardRepository.findAllByUser(user);
         model.addAttribute("creditCards", creditCards);
@@ -247,20 +265,10 @@ public class UserController {
         return "user/viewCards";
     }
 
-
-
-    @GetMapping("/creditCard/{cardNum}")
-    public String getCreditCard(@PathVariable String cardNum, Model model) {
-//        securityService.checkLoggedInStatus(model);
-        CreditCard creditCard = creditCardRepository.findByCardNum(cardNum);
-        model.addAttribute("creditcard", new CreditCard());
-        CLogger.info("/creditCard, get: id: " + creditCard.toString());
-        return "user/viewCard";
-    }
-
     @PreAuthorize("#username == authentication.name")
     @GetMapping("/editCreditCardDetails/{username}/{id}")
     public String editCreditCard(@PathVariable("username") String username,@PathVariable("id") int id, Model model) {
+//        System.out.println("/editCreditCard() testing "+ username);
         SecurityContext context = SecurityContextHolder.getContext();
         User user = userRepository.findByEmail(context.getAuthentication().getName());
         CreditCard card = creditCardRepository.findById(id).orElseThrow(() -> new NoSuchCreditCardException());
@@ -274,6 +282,17 @@ public class UserController {
         CLogger.info("/editCreditCardDetails, id: " + id);
 
         return "user/editCard";
+    }
+
+    @PreAuthorize("#username == authentication.name")
+    @PostMapping(value = "/editCreditCardDetails/{username}")
+    public String updateCreditCard(CreditCard creditCard, @PathVariable("username") String username) {
+//        System.out.println("/editCreditCard() testing POST "+ username);
+        creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(),
+                creditCard.getSecurityCode(), creditCard.getExpiryDate());
+        CLogger.info("/editCreditCardDetails, id: " + creditCard.toString());
+        return "redirect:/user";
+//        return "redirect:/viewCards";
     }
 
     @PreAuthorize("#username == authentication.name")
@@ -295,14 +314,59 @@ public class UserController {
         return "user/viewCards";
     }
 
-    @PostMapping(value = "/editCreditCardDetails")
-    public String updateCreditCard(CreditCard creditCard) {
 
-        creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(),
-                creditCard.getSecurityCode(), creditCard.getExpiryDate());
-        CLogger.info("/editCreditCardDetails, id: " + creditCard.toString());
-        return "redirect:/viewCards";
+//    @GetMapping("/creditCard/{cardNum}")
+//    public String getCreditCard(@PathVariable String cardNum, Model model) {
+////        securityService.checkLoggedInStatus(model);
+//        CreditCard creditCard = creditCardRepository.findByCardNum(cardNum);
+//        model.addAttribute("creditcard", new CreditCard());
+//        CLogger.info("/creditCard, get: id: " + creditCard.toString());
+//        return "user/viewCard";
+//    }
+
+    /**********************************
+     *               END
+     *        CREDIT CARD Requests
+     **********************************/
+
+
+
+
+
+    /**************************************
+     *               START
+     *        REGISTRATION/LOGIN Requests
+     **************************************/
+
+    @GetMapping("getEmail/{email}")
+    @ResponseBody
+    public String checkIfEmailIsValid(@PathVariable String email) {
+        User user = userRepository.findEmail(email);
+        if (user == null) {
+            CLogger.error("Email already exists:" + email);
+            return "Invalid: Email already exists";
+        }
+        return "Valid: email does not exist";
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @GetMapping("/register")
     public String register(Model model) {
