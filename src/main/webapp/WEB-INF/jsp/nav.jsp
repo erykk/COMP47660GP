@@ -2,7 +2,7 @@
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light" >
     <div class="container">
         <a class="navbar-brand" href="/">
             <img id="logo" src="/images/airplane.png" alt="Image" width="200px;">
@@ -34,3 +34,10 @@
         </ul>
     </div>
 </nav>
+
+<%--<form:form method="GET" action="${pageContext.request.contextPath}/user/${user.username}" modelAttribute="user">--%>
+<%--    <c:if test="${logged_in == true}">--%>
+<%--        <form:button class="btn btn-lg btn-primary" type="submit">Account</form:button></td>--%>
+<%--        &lt;%&ndash;                    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/user">Account</a></li>&ndash;%&gt;--%>
+<%--    </c:if>--%>
+<%--</form:form>--%>

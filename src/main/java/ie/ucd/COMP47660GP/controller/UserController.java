@@ -97,7 +97,7 @@ public class UserController {
      *           USER Requests
      **************************************/
 
-    @PreAuthorize("#username == authentication.name")
+//    @PreAuthorize("#username == authentication.name")
     @GetMapping("/user")
     public String user(Model model) {
         securityService.checkLoggedInStatus(model);
@@ -107,10 +107,10 @@ public class UserController {
         return "user/user";
     }
 
-    //    @PreAuthorize("#username == authentication.name")
-    @PostMapping(value = "/editPersonalDetails", consumes = "application/x-www-form-urlencoded")
-    public String updatePersonaDetails(User user) {
-//        System.out.println("/editPersonalDetail method");
+    @PreAuthorize("#username == authentication.name")
+    @PostMapping(value = "/editPersonalDetails/{username}", consumes = "application/x-www-form-urlencoded")
+    public String updatePersonaDetails(User user, @PathVariable("username") String username) {
+//        System.out.println("/editPersonalDetail method "+username);
 //        SecurityContext context = SecurityContextHolder.getContext();
 //        User user2 = userRepository.findByUsername(context.getAuthentication().getName());
 //        if(user.getId() != user2.getId()){

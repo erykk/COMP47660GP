@@ -13,7 +13,7 @@
     <jsp:include page="../nav.jsp"/>
     <br>
     <div class="container">
-        <form:form method="POST" modelAttribute="user" class="form-signin" action="/editPersonalDetails">
+        <form:form method="POST" modelAttribute="user" class="form-signin" action="/editPersonalDetails/${user.username}">
             <h2 class="form-signin-heading" style="text-align: center">Account Details</h2>
             <br>
             <table style="margin: 0 auto; width: 80%">
