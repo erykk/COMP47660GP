@@ -28,6 +28,7 @@
 
 <%--                <button class="btn btn-lg btn-outline-primary btn-block" type="submit">Delete</button>--%>
 <%--            </div>--%>
+<%--    <span><c:out value="${msg}"/></span>--%>
 <%--        </form>--%>
 <%--    </div>--%>
 
@@ -59,8 +60,8 @@
                 <tr>
                      <td><form:button class="btn btn-lg btn-primary" style="text-align:center" type="submit">Delete</form:button></td>
                 </tr>
-
             </table>
+            <span><c:out value="${msg}"/></span>
         </form:form>
 
     </div>
