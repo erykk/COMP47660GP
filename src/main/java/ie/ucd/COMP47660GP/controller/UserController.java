@@ -98,12 +98,13 @@ public class UserController {
 
 //    @PreAuthorize("#username == authentication.name")
     @GetMapping("/user")
-    public String user(Model model) {
+    public String user(@ModelAttribute("user") User user, BindingResult br, Model model) {
+        model.addAttribute("user", user);
         securityService.checkLoggedInStatus(model);
         SecurityContext context = SecurityContextHolder.getContext();
         User currentUser = userRepository.findByUsername(context.getAuthentication().getName());
-        model.addAttribute("user", currentUser);
-        CLogger.info("/user, id: " + currentUser.getId());
+//        model.addAttribute("user", currentUser);
+        CLogger.info("/user, id: " + user.getId());
         return "user/user";
     }
 
