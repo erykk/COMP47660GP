@@ -98,17 +98,27 @@ public class UserController {
 
 //    @PreAuthorize("#username == authentication.name")
     @GetMapping("/user")
-    public String user(@ModelAttribute("user") User user, BindingResult br, Model model) {
-        model.addAttribute("user", user);
+    public String user(@ModelAttribute("user2") User user2, BindingResult br, Model model) {
+        model.addAttribute("user2", user2);
         System.out.println("TESTING /user");
-        System.out.println(user.getUsername());
+//        System.out.println(user.getUsername());
         securityService.checkLoggedInStatus(model);
         SecurityContext context = SecurityContextHolder.getContext();
+        System.out.println(context.getAuthentication().getName());
         User currentUser = userRepository.findByUsername(context.getAuthentication().getName());
-//        model.addAttribute("user", currentUser);
-        CLogger.info("/user, id: " + user.getId());
+        model.addAttribute("user", currentUser);
+        CLogger.info("/user, id: " + currentUser.getId());
         return "user/user";
     }
+
+//    @GetMapping("/user")
+//    public String user(Model model) {
+//        securityService.checkLoggedInStatus(model);
+//        SecurityContext context = SecurityContextHolder.getContext();
+//        User currentUser = userRepository.findByUsername(context.getAuthentication().getName());
+//        model.addAttribute("user", currentUser);
+//        return "user/user";
+//    }
 
     @PreAuthorize("#username == authentication.name")
     @PostMapping(value = "/editPersonalDetails/{username}", consumes = "application/x-www-form-urlencoded")
