@@ -37,7 +37,7 @@
 
 <%--<form:form method="GET" action="${pageContext.request.contextPath}/user/${user.username}" modelAttribute="user">--%>
 <%--    <c:if test="${logged_in == true}">--%>
-<%--        <form:button class="btn btn-lg btn-primary" type="submit">Account</form:button></td>--%>
+<%--        <form:button class="btn btn-lg btn-primary" type="submit">Account2</form:button></td>--%>
 <%--        &lt;%&ndash;                    <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/user">Account</a></li>&ndash;%&gt;--%>
 <%--    </c:if>--%>
 <%--</form:form>--%>

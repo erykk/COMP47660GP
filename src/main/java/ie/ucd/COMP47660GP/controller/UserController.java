@@ -123,17 +123,22 @@ public class UserController {
         return "redirect:/user";
     }
 
-    //    @PreAuthorize("#username == authentication.name or hasRole('EXEC') or hasRole('ADMIN')")
+//    @PreAuthorize("#username == authentication.name")
     @RequestMapping(value = "/deleteAccount", method = RequestMethod.GET)
     public String deleteAccount(Model model) {
+//        System.out.println("/deleteAccount Testing GET "+username);
+        SecurityContext context = SecurityContextHolder.getContext();
+        User currentUser = userRepository.findByUsername(context.getAuthentication().getName());
+        model.addAttribute("user", currentUser);
         securityService.checkLoggedInStatus(model);
         return "user/deleteAccount";
     }
 
     @PreAuthorize("#username == authentication.name")
-    @RequestMapping(value = "/deleteAccount", method = RequestMethod.POST)
+    @RequestMapping(value = "/deleteAccount/{username}", method = RequestMethod.POST)
     public String deleteAccount(@RequestParam("username") String username, @RequestParam("password") String password,
                                 Model model) {
+        System.out.println("/deleteAccount Testing POST "+username);
         securityService.checkLoggedInStatus(model);
         User user = userService.findByUsername(username);
 
