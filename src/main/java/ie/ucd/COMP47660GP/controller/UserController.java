@@ -70,26 +70,47 @@ public class UserController {
     @Autowired
     UserEditValidator userEditValidator;
 
+
+    /**************************************
+     *               START
+     *           ADMIN Requests
+     **************************************/
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin")
-    public String getAdminPage(){
+    public String getAdminPage(Model model){
+        securityService.checkLoggedInStatus(model);
         return  "admin";
     }
 
-    @GetMapping("getEmail/{email}")
-    @ResponseBody
-    public String checkIfEmailIsValid(@PathVariable String email) {
-        User user = userRepository.findEmail(email);
-        if (user == null) {
-            CLogger.error("Email already exists:" + email);
-            return "Invalid: Email already exists";
-        }
-        return "Valid: email does not exist";
+    /**************************************
+     *               END
+     *           ADMIN Requests
+     **************************************/
+
+
+
+
+    /**************************************
+     *               START
+     *           USER Requests
+     **************************************/
+
+//    @PreAuthorize("#username == authentication.name")
+    @GetMapping("/user")
+    public String user(Model model) {
+        securityService.checkLoggedInStatus(model);
+        SecurityContext context = SecurityContextHolder.getContext();
+        User currentUser = userRepository.findByUsername(context.getAuthentication().getName());
+        model.addAttribute("user", currentUser);
+        CLogger.info("/user, id: " + currentUser.getId());
+        return "user/user";
     }
 
-    @PostMapping(value = "/editPersonalDetails", consumes = "application/x-www-form-urlencoded")
-    public String updatePersonaDetails(User user, BindingResult bindingResult) {
-//        System.out.println("/editPersonalDetail method");
+    @PreAuthorize("#username == authentication.name")
+    @PostMapping(value = "/editPersonalDetails/{username}", consumes = "application/x-www-form-urlencoded")
+    public String updatePersonaDetails(User user, BindingResult bindingResult, @PathVariable("username") String username) {
+//        System.out.println("/editPersonalDetail method "+username);
 //        SecurityContext context = SecurityContextHolder.getContext();
 //        User user2 = userRepository.findByUsername(context.getAuthentication().getName());
 //        if(user.getId() != user2.getId()){
@@ -102,7 +123,82 @@ public class UserController {
                 user.getPhoneNum());
         CLogger.info("/editPersonalDetails, cancel: id: " + user.getId());
         return "user/user";
+//        return "redirect:/user";
     }
+
+    //    @PreAuthorize("#username == authentication.name")
+    @RequestMapping(value = "/deleteAccount", method = RequestMethod.GET)
+    public String deleteAccount(Model model) {
+//        System.out.println("/deleteAccount Testing GET "+username);
+        SecurityContext context = SecurityContextHolder.getContext();
+        User currentUser = userRepository.findByUsername(context.getAuthentication().getName());
+        model.addAttribute("user", currentUser);
+        securityService.checkLoggedInStatus(model);
+        CLogger.info("/deleteAccount, view");
+        return "user/deleteAccount";
+    }
+
+    @PreAuthorize("#username == authentication.name")
+    @RequestMapping(value = "/deleteAccount/{username}", method = RequestMethod.POST)
+    public String deleteAccount(@RequestParam("username") @NotNull String username, @RequestParam("password") String password,
+                                Model model) {
+//        System.out.println("/deleteAccount Testing POST "+username);
+        securityService.checkLoggedInStatus(model);
+        if (!userValidator.validDelete(username, password)){
+            model.addAttribute("msg", "Invalid credentials");
+            return "user/deleteAccount";
+        }
+        User user = userService.findByEmail(username);
+        SecurityContext context = SecurityContextHolder.getContext();
+        User user2 = userRepository.findByEmail(context.getAuthentication().getName());
+        if(user.getId() != user2.getId()){
+            CLogger.error("/deleteAccount failed for username: " + username);
+            throw new UnauthorisedUserException();
+        }
+
+        CLogger.info("/deleteAccount successful for username: " + username);
+
+        if (user != null) {
+            if (userService.deleteExecUser(user, password)) {
+                model.addAttribute("msg",
+                        "Successfully removed executive privileges from user " + user.getUsername() + ".");
+                securityService.forceLogout(model);
+                CLogger.info("/deleteAccount successful for username: " + username);
+                return "user/success";
+            } else {
+                model.addAttribute("msg", "Could not remove executive privileges for user" + user.getUsername()
+                        + ". Password doesn't match");
+                CLogger.error("/deleteAccount failed for username: " + username);
+                return "user/fail";
+            }
+        } else {
+            model.addAttribute("msg", "User " + username + " does not exist.");
+            CLogger.error("/deleteAccount failed for username: " + username);
+            return "user/fail";
+        }
+    }
+
+    /**************************************
+     *               END
+     *           USER Requests
+     **************************************/
+
+
+
+
+
+    @GetMapping("getEmail/{email}")
+    @ResponseBody
+    public String checkIfEmailIsValid(@PathVariable String email) {
+        User user = userRepository.findEmail(email);
+        if (user == null) {
+            CLogger.error("Email already exists:" + email);
+            return "Invalid: Email already exists";
+        }
+        return "Valid: email does not exist";
+    }
+
+
 
     @GetMapping("/registerCard")
     public String registerCard(Model model) {
@@ -248,15 +344,6 @@ public class UserController {
         return "redirect:/login";
     }
 
-    @GetMapping("/user")
-    public String user(Model model) {
-        securityService.checkLoggedInStatus(model);
-        SecurityContext context = SecurityContextHolder.getContext();
-        User currentUser = userRepository.findByEmail(context.getAuthentication().getName());
-        model.addAttribute("user", currentUser);
-        CLogger.info("/user, id: " + currentUser.getId());
-        return "user/user";
-    }
 
     @GetMapping("/login")
     public String login(Model model) {
@@ -282,51 +369,9 @@ public class UserController {
         }
     }
 
-    @PreAuthorize("hasRole('EXEC')")
-    @RequestMapping(value = "/deleteAccount", method = RequestMethod.GET)
-    public String deleteAccount(Model model) {
-        securityService.checkLoggedInStatus(model);
-        CLogger.info("/deleteAccount, view");
-        return "user/deleteAccount";
-    }
 
-    @RequestMapping(value = "/deleteAccount", method = RequestMethod.POST)
-    public String deleteAccount(@RequestParam("username") @NotNull String username, @RequestParam("password") String password,
-            Model model) {
-        securityService.checkLoggedInStatus(model);
-        if (!userValidator.validDelete(username, password)){
-            model.addAttribute("msg", "Invalid credentials");
-            return "user/deleteAccount";
-        }
-        User user = userService.findByEmail(username);
-        SecurityContext context = SecurityContextHolder.getContext();
-        User user2 = userRepository.findByEmail(context.getAuthentication().getName());
-        if(user.getId() != user2.getId()){
-            CLogger.error("/deleteAccount failed for username: " + username);
-            throw new UnauthorisedUserException();
-        }
 
-        CLogger.info("/deleteAccount successful for username: " + username);
 
-        if (user != null) {
-            if (userService.deleteExecUser(user, password)) {
-                model.addAttribute("msg",
-                        "Successfully removed executive privileges from user " + user.getUsername() + ".");
-                securityService.forceLogout(model);
-                CLogger.info("/deleteAccount successful for username: " + username);
-                return "user/success";
-            } else {
-                model.addAttribute("msg", "Could not remove executive privileges for user" + user.getUsername()
-                        + ". Password doesn't match");
-                CLogger.error("/deleteAccount failed for username: " + username);
-                return "user/fail";
-            }
-        } else {
-            model.addAttribute("msg", "User " + username + " does not exist.");
-            CLogger.error("/deleteAccount failed for username: " + username);
-            return "user/fail";
-        }
-    }
 
 
 }

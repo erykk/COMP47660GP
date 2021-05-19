@@ -280,7 +280,7 @@ public class ReservationController {
 
     @PreAuthorize("#username == authentication.name")
     @RequestMapping(value = "/user/deleteReservation/{username}/{resID}", method = RequestMethod.GET)
-    public String cancelReservation(@PathVariable("username") String username, @PathVariable("resID") int resID, @ModelAttribute("reservation") Reservation reservation, BindingResult br, Model model) {
+    public String cancelReservation(@PathVariable("username") @NotNull String username, @PathVariable("resID") int resID, @ModelAttribute("reservation") Reservation reservation, BindingResult br, Model model) {
         User u = userRepository.findByUsername(username);
         model.addAttribute("user", u);
 //        System.out.println("6 TESTING PATCH /reservation{id}");
@@ -297,7 +297,7 @@ public class ReservationController {
 
     @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")
     @GetMapping("/reservationHistory/{username}")
-    public String history(Model model, @PathVariable("username") String username) {
+    public String history(Model model, @PathVariable("username") @NotNull String username) {
 //        securityService.checkLoggedInStatus(model);
 //        System.out.println("7 TESTING GET /reservationHistory/{username]/{id}");
 //        System.out.println(username);
