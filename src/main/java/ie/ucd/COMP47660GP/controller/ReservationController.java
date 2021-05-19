@@ -5,10 +5,7 @@ import ie.ucd.COMP47660GP.entities.CreditCard;
 import ie.ucd.COMP47660GP.entities.Flight;
 import ie.ucd.COMP47660GP.entities.Reservation;
 import ie.ucd.COMP47660GP.entities.User;
-import ie.ucd.COMP47660GP.exception.NoSuchBookingException;
-import ie.ucd.COMP47660GP.exception.NoSuchCreditCardException;
-import ie.ucd.COMP47660GP.exception.NoSuchFlightException;
-import ie.ucd.COMP47660GP.exception.NoSuchUserException;
+import ie.ucd.COMP47660GP.exception.*;
 import ie.ucd.COMP47660GP.model.Booking;
 import ie.ucd.COMP47660GP.repositories.CreditCardRepository;
 import ie.ucd.COMP47660GP.repositories.FlightRepository;
@@ -298,18 +295,35 @@ public class ReservationController {
         return "user/reservationHistory";
     }
 
-
-
-    @GetMapping("/reservation-history")
-    public String getReservationHistory(User user, Model model) {
-        securityService.checkLoggedInStatus(model);
+    @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")
+    @GetMapping("/reservationHistory/{username}")
+    public String history(Model model, @PathVariable("username") String username) {
+//        securityService.checkLoggedInStatus(model);
+//        System.out.println("7 TESTING GET /reservationHistory/{username]/{id}");
+//        System.out.println(username);
+        SecurityContext context = SecurityContextHolder.getContext();
+        User user = userRepository.findByUsername(context.getAuthentication().getName());
+//       if(user.getId() != id){
+//            CLogger.info("/editCreditCardDetails, attempted unauthorised reservation history access by user: " + id);
+//            throw new UnauthorisedUserException();
+//        }
         List<Reservation> reservations = reservationRepository.findUsersReservations(user.getId());
+
         model.addAttribute("reservations", reservations);
-
-        CLogger.info("/reservations, history: id: " + user.getId());
-
-        return "reservation_history";
+        CLogger.info("/reservationHistory, username: " + username);
+        return "user/reservationHistory";
     }
+
+//    @GetMapping("/reservation-history")
+//    public String getReservationHistory(User user, Model model) {
+//        securityService.checkLoggedInStatus(model);
+//        List<Reservation> reservations = reservationRepository.findUsersReservations(user.getId());
+//        model.addAttribute("reservations", reservations);
+//
+//        CLogger.info("/reservations, history: id: " + user.getId());
+//
+//        return "reservation_history";
+//    }
 
     /**
      * Admin methods

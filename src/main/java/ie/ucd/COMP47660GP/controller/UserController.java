@@ -151,22 +151,7 @@ public class UserController {
         return "user/viewCards";
     }
 
-    @GetMapping("/reservationHistory/{id}")
-    public String history(@PathVariable("id") @NotNull Long id, Model model) {
-//        securityService.checkLoggedInStatus(model);
-        SecurityContext context = SecurityContextHolder.getContext();
-        User user = userRepository.findByEmail(context.getAuthentication().getName());
-        if(user.getId() != id){
-            CLogger.info("/editCreditCardDetails, attempted unauthorised reservation history access by user: " + id);
-            throw new UnauthorisedUserException();
-        }
-        List<Reservation> reservations = reservationRepository.findUsersReservations(id);
 
-        model.addAttribute("reservations", reservations);
-
-        CLogger.info("/reservationHistory, id: " + id);
-        return "user/reservationHistory";
-    }
 
     @GetMapping("/creditCard/{cardNum}")
     public String getCreditCard(@PathVariable String cardNum, Model model) {
