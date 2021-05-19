@@ -13,7 +13,7 @@
     <jsp:include page="../nav.jsp"/>
     <br>
     <div class="container">
-        <form:form method="POST" modelAttribute="user" class="form-signin" action="/editPersonalDetails">
+        <form:form method="POST" modelAttribute="user" class="form-signin" action="/editPersonalDetails/${user.username}">
             <h2 class="form-signin-heading" style="text-align: center">Account Details</h2>
             <br>
             <table style="margin: 0 auto; width: 80%">
@@ -70,18 +70,19 @@
                 <tr></tr>
                 <tr>
                     <td colspan="2">
-                        <h4 class="text-center form-control"><a href="${contextPath}/viewCards">View Saved Cards</a></h4>
+                        <h4 class="text-center form-control"><a href="${contextPath}/viewCards/${user.username}">View Saved Cards</a></h4>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <h4 class="text-center form-control"><a href="${contextPath}/registerCard">Add Card</a></h4>
+                        <h4 class="text-center form-control"><a href="${contextPath}/registerCard/${user.username}">Add Card</a></h4>
                     </td>
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <h4 class="text-center form-control"><a href="${contextPath}/reservationHistory/${user.id}">View Your Reservation History</a></h4>
+                        <h4 class="text-center form-control"><a href="${contextPath}/reservationHistory/${user.username}">View Your Reservation History</a></h4>
                     </td>
+<%--                    <td><a href="/user/${user.username}">Edit</a></td>--%>
                 </tr>
             </table>
         </form:form>

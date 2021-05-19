@@ -15,7 +15,7 @@
 <div class="container">
 
 
-    <form:form method="POST" action="${contexPath}/creditCard" modelAttribute="cardCredentials">
+    <form:form method="POST" action="${contexPath}/creditCard/${cardCredentials.user.username}" modelAttribute="cardCredentials">
     <h2 style="text-align: center">Add Credit Card</h2>
     <table style="margin: 0 auto">
         <tr>

@@ -15,7 +15,7 @@
 <div class="container">
 
 
-    <form:form method="POST" action="${contexPath}/editCreditCardDetails" modelAttribute="cardCredentials">
+    <form:form method="POST" action="${contexPath}/editCreditCardDetails/${cardCredentials.user.username}" modelAttribute="cardCredentials">
         <h2>Add Credit Card</h2>
         <table>
              <tr>
