@@ -43,17 +43,6 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent>{
         createRoleIfNotExists("GUEST");
         createRoleIfNotExists("EXEC");
         createRoleIfNotExists("ADMIN");
-        Role role = roleRepository.findByName("EXEC");
-        if (userRepository.findByEmail("test@test.com") == null) {
-            User user = new User();
-            user.setFirstName("Test");
-            user.setLastName("McTest");
-            user.setEmail("test@test.com");
-            user.setPassword("test");
-            user.setExec(true);
-            user.setRoles(Arrays.asList(role));
-            userRepository.save(user);
-        }
 
         alreadySetup = true;
 
@@ -288,8 +277,8 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent>{
         userCred.setRole("ADMIN");
         userCred.setFirstName("admin");
         userCred.setLastName("admin");
-        userCred.setEmail("admin");
-        userCred.setAddress("admin");
+        userCred.setEmail("admin@ba.co.uk");
+        userCred.setAddress("admin addr");
         userCred.setRole("ADMIN");
         userCred.setUsername("admin4145_");
         userCred.setPassword("adminRule808!");
