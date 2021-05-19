@@ -45,7 +45,7 @@
                 </tr>
                 <tr>
 <%--                    <td>Password:</td>--%>
-                    <td><form:input type="text" path="" class="form-control"
+                    <td><form:input type="text" path="password" class="form-control"
                                     autofocus="true" placeholder="Password"></form:input></td>
                     <td><form:input type="hidden" path="" class="form-control"
                                     autofocus="true" name="${_csrf.parameterName}" value="${_csrf.token}"></form:input></td>

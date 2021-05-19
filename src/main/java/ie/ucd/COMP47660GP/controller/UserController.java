@@ -138,7 +138,7 @@ public class UserController {
     @RequestMapping(value = "/deleteAccount/{username}", method = RequestMethod.POST)
     public String deleteAccount(@RequestParam("username") String username, @RequestParam("password") String password,
                                 Model model) {
-        System.out.println("/deleteAccount Testing POST "+username);
+//        System.out.println("/deleteAccount Testing POST "+username);
         securityService.checkLoggedInStatus(model);
         User user = userService.findByUsername(username);
 
