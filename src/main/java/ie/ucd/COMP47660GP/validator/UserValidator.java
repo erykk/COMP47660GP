@@ -64,7 +64,7 @@ public class UserValidator implements Validator {
     }
 
     private static boolean isStrong(String password){
-        final String PASSWORD_PATTERN = "\"^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,32}$\"";
+        final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,32}$";
         Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
 
         Matcher matcher = pattern.matcher(password);
