@@ -350,24 +350,6 @@ public class UserController {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     @GetMapping("/register")
     public String register(Model model) {
         model.addAttribute("userCredentials", new User());
@@ -378,10 +360,10 @@ public class UserController {
 
     @RequestMapping(value = "/secureRegister", method = RequestMethod.POST)
     public String register(@ModelAttribute("userCredentials") User userCredentials, BindingResult bindingResult,
-            Model model) {
+                           Model model) {
 //        securityService.checkLoggedInStatus(model);
 //        loginValidator.validate(userCredentials, bindingResult);
-          userValidator.validate(userCredentials,bindingResult);
+        userValidator.validate(userCredentials,bindingResult);
 
         if (bindingResult.hasErrors()) {
             System.out.println("TESTING guest /secureRegister");
@@ -404,10 +386,8 @@ public class UserController {
         model.addAttribute("msg", "Successfully created user " + userCredentials.getUsername() + ".");
 
         CLogger.info("/register, id: " + userCredentials.getId());
-
         return "redirect:/login";
     }
-
 
     @GetMapping("/login")
     public String login(Model model) {
@@ -417,6 +397,7 @@ public class UserController {
         return "user/login";
     }
 
+    @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")
     @RequestMapping(value = "/secureLogin", method = RequestMethod.POST)
     public String login(@RequestParam("username") @NotNull String username, @RequestParam("password") String password, Model model) {
         securityService.checkLoggedInStatus(model);
@@ -433,9 +414,9 @@ public class UserController {
         }
     }
 
-
-
-
-
+    /**************************************
+     *               END
+     *        REGISTRATION/LOGIN Requests
+     **************************************/
 
 }
