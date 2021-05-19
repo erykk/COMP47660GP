@@ -281,6 +281,23 @@ public class ReservationController {
         return "reservation/user_reservation";
     }
 
+    @PreAuthorize("#username == authentication.name")
+    @RequestMapping(value = "/user/deleteReservation/{username}/{resID}", method = RequestMethod.GET)
+    public String cancelReservation(@PathVariable("username") String username, @PathVariable("resID") int resID, @ModelAttribute("reservation") Reservation reservation, BindingResult br, Model model) {
+        User u = userRepository.findByUsername(username);
+        model.addAttribute("user", u);
+//        System.out.println("6 TESTING PATCH /reservation{id}");
+        Reservation reservation2 = reservationRepository.findById(resID).orElseThrow(() -> new NoSuchBookingException(resID));
+        LocalDateTime flightTime = reservation2.getFlight().getDateTime();
+        securityService.checkLoggedInStatus(model);
+        // Can only cancel if flight is more than 24 hours away.
+        if (flightTime.isAfter(LocalDateTime.now().plusHours(24))) {
+            reservation2.setCancelled(true);
+            reservationRepository.save(reservation2);
+        }
+        return "user/reservationHistory";
+    }
+
 
 
     @GetMapping("/reservation-history")
