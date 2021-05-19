@@ -71,6 +71,8 @@ public class ReservationController {
     @Autowired
     UserEditValidator userEditValidator;
 
+
+
     @GetMapping(value = "/create-reservation/{id}")
     public String addReservation(
         @PathVariable("id")
@@ -80,6 +82,7 @@ public class ReservationController {
         Model model
     )
     {
+        System.out.println("1 TESTING GET /create-reservation{id}");
         Flight flight = flightRepository.findById(id).
                 orElseThrow(() -> new NoSuchFlightException(id));
         model.addAttribute("flight", flight);
@@ -99,6 +102,7 @@ public class ReservationController {
         Model model
     )
     {
+        System.out.println("2 TESTING GET /create-reservation{id} 2");
         Flight flight = flightRepository.findById(id).
                 orElseThrow(() -> new NoSuchFlightException(id));
 
@@ -129,6 +133,7 @@ public class ReservationController {
 
     @PostMapping(value = "/create-reservation", consumes = "application/x-www-form-urlencoded")
     public String addReservation(Booking booking, Model model, BindingResult bindingResult) {
+        System.out.println("3 TESTING  POST /create-reservation ");
         securityService.checkLoggedInStatus(model);
         List<User> users = booking.getUsers();
         User user = null;
@@ -212,6 +217,7 @@ public class ReservationController {
         return "reservation/reservation_created";
     }
 
+    //    @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")
     @GetMapping("/reservation")
     public String displayReservation(
         @RequestParam(value = "reservation_id", required = false)
@@ -221,6 +227,7 @@ public class ReservationController {
         Model model
     )
     {
+        System.out.println("4 TESTING GET /reservation");
         securityService.checkLoggedInStatus(model);
         Reservation reservation;
         if (reservation_id != null) {
@@ -252,23 +259,29 @@ public class ReservationController {
     // GET all reservations associated with given user id
     @GetMapping(value = "/reservation/{id}")
     public List<Reservation> getReservations(@PathVariable("id") @NotNull Long id) {
+        System.out.println("5 TESTING GET /reservation{id}");
         CLogger.info("/reservations, get: id: " + id);
         return reservationRepository.findUsersReservations(id);
     }
 
-    @PatchMapping("/reservation/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public void cancelReservation(@PathVariable("id") @NotNull int id) {
-        Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new NoSuchBookingException(id));
-        LocalDateTime flightTime = reservation.getFlight().getDateTime();
+    //    @PreAuthorize("#username == authentication.name")
+    @RequestMapping(value = "/user/deleteGuestReservation/{resID}", method = RequestMethod.GET)
+    public String cancelReservation( @PathVariable("resID") @NotNull int resID,@ModelAttribute("reservation") Reservation reservation, BindingResult br, Model model) {
+
+        System.out.println("TESTING PATCH 222 /reservation{id}");
+        Reservation reservation2 = reservationRepository.findById(resID).orElseThrow(() -> new NoSuchBookingException(resID));
+        LocalDateTime flightTime = reservation2.getFlight().getDateTime();
+//        securityService.checkLoggedInStatus(model);
         // Can only cancel if flight is more than 24 hours away.
         if (flightTime.isAfter(LocalDateTime.now().plusHours(24))) {
-            reservation.setCancelled(true);
-            reservationRepository.save(reservation);
+            reservation2.setCancelled(true);
+            reservationRepository.save(reservation2);
         }
-
-        CLogger.info("/reservations, cancel: id: " + id);
+        CLogger.info("/reservations, cancel: id: " + resID);
+        return "reservation/user_reservation";
     }
+
+
 
     @GetMapping("/reservation-history")
     public String getReservationHistory(User user, Model model) {
