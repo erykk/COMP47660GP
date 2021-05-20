@@ -70,13 +70,7 @@ public class UserController {
     @Autowired
     UserEditValidator userEditValidator;
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/admin")
-    public String getAdminPage(){
-        return  "admin";
-    }
-
-    @GetMapping("getEmail/{email}")
+        @GetMapping("getEmail/{email}")
     @ResponseBody
     public String checkIfEmailIsValid(@PathVariable String email) {
         User user = userRepository.findEmail(email);
