@@ -24,10 +24,6 @@
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/reservation">View Reservation</a></li>
 
             <c:if test="${logged_in == true}">
-                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/deleteAccount">Delete Executive Account</a></li>
-            </c:if>
-
-            <c:if test="${logged_in == true}">
                 <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/user">Account</a></li>
                 <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/logout">Logout</a></li>
             </c:if>

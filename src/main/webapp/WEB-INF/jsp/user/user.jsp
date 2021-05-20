@@ -84,6 +84,11 @@
                         <h4 class="text-center form-control"><a href="${contextPath}/reservationHistory/${user.id}">View Your Reservation History</a></h4>
                     </td>
                 </tr>
+                <tr>
+                    <td colspan="2">
+                        <h4 class="text-center form-control"><a style="color: red" href="${pageContext.request.contextPath}/deleteAccount">Delete Executive Account</a></h4>
+                    </td>
+                </tr>
             </table>
         </form:form>
 
