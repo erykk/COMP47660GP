@@ -11,9 +11,13 @@
         <ul class="navbar-nav ml-auto">
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/">Home</a></li>
             &nbsp;&nbsp;&nbsp;
-            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/login">Login</a></li>
+            <c:if test="${logged_in == false}">
+                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/login">Login</a></li>
+            </c:if>
             &nbsp;&nbsp;&nbsp;
-            <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/register">Register as Executive</a></li>
+            <c:if test="${logged_in == false}">
+                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/register">Register as Executive</a></li>
+            </c:if>
             &nbsp;&nbsp;&nbsp;
             <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/flight">All Flights</a></li>
             &nbsp;&nbsp;&nbsp;
