@@ -72,7 +72,10 @@ public class UserServiceImpl implements UserService{
     }
 
     public boolean deleteExecUser(User user, String password){
-        if (password.equals(user.getPassword())) {
+        System.out.println("pwds:");
+        System.out.println(user.getPassword());
+        System.out.println(password);
+        if (bCryptPasswordEncoder.matches(password, user.getPassword())) {
             System.out.println("service:" + user.getEmail());
             System.out.println("service" + bCryptPasswordEncoder.encode(user.getPassword()));
             user.setExec(false);

@@ -290,6 +290,13 @@ public class UserController {
     @RequestMapping(value = "/secureLogin", method = RequestMethod.POST)
     public String login(@RequestParam("username") @NotNull String username, @RequestParam("password") String password, Model model) {
         securityService.checkLoggedInStatus(model);
+        System.out.println("isExec: " + userService.findByUsername(username).getExec());
+//        if (!userService.findByUsername(username).getExec()) {
+//            model.addAttribute("msg", "User " + username + " does not exist");
+//            CLogger.error("/login failed for username: " + username);
+//            return "user/fail";
+//        }
+
         try {
             securityService.autoLogin(username, password);
             model.addAttribute("msg", "Logged in successfully as " + userRepository.findByEmail(username).getUsername());
@@ -312,14 +319,13 @@ public class UserController {
     }
 
     @RequestMapping(value = "/deleteAccount", method = RequestMethod.POST)
-    public String deleteAccount(@RequestParam("username") @NotNull String username, @RequestParam("password") String password,
-            Model model) {
+    public String deleteAccount(@RequestParam("username") @NotNull String username, @RequestParam("password") String password, Model model) {
         securityService.checkLoggedInStatus(model);
         if (!userValidator.validDelete(username, password)){
             model.addAttribute("msg", "Invalid credentials");
             return "user/deleteAccount";
         }
-        User user = userService.findByEmail(username);
+        User user = userService.findByUsername(username);
         SecurityContext context = SecurityContextHolder.getContext();
         User user2 = userRepository.findByEmail(context.getAuthentication().getName());
         if(user.getId() != user2.getId()){
@@ -329,22 +335,15 @@ public class UserController {
 
         CLogger.info("/deleteAccount successful for username: " + username);
 
-        if (user != null) {
-            if (userService.deleteExecUser(user, password)) {
-                model.addAttribute("msg",
-                        "Successfully removed executive privileges from user " + user.getUsername() + ".");
-                securityService.forceLogout(model);
-                CLogger.info("/deleteAccount successful for username: " + username);
-                return "user/success";
-            } else {
-                model.addAttribute("msg", "Could not remove executive privileges for user" + user.getUsername()
-                        + ". Password doesn't match");
-                CLogger.error("/deleteAccount failed for username: " + username);
-                return "user/fail";
-            }
+        if (userService.deleteExecUser(user, password)) {
+            model.addAttribute("msg","Successfully removed executive privileges from user " + user.getUsername() + ".");
+            securityService.forceLogout(model);
+            CLogger.info("/deleteAccount successful for username: " + username);
+            return "user/success";
         } else {
-            model.addAttribute("msg", "User " + username + " does not exist.");
-            CLogger.error("/deleteAccount failed for username: " + username);
+            model.addAttribute("msg", "Could not remove executive privileges for user" + user.getUsername()
+                    + ". Password doesn't match");
+            CLogger.error("/deleteAccount failed for username, cant remove priv for: " + username);
             return "user/fail";
         }
     }
