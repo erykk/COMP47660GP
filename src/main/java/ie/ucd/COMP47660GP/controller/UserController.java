@@ -88,7 +88,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/editPersonalDetails", consumes = "application/x-www-form-urlencoded")
-    public String updatePersonaDetails(User user, BindingResult bindingResult) {
+    public String updatePersonaDetails(User user, Model model, BindingResult bindingResult) {
 //        System.out.println("/editPersonalDetail method");
 //        SecurityContext context = SecurityContextHolder.getContext();
 //        User user2 = userRepository.findByUsername(context.getAuthentication().getName());
@@ -97,10 +97,22 @@ public class UserController {
 //            System.out.println(user.getId());
 //            System.out.println(user2.getId());
 //        }
-        userEditValidator.validate(user,bindingResult);
-        userRepository.updateUserId(user.getAddress(), user.getEmail(), user.getFirstName(), user.getLastName(),
-                user.getPhoneNum());
-        CLogger.info("/editPersonalDetails, cancel: id: " + user.getId());
+
+        securityService.checkLoggedInStatus(model);
+        SecurityContext context = SecurityContextHolder.getContext();
+        User currentUser = userRepository.findByEmail(context.getAuthentication().getName());
+
+        if (userService.verifyUser(currentUser, user)){
+            userEditValidator.validate(user,bindingResult);
+            userRepository.updateUserId(user.getAddress(), user.getEmail(), user.getFirstName(), user.getLastName(),
+                    user.getPhoneNum());
+            model.addAttribute("msg", "User credentials changed successfully");
+            CLogger.info("/editPersonalDetails, id: " + currentUser.getId());
+        } else {
+            model.addAttribute("msg", "Invalid user credentials");
+            CLogger.info("/editPersonalDetails, failed for id: " + currentUser.getId());
+        }
+
         return "user/user";
     }
 

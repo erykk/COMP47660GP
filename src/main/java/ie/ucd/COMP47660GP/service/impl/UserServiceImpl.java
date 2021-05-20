@@ -82,6 +82,13 @@ public class UserServiceImpl implements UserService{
         return false;
     }
 
+    public boolean verifyUser(User currentUser, User user){
+        System.out.println("user pwd: " + user.getPassword());
+        System.out.println("currentuser pwd: " + currentUser.getPassword());
+        System.out.println("userRepo pwd: " + userRepository.findByUsername(currentUser.getUsername()).getPassword());
+        return bCryptPasswordEncoder.matches(user.getPassword(), userRepository.findByUsername(currentUser.getUsername()).getPassword());
+    }
+
 
 
 
