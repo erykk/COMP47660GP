@@ -39,12 +39,12 @@ public class UserValidator implements Validator {
         if(userService.findByUsername(user.getUsername()) != null){
             errors.rejectValue("username", "userCredentials.username", "Username taken");
         }
-        if (user.getPassword().length() < 6 || user.getPassword().length() > 32) {
-            errors.rejectValue("password", "userCredentials.password", "Password must be between 6 and 32 characters");
+        if (user.getPassword().length() < 8 || user.getPassword().length() > 32) {
+            errors.rejectValue("password", "userCredentials.password", "Password must be between 8 and 32 characters");
         }
 
         if ((!isStrong(user.getPassword()))) {
-            errors.rejectValue("password", "userCredentials.password", "Password must contain 1 lowercase, 1 uppercase and 1 numeric character");
+            errors.rejectValue("password", "userCredentials.password", "Password must contain 1 lowercase, 1 uppercase, 1 numeric character and 1 symbol");
         }
 
         if (!user.getPasswordConfirm().equals(user.getPassword())) {
@@ -64,7 +64,7 @@ public class UserValidator implements Validator {
     }
 
     private static boolean isStrong(String password){
-        final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,32}$";
+        final String PASSWORD_PATTERN = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,32}$";
         Pattern pattern = Pattern.compile(PASSWORD_PATTERN);
 
         Matcher matcher = pattern.matcher(password);

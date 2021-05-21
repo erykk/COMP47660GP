@@ -309,6 +309,7 @@ public class UserController {
         User user = userService.findByUsername(username);
 
         if (!user.getExec()) {
+            CLogger.error("/login not exec: " + username);
             if (!hasAdminRole(user)){
                 model.addAttribute("msg", "User " + username + " does not exist");
                 CLogger.error("/login failed for username: " + username);
