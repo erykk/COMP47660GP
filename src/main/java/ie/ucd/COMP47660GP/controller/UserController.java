@@ -70,11 +70,6 @@ public class UserController {
     @Autowired
     UserEditValidator userEditValidator;
 
-
-
-
-
-
     /**************************************
      *               START
      *           USER Requests
@@ -95,26 +90,9 @@ public class UserController {
         return "user/user";
     }
 
-//    @GetMapping("/user")
-//    public String user(Model model) {
-//        securityService.checkLoggedInStatus(model);
-//        SecurityContext context = SecurityContextHolder.getContext();
-//        User currentUser = userRepository.findByUsername(context.getAuthentication().getName());
-//        model.addAttribute("user", currentUser);
-//        return "user/user";
-//    }
-
     @PreAuthorize("#username == authentication.name")
     @PostMapping(value = "/editPersonalDetails/{username}", consumes = "application/x-www-form-urlencoded")
     public String updatePersonaDetails(User user, Model model, BindingResult bindingResult, @PathVariable("username") String username) {
-//        System.out.println("/editPersonalDetail method "+username);
-//        SecurityContext context = SecurityContextHolder.getContext();
-//        User user2 = userRepository.findByUsername(context.getAuthentication().getName());
-//        if(user.getId() != user2.getId()){
-////            throw new UnauthorisedUserException();
-//            System.out.println(user.getId());
-//            System.out.println(user2.getId());
-//        }
 
         securityService.checkLoggedInStatus(model);
         SecurityContext context = SecurityContextHolder.getContext();
@@ -132,34 +110,12 @@ public class UserController {
         }
 
         return "user/user";
-//        return "redirect:/user";
     }
-
-
 
     /**************************************
      *               END
      *           USER Requests
      **************************************/
-
-    //    @PreAuthorize("#username == authentication.name")
-////    @GetMapping("/reservationHistory/{username]/{id}")
-////    public String history(@PathVariable("id") Long id, Model model, @PathVariable("username") String username) {
-//////        securityService.checkLoggedInStatus(model);
-////        System.out.println("TESting \resHistory");
-////        System.out.println(username);
-//        SecurityContext context = SecurityContextHolder.getContext();
-//        User user = userRepository.findByUsername(context.getAuthentication().getName());
-//        if(user.getId() != id){
-//            throw new UnauthorisedUserException();
-//        }
-//        List<Reservation> reservations = reservationRepository.findUsersReservations(id);
-//
-//        model.addAttribute("reservations", reservations);
-//        return "user/reservationHistory";
-//    }
-
-
 
 
     /**********************************
@@ -174,7 +130,7 @@ public class UserController {
         User u = new User();
         u.setUsername(username);
         card.setUser(u);
-//        System.out.println("TEsting /registerCard "+username);
+        System.out.println("TEsting /registerCard "+username);
         model.addAttribute("cardCredentials", card);
         securityService.checkLoggedInStatus(model);
         CLogger.info("/registerCard, new");
@@ -274,22 +230,10 @@ public class UserController {
     }
 
 
-//    @GetMapping("/creditCard/{cardNum}")
-//    public String getCreditCard(@PathVariable String cardNum, Model model) {
-////        securityService.checkLoggedInStatus(model);
-//        CreditCard creditCard = creditCardRepository.findByCardNum(cardNum);
-//        model.addAttribute("creditcard", new CreditCard());
-//        CLogger.info("/creditCard, get: id: " + creditCard.toString());
-//        return "user/viewCard";
-//    }
-
     /**********************************
      *               END
      *        CREDIT CARD Requests
      **********************************/
-
-
-
 
 
     /**************************************
@@ -307,7 +251,6 @@ public class UserController {
         }
         return "Valid: email does not exist";
     }
-
 
     @GetMapping("/register")
     public String register(Model model) {
@@ -424,58 +367,4 @@ public class UserController {
             return "user/fail";
         }
     }
-
-//    //    @PreAuthorize("#username == authentication.name")
-//    @RequestMapping(value = "/deleteAccount", method = RequestMethod.GET)
-//    public String deleteAccount(Model model) {
-////        System.out.println("/deleteAccount Testing GET "+username);
-//        SecurityContext context = SecurityContextHolder.getContext();
-//        User currentUser = userRepository.findByUsername(context.getAuthentication().getName());
-//        model.addAttribute("user", currentUser);
-//        securityService.checkLoggedInStatus(model);
-//        CLogger.info("/deleteAccount, view");
-//        return "user/deleteAccount";
-//    }
-
-//    @PreAuthorize("#username == authentication.name")
-//    @RequestMapping(value = "/deleteAccount/{username}", method = RequestMethod.POST)
-//    public String deleteAccount(@RequestParam("username") @NotNull String username, @RequestParam("password") String password,
-//                                Model model) {
-////        System.out.println("/deleteAccount Testing POST "+username);
-//        securityService.checkLoggedInStatus(model);
-//        if (!userValidator.validDelete(username, password)){
-//            model.addAttribute("msg", "Invalid credentials");
-//            return "user/deleteAccount";
-//        }
-//        User user = userService.findByEmail(username);
-//        SecurityContext context = SecurityContextHolder.getContext();
-//        User user2 = userRepository.findByEmail(context.getAuthentication().getName());
-//        if(user.getId() != user2.getId()){
-//            CLogger.error("/deleteAccount failed for username: " + username);
-//            throw new UnauthorisedUserException();
-//        }
-//
-//        CLogger.info("/deleteAccount successful for username: " + username);
-//
-//        if (user != null) {
-//            if (userService.deleteExecUser(user, password)) {
-//                model.addAttribute("msg",
-//                        "Successfully removed executive privileges from user " + user.getUsername() + ".");
-//                securityService.forceLogout(model);
-//                CLogger.info("/deleteAccount successful for username: " + username);
-//                return "user/success";
-//            } else {
-//                model.addAttribute("msg", "Could not remove executive privileges for user" + user.getUsername()
-//                        + ". Password doesn't match");
-//                CLogger.error("/deleteAccount failed for username: " + username);
-//                return "user/fail";
-//            }
-//        } else {
-//            model.addAttribute("msg", "User " + username + " does not exist.");
-//            CLogger.error("/deleteAccount failed for username: " + username);
-//            return "user/fail";
-//        }
-//    }
-
-
 }
