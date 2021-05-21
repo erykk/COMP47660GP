@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import ie.ucd.COMP47660GP.CLogger;
 import ie.ucd.COMP47660GP.entities.CreditCard;
 import ie.ucd.COMP47660GP.entities.Reservation;
+import ie.ucd.COMP47660GP.entities.Role;
 import ie.ucd.COMP47660GP.entities.User;
 import ie.ucd.COMP47660GP.exception.NoSuchCreditCardException;
 import ie.ucd.COMP47660GP.exception.NoSuchUserException;
@@ -305,11 +306,15 @@ public class UserController {
     public String login(@RequestParam("username") @NotNull String username, @RequestParam("password") String password, Model model) {
         securityService.checkLoggedInStatus(model);
         System.out.println("isExec: " + userService.findByUsername(username).getExec());
-//        if (!userService.findByUsername(username).getExec()) {
-//            model.addAttribute("msg", "User " + username + " does not exist");
-//            CLogger.error("/login failed for username: " + username);
-//            return "user/fail";
-//        }
+        User user = userService.findByUsername(username);
+
+        if (!user.getExec()) {
+            if (!hasAdminRole(user)){
+                model.addAttribute("msg", "User " + username + " does not exist");
+                CLogger.error("/login failed for username: " + username);
+                return "user/fail";
+            }
+        }
 
         try {
             securityService.autoLogin(username, password);
@@ -367,5 +372,13 @@ public class UserController {
             CLogger.error("/deleteAccount failed for username, cant remove priv for: " + username);
             return "user/fail";
         }
+    }
+
+    private static boolean hasAdminRole(User user){
+        for (Role role : user.getRoles()){
+            if(role.getName().contains("ADMIN"))
+                return true;
+        }
+        return false;
     }
 }
