@@ -34,7 +34,7 @@
             </c:forEach>
             <tr>
                 <td>
-                    <h4 class="text-center btn btn-lg btn-outline-primary"><a href="${contextPath}/registerCard">Add Card</a></h4>
+                    <h4 class="text-center btn btn-lg btn-outline-primary"><a href="${contextPath}/registerCard/${user.username}">Add Card</a></h4>
                 </td>
             </tr>
         </table>
