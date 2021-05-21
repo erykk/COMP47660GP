@@ -21,6 +21,7 @@ public interface UserService {
 
     // Assignment 3
     User findByUsername(String username);
+    boolean verifyUser(User currentUser, User user);
 
 
 

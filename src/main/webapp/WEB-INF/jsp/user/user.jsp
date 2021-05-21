@@ -16,13 +16,14 @@
         <form:form method="POST" modelAttribute="user" class="form-signin" action="/editPersonalDetails/${user.username}">
             <h2 class="form-signin-heading" style="text-align: center">Account Details</h2>
             <br>
+            <p style="color: red; text-align: center"><c:out value="${msg}"/></p>
             <table style="margin: 0 auto; width: 80%">
                 <tr>
                     <td>Email:</td>
                     <td>
-                            <form:input type="text" path="email" class="form-control" placeholder="${email}"
-                                autofocus="true"></form:input>
-                            <form:errors path="email"></form:errors>
+                        <form:input type="text" path="email" class="form-control" placeholder="${email}"
+                            autofocus="true"></form:input>
+                        <form:errors path="email"></form:errors>
                     </td>
                 </tr>
                 <tr>
@@ -58,8 +59,8 @@
                 <tr>
                     <td>Password:</td>
                     <td>
-                            <form:input type="password" path="password" class="form-control" ></form:input>
-                            <form:errors path="password"></form:errors>
+                        <form:input type="password" path="password" class="form-control" placeholder=""></form:input>
+                        <form:errors path="password"></form:errors>
                     </td>
                 </tr>
                 <tr>
@@ -83,6 +84,11 @@
                         <h4 class="text-center form-control"><a href="${contextPath}/reservationHistory/${user.username}">View Your Reservation History</a></h4>
                     </td>
 <%--                    <td><a href="/user/${user.username}">Edit</a></td>--%>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <h4 class="text-center form-control"><a style="color: red" href="${pageContext.request.contextPath}/deleteAccount">Delete Executive Account</a></h4>
+                    </td>
                 </tr>
             </table>
         </form:form>
