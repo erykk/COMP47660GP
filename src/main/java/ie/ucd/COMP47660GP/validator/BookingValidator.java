@@ -30,8 +30,6 @@ public class BookingValidator implements Validator {
         CreditCard card = booking.getCreditCard();
         String op = "";
 
-        //CLogger.info("NUM users: " + users.size());
-
         int count = 1;
         for (User u : users) {
             if (u.getFirstName().length() < 1 || u.getLastName().length() < 1 || u.getEmail().length() < 1 || u.getPhoneNum().length() < 1 || u.getAddress().length() < 1) {
@@ -53,8 +51,6 @@ public class BookingValidator implements Validator {
                 op += "Invalid expiry date. ";
             op += "Expiry date cannot be empty ";
         }
-
-        //CLogger.info("EXP: " + card.getExpiryDate());
 
         return op.length() > 1 ? op : "ok";
     }
