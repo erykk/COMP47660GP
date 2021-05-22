@@ -259,7 +259,7 @@ public class UserController {
     @PreAuthorize("#username == authentication.name")
     @PostMapping(value = "/editCreditCardDetails/{username}")
     public String updateCreditCard(CreditCard creditCard, @PathVariable("username") String username) {
-//        System.out.println("/editCreditCard() testing POST "+ username);
+
         creditCardRepository.updateCreditCardInfo(creditCard.getCardNum(), creditCard.getName(),
                 creditCard.getSecurityCode(), creditCard.getExpiryDate());
         CLogger.info("/editCreditCardDetails, id: " + creditCard.toString());
@@ -357,12 +357,13 @@ public class UserController {
         return "user/login";
     }
 
-    @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")
+//    @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")
     @RequestMapping(value = "/secureLogin", method = RequestMethod.POST)
     public String login(@RequestParam("username") @NotNull String username, @RequestParam("password") String password, Model model) {
         securityService.checkLoggedInStatus(model);
         System.out.println("isExec: " + userService.findByUsername(username).getExec());
         User user = userService.findByUsername(username);
+        System.out.println("/securLogin: "+username);
 
         if (!user.getExec()) {
             CLogger.error("/login not exec: " + username);

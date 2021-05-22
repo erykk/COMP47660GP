@@ -30,9 +30,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
                 .authorizeRequests()
                 .antMatchers("/register", "/", "/login", "/secureRegister", "/resources/**", "/images/**",
-                "/mem/{id}", "/fail" ).permitAll()
+                "/mem/{id}", "/fail",  "/secureLogin").permitAll()
 
-                .antMatchers("/editPersonalDetails/{username}", "/deleteAccount",  "/secureLogin").authenticated()
+                .antMatchers("/editPersonalDetails/{username}", "/deleteAccount").authenticated()
 
                 .antMatchers("/registerCard/{username}", "/creditCard/{username}", "/viewCards/{username}",
                 "/editCreditCardDetails/{username}/{id}", "/editCreditCardDetails/{username}", "/editCreditCardDetails/{username}/{id}/delete").authenticated()
@@ -50,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
             .formLogin().loginPage("/login")
-            .loginProcessingUrl("/secureLogin").usernameParameter("username").passwordParameter("password").and()
+                .loginProcessingUrl("/secureLogin").usernameParameter("username").passwordParameter("password").and()
             .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/logoutSuccess")
