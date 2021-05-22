@@ -62,7 +62,7 @@
                         <td style="border: 1px solid black;"><c:out value="${flight.destination}"/> </td>
                         <td style="border: 1px solid black;"><c:out value="${flight.dateTime}"/> </td>
                         <td style="border: 1px solid black;"><c:out value="${reservation.cancelled}"/> </td>
-                        <td style="border: 1px solid black;"><a href="/user/deleteGuestReservation/${reservation.reservation_id}">Canceeeel Reservation</a></td>
+                        <td style="border: 1px solid black;"><a href="/user/deleteReservation/${user.username}/${reservation.reservation_id}">Canceeeel Reservation</a></td>
                     </tr>
                 </tbody>
             </table>

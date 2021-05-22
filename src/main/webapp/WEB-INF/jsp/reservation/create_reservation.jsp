@@ -29,7 +29,7 @@
     </table>
 
     <%--@elvariable id="booking" type="ie.ucd.COMP47660GP.model.Booking"--%>
-    <form:form method="post" modelAttribute="booking" action="/create-reservation">
+    <form:form method="post" modelAttribute="booking" action="/create-reservation/${booking.execUsername}">
         <table style="margin-left: auto; margin-right: auto">
             <tr><td><h3>Passenger Information</h3></td></tr>
             <c:forEach items="${booking.users}" var="user" varStatus="status">
@@ -46,6 +46,10 @@
                 <tr>
                     <td>Email:</td>
                     <td><input name="users[${status.index}].email" value="${user.email}"/></td>
+                </tr>
+                <tr>
+                    <td>Username:</td>
+                    <td><input name="users[${status.index}].username" value="${user.username}"/></td>
                 </tr>
                 <tr>
                     <td>Address:</td>

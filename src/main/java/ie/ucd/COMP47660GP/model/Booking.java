@@ -12,6 +12,7 @@ public class Booking {
     int flightID;
     String dateStr;
     String savedCard;
+    String execUsername;
 
     public Booking() {
         users = new LinkedList<>();
@@ -65,6 +66,10 @@ public class Booking {
     public void setSavedCard(String savedCard) {
         this.savedCard = savedCard;
     }
+
+    public String getExecUsername(){ return this.execUsername; }
+
+    public void setExecUsername(String execUsername){ this.execUsername = execUsername;}
 
     public String toString() {
         String op = "";

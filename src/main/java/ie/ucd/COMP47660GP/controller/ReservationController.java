@@ -69,7 +69,7 @@ public class ReservationController {
     UserEditValidator userEditValidator;
 
 
-
+//    @PreAuthorize("#username == authentication.name")
     @GetMapping(value = "/create-reservation/{id}")
     public String addReservation(
         @PathVariable("id")
@@ -80,10 +80,15 @@ public class ReservationController {
     )
     {
         System.out.println("1 TESTING GET /create-reservation{id}");
+        SecurityContext context = SecurityContextHolder.getContext();
+        System.out.println(context.getAuthentication().getName());
+//        System.out.println(username);
         Flight flight = flightRepository.findById(id).
                 orElseThrow(() -> new NoSuchFlightException(id));
         model.addAttribute("flight", flight);
-        securityService.checkLoggedInStatus(model);
+        User user = userRepository.findByUsername(context.getAuthentication().getName());
+        model.addAttribute("user", user);
+        System.out.println("Logged in: "+securityService.checkLoggedInStatus(model));
 
         CLogger.info("/create-reservation, id: " + id);
 
@@ -106,7 +111,9 @@ public class ReservationController {
         Booking booking = new Booking(numPassengers);
 
         SecurityContext context = SecurityContextHolder.getContext();
-        User user = userRepository.findByEmail(context.getAuthentication().getName());
+        User user = userRepository.findByUsername(context.getAuthentication().getName());
+        System.out.println("Username: "+context.getAuthentication().getName());
+        booking.setExecUsername(context.getAuthentication().getName());
 
         if (user != null) {
             booking.getUsers().remove(0);
@@ -128,10 +135,14 @@ public class ReservationController {
         return "reservation/create_reservation";
     }
 
+    @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")
+    @PostMapping(value = "/create-reservation/{username}", consumes = "application/x-www-form-urlencoded")
+    public String addReservation(@PathVariable("username") @NotNull String username,@ModelAttribute("booking") Booking booking, Model model, BindingResult bindingResult) {
 
-    @PostMapping(value = "/create-reservation", consumes = "application/x-www-form-urlencoded")
-    public String addReservation(Booking booking, Model model, BindingResult bindingResult) {
         System.out.println("3 TESTING  POST /create-reservation ");
+        System.out.println(securityService.checkLoggedInStatus(model));
+        System.out.println(username);
+        System.out.println(booking.getUsers().get(0).getId());
         securityService.checkLoggedInStatus(model);
         List<User> users = booking.getUsers();
         User user = null;
@@ -215,7 +226,6 @@ public class ReservationController {
         return "reservation/reservation_created";
     }
 
-    //    @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")
     @GetMapping("/reservation")
     public String displayReservation(
         @RequestParam(value = "reservation_id", required = false)
@@ -227,6 +237,8 @@ public class ReservationController {
     {
         System.out.println("4 TESTING GET /reservation");
         securityService.checkLoggedInStatus(model);
+        SecurityContext context = SecurityContextHolder.getContext();
+        User user2 = userRepository.findByUsername(context.getAuthentication().getName());
         Reservation reservation;
         if (reservation_id != null) {
             try {
@@ -254,37 +266,12 @@ public class ReservationController {
     }
 
 
-    // GET all reservations associated with given user id
-    @GetMapping(value = "/reservation/{id}")
-    public List<Reservation> getReservations(@PathVariable("id") @NotNull Long id) {
-        System.out.println("5 TESTING GET /reservation{id}");
-        CLogger.info("/reservations, get: id: " + id);
-        return reservationRepository.findUsersReservations(id);
-    }
-
-    //    @PreAuthorize("#username == authentication.name")
-    @RequestMapping(value = "/user/deleteGuestReservation/{resID}", method = RequestMethod.GET)
-    public String cancelReservation( @PathVariable("resID") @NotNull int resID,@ModelAttribute("reservation") Reservation reservation, BindingResult br, Model model) {
-
-        System.out.println("TESTING PATCH 222 /reservation{id}");
-        Reservation reservation2 = reservationRepository.findById(resID).orElseThrow(() -> new NoSuchBookingException(resID));
-        LocalDateTime flightTime = reservation2.getFlight().getDateTime();
-//        securityService.checkLoggedInStatus(model);
-        // Can only cancel if flight is more than 24 hours away.
-        if (flightTime.isAfter(LocalDateTime.now().plusHours(24))) {
-            reservation2.setCancelled(true);
-            reservationRepository.save(reservation2);
-        }
-        CLogger.info("/reservations, cancel: id: " + resID);
-        return "reservation/user_reservation";
-    }
-
-    @PreAuthorize("#username == authentication.name")
+    @PreAuthorize("#username == authentication.name  or hasAuthority('ADMIN')")
     @RequestMapping(value = "/user/deleteReservation/{username}/{resID}", method = RequestMethod.GET)
     public String cancelReservation(@PathVariable("username") @NotNull String username, @PathVariable("resID") int resID, @ModelAttribute("reservation") Reservation reservation, BindingResult br, Model model) {
         User u = userRepository.findByUsername(username);
         model.addAttribute("user", u);
-//        System.out.println("6 TESTING PATCH /reservation{id}");
+        System.out.println("6 TESTING PATCH /reservation{id}");
         Reservation reservation2 = reservationRepository.findById(resID).orElseThrow(() -> new NoSuchBookingException(resID));
         LocalDateTime flightTime = reservation2.getFlight().getDateTime();
         securityService.checkLoggedInStatus(model);
@@ -299,9 +286,9 @@ public class ReservationController {
     @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")
     @GetMapping("/reservationHistory/{username}")
     public String history(Model model, @PathVariable("username") @NotNull String username) {
-//        securityService.checkLoggedInStatus(model);
-//        System.out.println("7 TESTING GET /reservationHistory/{username]/{id}");
-//        System.out.println(username);
+        securityService.checkLoggedInStatus(model);
+        System.out.println("7 TESTING GET /reservationHistory/{username]/{id}");
+        System.out.println(username);
         SecurityContext context = SecurityContextHolder.getContext();
         User user = userRepository.findByUsername(context.getAuthentication().getName());
 //       if(user.getId() != id){
@@ -315,16 +302,80 @@ public class ReservationController {
         return "user/reservationHistory";
     }
 
-//    @GetMapping("/reservation-history")
-//    public String getReservationHistory(User user, Model model) {
+
+
+    /**************************************
+     *               START
+     *           GUEST Requests
+     **************************************/
+
+
+    @GetMapping("/guestReservation")
+    public String displayGuestReservation(
+            @RequestParam(value = "reservation_id", required = false)
+            @NotNull
+            @Digits(integer=6, fraction = 0)
+                    Integer reservation_id,
+            Model model
+    )
+    {
+        System.out.println("TESTING GUEST 1 /guestReservation");
+        securityService.checkLoggedInStatus(model);
+        SecurityContext context = SecurityContextHolder.getContext();
+        User user2 = userRepository.findByUsername(context.getAuthentication().getName());
+        Reservation reservation;
+        if (reservation_id != null) {
+            try {
+                reservation = reservationRepository.findById(reservation_id).
+                        orElseThrow(() -> new NoSuchBookingException(reservation_id));
+                User user = reservation.getUser();
+                Flight flight = reservation.getFlight();
+
+                model.addAttribute("user", user);
+                model.addAttribute("flight", flight);
+
+            } catch (NoSuchBookingException e) {
+                CLogger.info("/reservations, no such booking for id: " + reservation_id );
+                model.addAttribute("error", e.getMessage());
+                reservation = new Reservation();
+            }
+        } else {
+            reservation = new Reservation();
+        }
+        model.addAttribute("reservation", reservation);
+
+        CLogger.info("/reservations" );
+
+        return "reservation/guest_user_reservation";
+    }
+
+    //    @PreAuthorize("#username == authentication.name")
+    @RequestMapping(value = "/user/deleteGuestReservation/{resID}", method = RequestMethod.GET)
+    public String cancelGuestReservation( @PathVariable("resID") @NotNull int resID, @ModelAttribute("reservation") Reservation reservation, BindingResult br, Model model) {
+
+        System.out.println("TESTING GUEST 2 /user/deleteGuestReservation/{resID}");
+        System.out.println("Canceeel Reservation: "+resID);
+
+        Reservation reservation2 = reservationRepository.findById(resID).orElseThrow(() -> new NoSuchBookingException(resID));
+        LocalDateTime flightTime = reservation2.getFlight().getDateTime();
 //        securityService.checkLoggedInStatus(model);
-//        List<Reservation> reservations = reservationRepository.findUsersReservations(user.getId());
-//        model.addAttribute("reservations", reservations);
-//
-//        CLogger.info("/reservations, history: id: " + user.getId());
-//
-//        return "reservation_history";
-//    }
+        // Can only cancel if flight is more than 24 hours away.
+        System.out.println(flightTime.isAfter(LocalDateTime.now().plusHours(24)));
+        if (flightTime.isAfter(LocalDateTime.now().plusHours(24))) {
+            reservation2.setCancelled(true);
+            reservationRepository.save(reservation2);
+        }
+        CLogger.info("/reservations, cancel: id: " + resID);
+        return "reservation/guest_user_reservation";
+    }
+
+
+
+    /**********************************
+     *               END
+     *          GUEST Requests
+     **********************************/
+
 
 
 

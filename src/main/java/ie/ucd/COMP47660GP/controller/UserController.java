@@ -91,7 +91,7 @@ public class UserController {
         return "user/user";
     }
 
-    @PreAuthorize("#username == authentication.name")
+    @PreAuthorize("#username == authentication.name  or hasAuthority('ADMIN')")
     @PostMapping(value = "/editPersonalDetails/{username}", consumes = "application/x-www-form-urlencoded")
     public String updatePersonaDetails(User user, Model model, BindingResult bindingResult, @PathVariable("username") String username) {
 
@@ -113,10 +113,65 @@ public class UserController {
         return "user/user";
     }
 
+    //    @PreAuthorize("hasRole('EXEC')")
+    @PreAuthorize("#username == authentication.name  or hasAuthority('ADMIN')")
+    @RequestMapping(value = "/deleteAccount", method = RequestMethod.GET)
+    public String deleteAccount(Model model) {
+        System.out.println("/deleteAccount GET");
+        securityService.checkLoggedInStatus(model);
+        CLogger.info("/deleteAccount, view");
+        return "user/deleteAccount";
+    }
+
+    @PreAuthorize("#username == authentication.name  or hasAuthority('ADMIN')")
+    @RequestMapping(value = "/deleteAccount", method = RequestMethod.POST)
+    public String deleteAccount(@RequestParam("username") @NotNull String username, @RequestParam("password") String password, Model model) {
+        System.out.println("/deleteAccount POST");
+        securityService.checkLoggedInStatus(model);
+        if (!userValidator.validDelete(username, password)){
+            model.addAttribute("msg", "Invalid credentials");
+            return "user/deleteAccount";
+        }
+        User user = userService.findByUsername(username);
+        SecurityContext context = SecurityContextHolder.getContext();
+        User user2 = userRepository.findByUsername(context.getAuthentication().getName());
+        if(user.getId() != user2.getId()){
+            CLogger.error("/deleteAccount failed for username: " + username);
+            throw new UnauthorisedUserException();
+        }
+
+        CLogger.info("/deleteAccount successful for username: " + username);
+
+        if (userService.deleteExecUser(user, password)) {
+            model.addAttribute("msg","Successfully removed executive privileges from user " + user.getUsername() + ".");
+            securityService.forceLogout(model);
+            CLogger.info("/deleteAccount successful for username: " + username);
+            return "user/success";
+        } else {
+            model.addAttribute("msg", "Could not remove executive privileges for user" + user.getUsername()
+                    + ". Password doesn't match");
+            CLogger.error("/deleteAccount failed for username, cant remove priv for: " + username);
+            return "user/fail";
+        }
+    }
+
+    private static boolean hasAdminRole(User user){
+        for (Role role : user.getRoles()){
+            if(role.getName().contains("ADMIN"))
+                return true;
+        }
+        return false;
+    }
+
+
+
     /**************************************
      *               END
      *           USER Requests
      **************************************/
+
+
+
 
 
     /**********************************
@@ -215,6 +270,7 @@ public class UserController {
     @PreAuthorize("#username == authentication.name")
     @GetMapping("/editCreditCardDetails/{username}/{id}/delete")
     public String deleteCreditCard(@PathVariable("username") String username,@PathVariable("id") int id, Model model) {
+        System.out.println("/editCreditCardDetails/{username}/{id}/delete"+ username);
         SecurityContext context = SecurityContextHolder.getContext();
         User user = userRepository.findByUsername(context.getAuthentication().getName());
         CreditCard card = creditCardRepository.findById(id).orElseThrow(() -> new NoSuchCreditCardException());
@@ -335,51 +391,5 @@ public class UserController {
      *        REGISTRATION/LOGIN Requests
      **************************************/
 
-//    @PreAuthorize("hasRole('EXEC')")
-    @PreAuthorize("#username == authentication.name")
-    @RequestMapping(value = "/deleteAccount", method = RequestMethod.GET)
-    public String deleteAccount(Model model) {
-        securityService.checkLoggedInStatus(model);
-        CLogger.info("/deleteAccount, view");
-        return "user/deleteAccount";
-    }
 
-    @PreAuthorize("#username == authentication.name")
-    @RequestMapping(value = "/deleteAccount", method = RequestMethod.POST)
-    public String deleteAccount(@RequestParam("username") @NotNull String username, @RequestParam("password") String password, Model model) {
-        securityService.checkLoggedInStatus(model);
-        if (!userValidator.validDelete(username, password)){
-            model.addAttribute("msg", "Invalid credentials");
-            return "user/deleteAccount";
-        }
-        User user = userService.findByUsername(username);
-        SecurityContext context = SecurityContextHolder.getContext();
-        User user2 = userRepository.findByUsername(context.getAuthentication().getName());
-        if(user.getId() != user2.getId()){
-            CLogger.error("/deleteAccount failed for username: " + username);
-            throw new UnauthorisedUserException();
-        }
-
-        CLogger.info("/deleteAccount successful for username: " + username);
-
-        if (userService.deleteExecUser(user, password)) {
-            model.addAttribute("msg","Successfully removed executive privileges from user " + user.getUsername() + ".");
-            securityService.forceLogout(model);
-            CLogger.info("/deleteAccount successful for username: " + username);
-            return "user/success";
-        } else {
-            model.addAttribute("msg", "Could not remove executive privileges for user" + user.getUsername()
-                    + ". Password doesn't match");
-            CLogger.error("/deleteAccount failed for username, cant remove priv for: " + username);
-            return "user/fail";
-        }
-    }
-
-    private static boolean hasAdminRole(User user){
-        for (Role role : user.getRoles()){
-            if(role.getName().contains("ADMIN"))
-                return true;
-        }
-        return false;
-    }
 }

@@ -22,6 +22,7 @@
                         <th style="border: 1px solid black;">Destination</th>
                         <th style="border: 1px solid black;">Departure Time</th>
                         <th style="border: 1px solid black;">Is Cancelled?</th>
+                        <th style="border: 1px solid black;">Cancel Reservation?</th>
                     </tr>
                 </thead>
             <c:forEach items="${reservations}" var="reservation">

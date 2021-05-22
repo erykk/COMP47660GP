@@ -5,7 +5,7 @@ import org.springframework.ui.Model;
 public interface SecurityService {
     String findLoggedInEmail();
 
-    void checkLoggedInStatus(Model model);
+    boolean checkLoggedInStatus(Model model);
 
     void autoLogin(String email, String password);
 

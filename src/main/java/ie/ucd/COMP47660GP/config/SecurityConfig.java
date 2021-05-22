@@ -29,11 +29,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
                 .authorizeRequests()
-            .antMatchers("/register", "/", "/login", "/secureRegister", "/secureLogin", "/resources/**",
-                    "/images/**", "/reservation", "/mem/{id}", "/creditCard", "/creditCard/{cardNum}", "/editCreditCardDetails",
-                    "/registerCard", "/editPersonalDetails", "/flight", "/flights", "/create-reservation", "/createMember",
-                    "/create-reservation/*", "/deleteAccount", "/success", "/fail")
-            .permitAll().anyRequest().authenticated().and()
+                .antMatchers("/register", "/", "/login", "/secureRegister", "/resources/**", "/images/**",
+                "/mem/{id}", "/fail" ).permitAll()
+
+                .antMatchers("/editPersonalDetails/{username}", "/deleteAccount",  "/secureLogin").authenticated()
+
+                .antMatchers("/registerCard/{username}", "/creditCard/{username}", "/viewCards/{username}",
+                "/editCreditCardDetails/{username}/{id}", "/editCreditCardDetails/{username}", "/editCreditCardDetails/{username}/{id}/delete").authenticated()
+
+                .antMatchers("/create-reservation/{id}", "/create-reservation/{id}", "/create-reservation/{username}", "/reservation").permitAll()
+
+                .antMatchers("/user/deleteReservation/{username}/{resID}", "/reservationHistory/{username}").authenticated()
+
+                .antMatchers("/guestReservation", "/user/deleteGuestReservation/{resID}").permitAll()
+
+                .antMatchers("/flight", "/flights").permitAll()
+
+                .antMatchers("/admin", "/admin/reservation", "/editReservation/{id}", "/editReservation", "/admin/deleteReservation",
+                        "/deleteReservation/{id}", "/addFlight", "/deleteFlight", "/findFlight", "/editFlight").access("hasAuthority('ADMIN')")
+
+                .and()
             .formLogin().loginPage("/login")
             .loginProcessingUrl("/secureLogin").usernameParameter("username").passwordParameter("password").and()
             .logout()
@@ -46,20 +61,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .sessionFixation().newSession()
                 .invalidSessionUrl("/login");
-//        http.authorizeRequests().
-//                antMatchers("/editPersonalDetails").authenticated().
-//                antMatchers("/creditCard").authenticated().
-//                antMatchers("/reservation").authenticated().
-//                antMatchers("/reservation/{id}").authenticated().
-//                antMatchers("/reservationHistory/{id}").authenticated().
-//                antMatchers("/creditCard/{cardNum}").authenticated().
-//                antMatchers("/viewCards").permitAll().
-//                antMatchers("/editCreditCardDetails/{id}").authenticated().
-//                antMatchers("/secureRegister").permitAll().
-//                antMatchers("/secureLogin").authenticated().
-//                antMatchers("/register").permitAll().
-//                antMatchers("/login").permitAll().
-//                and().formLogin().and().httpBasic();
+
+//        .httpBasic()
+////
+
+//         .antMatchers(", "/reservation", "/mem/{id}", "/creditCard", "/creditCard/{cardNum}", "/editCreditCardDetails",
+//                "/registerCard", "/editPersonalDetails", "/flight", "/flights", "/create-reservation", "/createMember",
+//                "/create-reservation/*", "/deleteAccount", "/success", "/fail", "/guestReservation", "/user/deleteGuestReservation/*")
     }
 
     @Bean
