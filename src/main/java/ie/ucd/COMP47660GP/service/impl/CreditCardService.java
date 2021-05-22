@@ -1,6 +1,7 @@
 package ie.ucd.COMP47660GP.service.impl;
 
 import ie.ucd.COMP47660GP.entities.CreditCard;
+import ie.ucd.COMP47660GP.entities.User;
 import ie.ucd.COMP47660GP.repositories.CreditCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,5 +22,7 @@ public class CreditCardService {
     public CreditCard findByCardNum(String cardNum) {
         return cardRepository.findByCardNum(cardNum);
     }
+
+    public CreditCard findByCardNumAndUser(String cardNum, User user) { return cardRepository.findByCardNumAndUser(cardNum, user); }
 
 }

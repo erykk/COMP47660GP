@@ -29,7 +29,7 @@ public class CreditCardValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "expiryDate", "NotEmpty");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "securityCode", "NotEmpty");
 
-        CreditCard existingCard = creditCardService.findByCardNum(card.getCardNum());
+        CreditCard existingCard = creditCardService.findByCardNumAndUser(card.getCardNum(), card.getUser());
 
         if (existingCard != null) {
             errors.rejectValue("cardNum", "cardCredentials.cardNum", "Card is already linked to account");

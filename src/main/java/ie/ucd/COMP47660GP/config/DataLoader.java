@@ -19,7 +19,6 @@ import org.springframework.validation.ObjectError;
 
 import javax.transaction.Transactional;
 import java.beans.PropertyEditor;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -287,8 +286,6 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent>{
         userCred.setPasswordConfirm(env.getProperty("admin.password"));
         userCred.setPhoneNum("000000000");
         uc.register(userCred,bindingResult, model);
-
-
     }
 
     @Transactional

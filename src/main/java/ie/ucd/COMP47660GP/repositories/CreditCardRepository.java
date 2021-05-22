@@ -18,6 +18,9 @@ public interface CreditCardRepository extends JpaRepository<CreditCard, Integer>
     @Query("Select c from CreditCard c where c.cardNum  = :cardNum")
     CreditCard findByCardNum(String cardNum) throws NoSuchCreditCardException;
 
+    @Query("Select c from CreditCard c where c.cardNum = :cardNum and c.user = :user")
+    CreditCard findByCardNumAndUser(String cardNum, User user) throws NoSuchCreditCardException;
+
     @Query("select c from CreditCard c where c.user = :user")
     List<CreditCard> findAllByUser(User user);
 
