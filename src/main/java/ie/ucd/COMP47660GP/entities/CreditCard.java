@@ -18,7 +18,7 @@ public class CreditCard {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-    @Column(name = "card_num", unique = true, nullable = false)
+    @Column(name = "card_num", unique = false, nullable = false)
     @Convert(converter = AttributeEncryptor.class)
     private String cardNum;
     @Column(name = "card_name")

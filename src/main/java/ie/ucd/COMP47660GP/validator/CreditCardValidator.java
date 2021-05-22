@@ -32,7 +32,7 @@ public class CreditCardValidator implements Validator {
         CreditCard existingCard = creditCardService.findByCardNumAndUser(card.getCardNum(), card.getUser());
 
         if (existingCard != null) {
-            errors.rejectValue("cardNum", "cardCredentials.cardNum", "Card is already linked to account");
+            errors.rejectValue("cardNum", "cardCredentials.cardNum", "Card is already tied to your account");
         }
         if (card.getCardNum().length() != 16) {
             errors.rejectValue("cardNum", "cardCredentials.cardNum", "Must be valid card number");

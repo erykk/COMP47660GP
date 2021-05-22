@@ -14,10 +14,6 @@ public class CreditCardService {
     private CreditCardRepository cardRepository;
 
     public void save(CreditCard card) {
-        card.setName(card.getName());
-        card.setCardNum(card.getCardNum());
-        card.setExpiryDate(card.getExpiryDate());
-        card.setSecurityCode(card.getSecurityCode());
         cardRepository.save(card);
     }
 

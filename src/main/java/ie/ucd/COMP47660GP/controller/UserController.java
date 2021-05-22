@@ -43,7 +43,6 @@ public class UserController {
 
     @Autowired
     CreditCardValidator cardValidator;
-    //List<CreditCard> creditCards = new LinkedList<>();
     @Autowired
     UserService userService;
     @Autowired
@@ -175,7 +174,6 @@ public class UserController {
     public String addCreditCard(@ModelAttribute("cardCredentials") CreditCard cardCredentials,
                                 BindingResult bindingResult, Model model, @PathVariable("username") String username) {
         securityService.checkLoggedInStatus(model);
-        cardValidator.validate(cardCredentials, bindingResult);
 
         if (bindingResult.hasErrors()) {
             CLogger.warn("/creditCard", "failed to add card for user: " + username, SecurityContextHolder.getContext());
@@ -188,13 +186,14 @@ public class UserController {
         SecurityContext context = SecurityContextHolder.getContext();
         User user = userRepository.findByUsername(context.getAuthentication().getName());
         cardCredentials.setUser(user);
+        cardValidator.validate(cardCredentials, bindingResult);
         cardService.save(cardCredentials);
         List<CreditCard> creditCards = creditCardRepository.findAllByUser(user);
-        //creditCards.add(cardCredentials);
 
         model.addAttribute("cardCredentials", cardCredentials);
         model.addAttribute("msg", "Successfully added card " + cardCredentials.getCardNum() + ".");
         model.addAttribute("creditCards", creditCards);
+        model.addAttribute("user", user);
         CLogger.info("/creditCard", "added card for: " + username, SecurityContextHolder.getContext());
 
         return "user/viewCards";
