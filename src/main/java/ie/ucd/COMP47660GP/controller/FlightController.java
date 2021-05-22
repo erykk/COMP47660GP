@@ -56,7 +56,6 @@ public class FlightController {
         model.addAttribute("destinations", destinations);
 
         SecurityContext context = SecurityContextHolder.getContext();
-        System.out.println("Sec context "+context.getAuthentication().getName());
 
         Flight flight = new Flight();
         model.addAttribute("flight", flight);

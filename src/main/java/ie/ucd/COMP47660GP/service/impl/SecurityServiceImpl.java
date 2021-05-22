@@ -54,7 +54,6 @@ public class SecurityServiceImpl implements SecurityService{
     public boolean checkLoggedInStatus(Model model) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("authentication.getName(): "+authentication.getName());
         if(authentication != null && !authentication.getName().equals("anonymousUser")){
             model.addAttribute("logged_in", true);
             return true;

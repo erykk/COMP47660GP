@@ -219,7 +219,6 @@ public class UserController {
 
         if(user.getId() != card.getUser().getId()){
             CLogger.warn("/editCreditCardDetails", "attempted unauthorised access by user: " + user.getId() + " for card: " + card.toString(), SecurityContextHolder.getContext());
-            System.out.println("Unauthorised access");
             throw new UnauthorisedUserException();
         }
 
@@ -248,7 +247,6 @@ public class UserController {
 
         if(user.getId() != card.getUser().getId()){
             CLogger.warn("/editCreditCardDetails", "attempted unauthorised access by user: " + user.getId() + " for card: " + card.toString(), SecurityContextHolder.getContext());
-            System.out.println("Unauthorised access");
             throw new UnauthorisedUserException();
         }
 
@@ -289,7 +287,6 @@ public class UserController {
         userValidator.validate(userCredentials,bindingResult);
 
         if (bindingResult.hasErrors()) {
-            System.out.println("TESTING guest /secureRegister");
             CLogger.warn("/register", "failed to register new user ", SecurityContextHolder.getContext());
             return "user/register";
         }

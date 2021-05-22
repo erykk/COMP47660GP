@@ -184,7 +184,6 @@ public class ReservationController {
         if(user2 != null){
             savedUsers.clear();
             savedUsers.add(user2);
-            System.out.println("/create-res user not null");
         }
 
 
@@ -328,7 +327,6 @@ public class ReservationController {
         Reservation reservation2 = reservationRepository.findById(resID).orElseThrow(() -> new NoSuchBookingException(resID));
         LocalDateTime flightTime = reservation2.getFlight().getDateTime();
         // Can only cancel if flight is more than 24 hours away.
-        System.out.println(flightTime.isAfter(LocalDateTime.now().plusHours(24)));
 
         if (flightTime.isAfter(LocalDateTime.now().plusHours(24))) {
             reservation2.setCancelled(true);
