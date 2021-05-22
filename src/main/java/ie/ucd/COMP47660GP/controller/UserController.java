@@ -41,8 +41,6 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    LoginValidator loginValidator;
-    @Autowired
     CreditCardValidator cardValidator;
     List<CreditCard> creditCards = new LinkedList<>();
     @Autowired
@@ -52,14 +50,10 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    ReservationRepository reservationRepository;
-    @Autowired
     @Qualifier("loginServiceImpl")
     LoginService loginService;
     @Autowired
     SecurityServiceImpl securityService;
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     CreditCardRepository creditCardRepository;

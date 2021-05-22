@@ -31,12 +31,6 @@ public class FlightController {
     FlightRepository flightRepository;
 
     @Autowired
-    ReservationRepository reservationRepository;
-
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
     SecurityServiceImpl securityService;
 
     @Autowired

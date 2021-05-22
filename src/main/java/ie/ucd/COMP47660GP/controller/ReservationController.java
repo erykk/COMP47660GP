@@ -42,8 +42,6 @@ public class ReservationController {
 
     @Autowired
     ReservationRepository reservationRepository;
-    @Autowired
-    UserService userService;
 
     @Autowired
     UserRepository userRepository;
@@ -59,12 +57,6 @@ public class ReservationController {
 
     @Autowired
     BookingValidator bookingValidator;
-
-    @Autowired
-    CreditCardValidator cardValidator;
-
-    @Autowired
-    UserEditValidator userEditValidator;
 
 
 //    @PreAuthorize("#username == authentication.name")
