@@ -6,6 +6,8 @@ import ie.ucd.COMP47660GP.repositories.CreditCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CreditCardService {
     @Autowired
@@ -24,5 +26,7 @@ public class CreditCardService {
     }
 
     public CreditCard findByCardNumAndUser(String cardNum, User user) { return cardRepository.findByCardNumAndUser(cardNum, user); }
+
+    public List<CreditCard> findAllByUser(User user) { return cardRepository.findAllByUser(user); }
 
 }

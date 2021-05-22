@@ -43,7 +43,7 @@ public class UserController {
 
     @Autowired
     CreditCardValidator cardValidator;
-    List<CreditCard> creditCards = new LinkedList<>();
+    //List<CreditCard> creditCards = new LinkedList<>();
     @Autowired
     UserService userService;
     @Autowired
@@ -189,7 +189,8 @@ public class UserController {
         User user = userRepository.findByUsername(context.getAuthentication().getName());
         cardCredentials.setUser(user);
         cardService.save(cardCredentials);
-        creditCards.add(cardCredentials);
+        List<CreditCard> creditCards = creditCardRepository.findAllByUser(user);
+        //creditCards.add(cardCredentials);
 
         model.addAttribute("cardCredentials", cardCredentials);
         model.addAttribute("msg", "Successfully added card " + cardCredentials.getCardNum() + ".");
