@@ -8,13 +8,10 @@ import ie.ucd.COMP47660GP.exception.NoSuchBookingException;
 import ie.ucd.COMP47660GP.repositories.FlightRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
-import ie.ucd.COMP47660GP.service.impl.CreditCardService;
 import ie.ucd.COMP47660GP.service.impl.SecurityServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jdbc.core.JdbcAggregateOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,7 +35,7 @@ public class AdminController {
     private FlightRepository flightRepository;
 
     /**************************************
-     *               START
+     *
      *           ADMIN User
      **************************************/
 
@@ -50,13 +47,8 @@ public class AdminController {
         return  "admin";
     }
 
-    /**************************************
-     *               END
-     *           ADMIN User
-     **************************************/
-
     /****************************
-     *           START
+     *
      *        ADMIN Reservation
      ****************************/
 
@@ -111,9 +103,6 @@ public class AdminController {
         return "admin";
     }
 
-
-
-
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/admin/deleteReservation")
     public String removeReservation(@RequestParam(value = "reservation_id", required = false) Integer reservation_id,
@@ -156,12 +145,7 @@ public class AdminController {
     }
 
     /****************************
-     *           END
-     *        ADMIN Reservation
-     ****************************/
-
-    /****************************
-     *           START
+     *
      *        ADMIN Flight
      ****************************/
 
@@ -230,7 +214,6 @@ public class AdminController {
         return "flight/flightNotFound";
     }
 
-
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping(value = "/editFlight")
     @ResponseStatus(HttpStatus.OK)
@@ -251,10 +234,4 @@ public class AdminController {
                 flight.getDate(), flight.getTime(),flight.getFlightNum());
         return "admin";
     }
-
-
-    /****************************
-     *           END
-     *        ADMIN Flight
-     ****************************/
 }

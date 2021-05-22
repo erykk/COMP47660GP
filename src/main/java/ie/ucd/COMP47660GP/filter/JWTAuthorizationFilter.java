@@ -1,6 +1,5 @@
 package ie.ucd.COMP47660GP.filter;
 
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import org.slf4j.Logger;
@@ -56,7 +55,6 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         filterChain.doFilter(request, response);
     }
-
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request, String token) {
         //String token = request.getHeader(HEADER_STRING);

@@ -3,8 +3,6 @@ package ie.ucd.COMP47660GP.entities;
 import javax.persistence.*;
 import java.util.Collection;
 
-import javax.validation.constraints.NotNull;
-
 import ie.ucd.COMP47660GP.service.AttributeEncryptor;
 
 @Entity

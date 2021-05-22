@@ -1,6 +1,5 @@
 package ie.ucd.COMP47660GP.filter;
 
-
 public final class SecurityConstants {
 
     // Signing key for HS512 algorithm

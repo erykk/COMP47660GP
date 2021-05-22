@@ -1,6 +1,5 @@
 package ie.ucd.COMP47660GP.validator;
 
-import ie.ucd.COMP47660GP.CLogger;
 import ie.ucd.COMP47660GP.entities.CreditCard;
 import ie.ucd.COMP47660GP.entities.User;
 import ie.ucd.COMP47660GP.model.Booking;
@@ -33,7 +32,6 @@ public class BookingValidator implements Validator {
         int count = 1;
         for (User u : users) {
             if (u.getFirstName().length() < 1 || u.getLastName().length() < 1 || u.getEmail().length() < 1 || u.getPhoneNum().length() < 1 || u.getAddress().length() < 1) {
-                //CLogger.info("user: " + u.getFirstName() + u.getLastName() + u.getEmail() + u.getPhoneNum() + u.getAddress());
                 op += "Invalid user credentials for passenger " + count + ". ";
             }
             count++;

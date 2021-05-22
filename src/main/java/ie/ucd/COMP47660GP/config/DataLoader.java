@@ -277,11 +277,8 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent>{
             }
         };
         User userCred = new User();
-        //userCred.setRole("EXEC");
         userCred.setFirstName("admin");
         userCred.setLastName("admin");
-//        userCred.setEmail("admin@ba.co.uk");
-//        userCred.setAddress("admin addr");
         userCred.setEmail("admin@admin.com");
         userCred.setAddress("admin");
         userCred.setRole("ADMIN");
@@ -289,7 +286,6 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent>{
         userCred.setPassword(env.getProperty("admin.password"));
         userCred.setPasswordConfirm(env.getProperty("admin.password"));
         userCred.setPhoneNum("000000000");
-        //userCred.setExec(true);
         uc.register(userCred,bindingResult, model);
 
 

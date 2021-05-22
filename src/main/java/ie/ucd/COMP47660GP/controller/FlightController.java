@@ -1,47 +1,31 @@
 package ie.ucd.COMP47660GP.controller;
 
-import ie.ucd.COMP47660GP.entities.CreditCard;
 import ie.ucd.COMP47660GP.entities.Flight;
-import ie.ucd.COMP47660GP.entities.User;
 import ie.ucd.COMP47660GP.CLogger;
-import ie.ucd.COMP47660GP.entities.Flight;
 import ie.ucd.COMP47660GP.model.FlightDetails;
 import ie.ucd.COMP47660GP.repositories.FlightRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
 import ie.ucd.COMP47660GP.service.impl.SecurityServiceImpl;
-import org.apache.jasper.compiler.JspUtil;
 import ie.ucd.COMP47660GP.validator.FlightValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Future;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.time.format.DateTimeParseException;
 import java.util.LinkedList;
 import java.util.List;
 
 
 @Controller
-public class FlightController{
+public class FlightController {
 
     @Autowired
     FlightRepository flightRepository;

@@ -30,17 +30,6 @@ public class SecurityServiceImpl implements SecurityService{
         return null;
     }
 
-//    @Override
-//    public void autoLogin(String email, String password) {
-//        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-//        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
-//        authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-//        if (usernamePasswordAuthenticationToken.isAuthenticated()) {
-//            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-//            logger.debug(String.format("Auto login %s successfully!", email));
-//        }
-//    }
-
     @Override
     public void autoLogin(String username, String password) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -62,24 +51,6 @@ public class SecurityServiceImpl implements SecurityService{
         return null;
     }
 
-//    public boolean login(String email, String password){
-//        boolean state = false;
-//        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-//        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails,password,userDetails.getAuthorities());
-//
-//        try {
-//            authenticationManager.authenticate(token);
-//        } catch (Exception ignored) {}
-//
-//        state = token.isAuthenticated();
-//
-//        if(state){
-//            SecurityContextHolder.getContext().setAuthentication(token);
-//        }
-//
-//        return state;
-//    }
-//
     public boolean checkLoggedInStatus(Model model) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

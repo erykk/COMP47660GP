@@ -1,6 +1,4 @@
-
 package ie.ucd.COMP47660GP.filter;
-
 
 import com.auth0.jwt.JWT;
 import ie.ucd.COMP47660GP.service.impl.ACUserDetails;
@@ -60,16 +58,10 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withSubject(((ACUserDetails) auth.getPrincipal()).getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .sign(HMAC512(SECRET.getBytes()));
-        //res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
 
         addCookie(token, response);
 
         new DefaultRedirectStrategy().sendRedirect(request, response, "/welcome");
-
-        //authenticationSuccessHandler.onAuthenticationSuccess(request, response, getAuthentication(token));
-        //getAuthentication(token).
-
-
     }
 
     private void addCookie(String token, HttpServletResponse response){

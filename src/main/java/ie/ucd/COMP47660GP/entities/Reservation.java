@@ -2,7 +2,6 @@ package ie.ucd.COMP47660GP.entities;
 
 import javax.persistence.*;
 
-
 @Entity
 @Table(name = "reservations")
 public class Reservation {

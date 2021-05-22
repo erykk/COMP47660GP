@@ -17,14 +17,12 @@ import ie.ucd.COMP47660GP.validator.BookingValidator;
 import ie.ucd.COMP47660GP.validator.CreditCardValidator;
 import ie.ucd.COMP47660GP.validator.UserEditValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Digits;
@@ -79,17 +77,13 @@ public class ReservationController {
         Model model
     )
     {
-        System.out.println("1 TESTING GET /create-reservation{id}");
         SecurityContext context = SecurityContextHolder.getContext();
-        System.out.println(context.getAuthentication().getName());
-//        System.out.println(username);
         Flight flight = flightRepository.findById(id).
                 orElseThrow(() -> new NoSuchFlightException(id));
-        model.addAttribute("flight", flight);
         User user = userRepository.findByUsername(context.getAuthentication().getName());
-        model.addAttribute("user", user);
-        System.out.println("Logged in: "+securityService.checkLoggedInStatus(model));
 
+        model.addAttribute("user", user);
+        model.addAttribute("flight", flight);
         CLogger.info("/create-reservation" , "for id: " + id , SecurityContextHolder.getContext());
 
         return "reservation/num_passengers";
@@ -104,7 +98,6 @@ public class ReservationController {
         Model model
     )
     {
-        System.out.println("2 TESTING GET /create-reservation{id} 2");
         Flight flight = flightRepository.findById(id).
                 orElseThrow(() -> new NoSuchFlightException(id));
 
@@ -112,7 +105,6 @@ public class ReservationController {
 
         SecurityContext context = SecurityContextHolder.getContext();
         User user = userRepository.findByUsername(context.getAuthentication().getName());
-        System.out.println("Username: "+context.getAuthentication().getName());
         booking.setExecUsername(context.getAuthentication().getName());
 
         if (user != null) {
@@ -139,10 +131,6 @@ public class ReservationController {
     @PostMapping(value = "/create-reservation/{username}", consumes = "application/x-www-form-urlencoded")
     public String addReservation(@PathVariable("username") @NotNull String username,@ModelAttribute("booking") Booking booking, Model model, BindingResult bindingResult) {
 
-        System.out.println("3 TESTING  POST /create-reservation ");
-        System.out.println(securityService.checkLoggedInStatus(model));
-        System.out.println(username);
-        System.out.println(booking.getUsers().get(0).getId());
         securityService.checkLoggedInStatus(model);
         List<User> users = booking.getUsers();
         User user = null;
@@ -220,7 +208,6 @@ public class ReservationController {
         }
 
         model.addAttribute("reservations", reservations);
-
         CLogger.info("/create-reservation", "created new reservation" , SecurityContextHolder.getContext());
 
         return "reservation/reservation_created";
@@ -235,11 +222,11 @@ public class ReservationController {
         Model model
     )
     {
-        System.out.println("4 TESTING GET /reservation");
         securityService.checkLoggedInStatus(model);
         SecurityContext context = SecurityContextHolder.getContext();
         User user2 = userRepository.findByUsername(context.getAuthentication().getName());
         Reservation reservation;
+
         if (reservation_id != null) {
             try {
                 reservation = reservationRepository.findById(reservation_id).
@@ -258,8 +245,8 @@ public class ReservationController {
         } else {
             reservation = new Reservation();
         }
-        model.addAttribute("reservation", reservation);
 
+        model.addAttribute("reservation", reservation);
         CLogger.info("/reservations", "get reservation of id: " + reservation_id, SecurityContextHolder.getContext() );
 
         return "reservation/user_reservation";
@@ -271,7 +258,6 @@ public class ReservationController {
     public String cancelReservation(@PathVariable("username") @NotNull String username, @PathVariable("resID") int resID, @ModelAttribute("reservation") Reservation reservation, BindingResult br, Model model) {
         User u = userRepository.findByUsername(username);
         model.addAttribute("user", u);
-        System.out.println("6 TESTING PATCH /reservation{id}");
         Reservation reservation2 = reservationRepository.findById(resID).orElseThrow(() -> new NoSuchBookingException(resID));
         LocalDateTime flightTime = reservation2.getFlight().getDateTime();
         securityService.checkLoggedInStatus(model);
@@ -280,6 +266,7 @@ public class ReservationController {
             reservation2.setCancelled(true);
             reservationRepository.save(reservation2);
         }
+
         CLogger.info("/user/deleteReservation", "reservation id: " + resID, SecurityContextHolder.getContext());
         return "user/reservationHistory";
     }
@@ -288,25 +275,18 @@ public class ReservationController {
     @GetMapping("/reservationHistory/{username}")
     public String history(Model model, @PathVariable("username") @NotNull String username) {
         securityService.checkLoggedInStatus(model);
-        System.out.println("7 TESTING GET /reservationHistory/{username]/{id}");
-        System.out.println(username);
         SecurityContext context = SecurityContextHolder.getContext();
         User user = userRepository.findByUsername(context.getAuthentication().getName());
-//       if(user.getId() != id){
-//            CLogger.info("/editCreditCardDetails, attempted unauthorised reservation history access by user: " + id);
-//            throw new UnauthorisedUserException();
-//        }
         List<Reservation> reservations = reservationRepository.findUsersReservations(user.getId());
 
         model.addAttribute("reservations", reservations);
         CLogger.info("/reservationHistory", "for user: " + username ,SecurityContextHolder.getContext());
+
         return "user/reservationHistory";
     }
 
-
-
     /**************************************
-     *               START
+     *
      *           GUEST Requests
      **************************************/
 
@@ -320,11 +300,11 @@ public class ReservationController {
             Model model
     )
     {
-        System.out.println("TESTING GUEST 1 /guestReservation");
         securityService.checkLoggedInStatus(model);
         SecurityContext context = SecurityContextHolder.getContext();
         User user2 = userRepository.findByUsername(context.getAuthentication().getName());
         Reservation reservation;
+
         if (reservation_id != null) {
             try {
                 reservation = reservationRepository.findById(reservation_id).
@@ -343,8 +323,8 @@ public class ReservationController {
         } else {
             reservation = new Reservation();
         }
-        model.addAttribute("reservation", reservation);
 
+        model.addAttribute("reservation", reservation);
         CLogger.info("/guestReservation", "get reservation id: " + reservation_id, SecurityContextHolder.getContext() );
 
         return "reservation/guest_user_reservation";
@@ -353,25 +333,17 @@ public class ReservationController {
     //    @PreAuthorize("#username == authentication.name")
     @RequestMapping(value = "/user/deleteGuestReservation/{resID}", method = RequestMethod.GET)
     public String cancelGuestReservation( @PathVariable("resID") @NotNull int resID, @ModelAttribute("reservation") Reservation reservation, BindingResult br, Model model) {
-
-        System.out.println("TESTING GUEST 2 /user/deleteGuestReservation/{resID}");
-        System.out.println("Canceeel Reservation: "+resID);
-
         Reservation reservation2 = reservationRepository.findById(resID).orElseThrow(() -> new NoSuchBookingException(resID));
         LocalDateTime flightTime = reservation2.getFlight().getDateTime();
-//        securityService.checkLoggedInStatus(model);
         // Can only cancel if flight is more than 24 hours away.
         System.out.println(flightTime.isAfter(LocalDateTime.now().plusHours(24)));
+
         if (flightTime.isAfter(LocalDateTime.now().plusHours(24))) {
             reservation2.setCancelled(true);
             reservationRepository.save(reservation2);
         }
+
         CLogger.info("/user/deleteGuestReservation", "for reservation id: " + resID, SecurityContextHolder.getContext());
         return "reservation/guest_user_reservation";
     }
-
-    /**********************************
-     *               END
-     *          GUEST Requests
-     **********************************/
 }
