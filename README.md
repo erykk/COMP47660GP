@@ -44,6 +44,12 @@ The following line should be changed from _create_ to _update_:
     spring.jpa.hibernate.ddl-auto=create
 ```
 
+### Admin Credentials:
+```
+    Username: admin4145_
+    Password: adminRule808!
+```
+
 
 ### Encrypting Secrets:
 Encrypted secrets stored in configuration files are encrypted using JasyptPBEStringEncryptionCLI from jasypt 1.9.3.

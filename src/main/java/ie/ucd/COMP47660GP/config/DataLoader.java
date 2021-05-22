@@ -9,6 +9,7 @@ import org.springframework.beans.PropertyEditorRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.ApplicationListener;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,6 +32,8 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent>{
     RoleRepository roleRepository;
     @Autowired
     UserController uc = new UserController();
+    @Autowired
+    Environment env;
 
 
     boolean alreadySetup = false;
@@ -283,8 +286,8 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent>{
         userCred.setAddress("admin");
         userCred.setRole("ADMIN");
         userCred.setUsername("admin4145_");
-        userCred.setPassword("adminRule808!");
-        userCred.setPasswordConfirm("adminRule808!");
+        userCred.setPassword(env.getProperty("admin.password"));
+        userCred.setPasswordConfirm(env.getProperty("admin.password"));
         userCred.setPhoneNum("000000000");
         //userCred.setExec(true);
         uc.register(userCred,bindingResult, model);
