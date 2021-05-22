@@ -1,5 +1,6 @@
 package ie.ucd.COMP47660GP.controller;
 
+import ie.ucd.COMP47660GP.CLogger;
 import ie.ucd.COMP47660GP.entities.Flight;
 import ie.ucd.COMP47660GP.model.FlightDetails;
 import ie.ucd.COMP47660GP.service.impl.SecurityServiceImpl;
@@ -19,6 +20,7 @@ public class GeneralController {
 
     @GetMapping("/")
     public String getLanding(Model model) {
+        CLogger.info("/ , view");
         List<String> origins = new LinkedList<>();
         List<String> destinations = new LinkedList<>();
 

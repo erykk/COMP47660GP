@@ -78,7 +78,7 @@ public class AdminController {
             } catch (NoSuchBookingException e) {
                 model.addAttribute("error", e.getMessage());
                 reservation = new Reservation();
-                CLogger.info("/admin/reservation, no reservation found for id: " + reservation_id);
+                CLogger.warn("/admin/reservation, no reservation found for id: " + reservation_id);
             }
         } else {
             reservation = new Reservation();
@@ -130,7 +130,7 @@ public class AdminController {
                 model.addAttribute("flight", flight);
 
             } catch (NoSuchBookingException e) {
-                CLogger.info("/admin/deleteReservation, no reservation found for id: " + reservation_id);
+                CLogger.warn("/admin/deleteReservation, no reservation found for id: " + reservation_id);
                 model.addAttribute("error", e.getMessage());
                 reservation = new Reservation();
             }
