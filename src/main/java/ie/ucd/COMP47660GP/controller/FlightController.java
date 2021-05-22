@@ -83,7 +83,7 @@ public class FlightController{
         Flight flight = new Flight();
         model.addAttribute("flight", flight);
         securityService.checkLoggedInStatus(model);
-        CLogger.info("Requesting all flight information");
+        CLogger.info("/flight", "view", SecurityContextHolder.getContext());
         return "flight/flightslist";
     }
 
@@ -111,7 +111,7 @@ public class FlightController{
             // Add one day to include all flights of selected date
             date = LocalDate.parse(dateStr).plusDays(1);
         } catch (DateTimeParseException e) {
-            CLogger.error(e.toString());
+            CLogger.error("/flights", e.toString(), SecurityContextHolder.getContext());
             model.addAttribute("msg", "Please enter a valid date");
             securityService.checkLoggedInStatus(model);
             return "flight/flightslist";
@@ -134,7 +134,7 @@ public class FlightController{
 
         securityService.checkLoggedInStatus(model);
 
-        CLogger.info("Retrieving flight: " + origin + " " + dest + " " + dateStr);
+        CLogger.info("/flights", "Retrieving flight [from: " + origin + ", to: " + dest + ", date: " + dateStr + "]", SecurityContextHolder.getContext());
 
         return "flight/flightslist";
     }

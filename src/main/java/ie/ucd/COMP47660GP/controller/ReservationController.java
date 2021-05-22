@@ -90,7 +90,7 @@ public class ReservationController {
         model.addAttribute("user", user);
         System.out.println("Logged in: "+securityService.checkLoggedInStatus(model));
 
-        CLogger.info("/create-reservation, id: " + id);
+        CLogger.info("/create-reservation" , "for id: " + id , SecurityContextHolder.getContext());
 
         return "reservation/num_passengers";
     }
@@ -130,7 +130,7 @@ public class ReservationController {
         model.addAttribute("flight", flight);
         securityService.checkLoggedInStatus(model);
 
-        CLogger.info("/create-reservation, id: " + id);
+        CLogger.info("/create-reservation", "for id: " + id, SecurityContextHolder.getContext());
 
         return "reservation/create_reservation";
     }
@@ -151,7 +151,7 @@ public class ReservationController {
         String errorCode = bookingValidator.validateAll(booking);
 
         if (!errorCode.contains("ok")){
-            CLogger.error("Booking error");
+            CLogger.error("/create-reservation", "error: " + errorCode, SecurityContextHolder.getContext());
             model.addAttribute("msg", errorCode);
             model.addAttribute("flightID", booking.getFlightID());
             return "user/fail";
@@ -221,7 +221,7 @@ public class ReservationController {
 
         model.addAttribute("reservations", reservations);
 
-        CLogger.info("/create-reservation, " + booking.toString());
+        CLogger.info("/create-reservation", "created new reservation" , SecurityContextHolder.getContext());
 
         return "reservation/reservation_created";
     }
@@ -251,7 +251,7 @@ public class ReservationController {
                 model.addAttribute("flight", flight);
 
             } catch (NoSuchBookingException e) {
-                CLogger.info("/reservations, no such booking for id: " + reservation_id );
+                CLogger.error("/reservations", "no such booking for id: " + reservation_id , SecurityContextHolder.getContext());
                 model.addAttribute("error", e.getMessage());
                 reservation = new Reservation();
             }
@@ -260,7 +260,7 @@ public class ReservationController {
         }
         model.addAttribute("reservation", reservation);
 
-        CLogger.info("/reservations" );
+        CLogger.info("/reservations", "get reservation of id: " + reservation_id, SecurityContextHolder.getContext() );
 
         return "reservation/user_reservation";
     }
@@ -280,6 +280,7 @@ public class ReservationController {
             reservation2.setCancelled(true);
             reservationRepository.save(reservation2);
         }
+        CLogger.info("/user/deleteReservation", "reservation id: " + resID, SecurityContextHolder.getContext());
         return "user/reservationHistory";
     }
 
@@ -298,7 +299,7 @@ public class ReservationController {
         List<Reservation> reservations = reservationRepository.findUsersReservations(user.getId());
 
         model.addAttribute("reservations", reservations);
-        CLogger.info("/reservationHistory, username: " + username);
+        CLogger.info("/reservationHistory", "for user: " + username ,SecurityContextHolder.getContext());
         return "user/reservationHistory";
     }
 
@@ -335,7 +336,7 @@ public class ReservationController {
                 model.addAttribute("flight", flight);
 
             } catch (NoSuchBookingException e) {
-                CLogger.info("/reservations, no such booking for id: " + reservation_id );
+                CLogger.error("/guestReservations", "no such booking for id: " + reservation_id, SecurityContextHolder.getContext() );
                 model.addAttribute("error", e.getMessage());
                 reservation = new Reservation();
             }
@@ -344,7 +345,7 @@ public class ReservationController {
         }
         model.addAttribute("reservation", reservation);
 
-        CLogger.info("/reservations" );
+        CLogger.info("/guestReservation", "get reservation id: " + reservation_id, SecurityContextHolder.getContext() );
 
         return "reservation/guest_user_reservation";
     }
@@ -365,18 +366,12 @@ public class ReservationController {
             reservation2.setCancelled(true);
             reservationRepository.save(reservation2);
         }
-        CLogger.info("/reservations, cancel: id: " + resID);
+        CLogger.info("/user/deleteGuestReservation", "for reservation id: " + resID, SecurityContextHolder.getContext());
         return "reservation/guest_user_reservation";
     }
-
-
 
     /**********************************
      *               END
      *          GUEST Requests
      **********************************/
-
-
-
-
 }
