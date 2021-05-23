@@ -1,5 +1,6 @@
 package ie.ucd.COMP47660GP.service.impl;
 
+import ie.ucd.COMP47660GP.CLogger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,8 @@ public class SecurityServiceImpl implements SecurityService{
         authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         if (usernamePasswordAuthenticationToken.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-            logger.debug(String.format("Auto login %s successfully!", username));
         }
+        CLogger.info("autoLogin", "called", SecurityContextHolder.getContext());
     }
 
     @Override

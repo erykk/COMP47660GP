@@ -325,10 +325,12 @@ public class UserController {
     }
 
 //    @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")
-    @RequestMapping(value = "/secureLogin", method = RequestMethod.POST)
+    @RequestMapping(value = "/secureLogin", method = RequestMethod.GET)
     public String login(@RequestParam("username") @NotNull String username, @RequestParam("password") String password, Model model) {
         securityService.checkLoggedInStatus(model);
         User user = userService.findByUsername(username);
+
+        CLogger.info("/secureLogin", "login called", SecurityContextHolder.getContext());
 
         if (!user.getExec()) {
             CLogger.warn("/login", "no executive account found for user: " + username, SecurityContextHolder.getContext());
