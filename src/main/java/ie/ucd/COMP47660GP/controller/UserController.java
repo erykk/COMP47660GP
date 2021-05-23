@@ -325,25 +325,31 @@ public class UserController {
     }
 
 //    @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")
-    @RequestMapping(value = "/secureLogin", method = RequestMethod.GET)
+    @RequestMapping(value = "/secureLogin", method = RequestMethod.POST)
     public String login(@RequestParam("username") @NotNull String username, @RequestParam("password") String password, Model model) {
         securityService.checkLoggedInStatus(model);
         User user = userService.findByUsername(username);
+
+        if (user == null){
+            model.addAttribute("msg", "Invalid credentials");
+            CLogger.warn("/login", "no user found for username: " + username, SecurityContextHolder.getContext());
+            return "user/login";
+        }
 
         CLogger.info("/secureLogin", "login called", SecurityContextHolder.getContext());
 
         if (!user.getExec()) {
             CLogger.warn("/login", "no executive account found for user: " + username, SecurityContextHolder.getContext());
             if (!hasAdminRole(user)){
-                model.addAttribute("msg", "User " + username + " does not exist");
+                model.addAttribute("msg", "Invalid credentials");
                 CLogger.warn("/login", "no executive or admin account found for user: " + username, SecurityContextHolder.getContext());
-                return "user/fail";
+                return "user/login";
             }
         }
 
         try {
             securityService.autoLogin(username, password);
-
+            securityService.checkLoggedInStatus(model);
             model.addAttribute("msg", "Logged in successfully as " + userRepository.findByUsername(username).getUsername());
             model.addAttribute("user", userRepository.findByUsername(username));
             CLogger.info("/login", "successful for username: " + username, SecurityContextHolder.getContext());
@@ -351,12 +357,13 @@ public class UserController {
             return "user/user";
 
         } catch (NoSuchUserException e) {
-
-            model.addAttribute("msg", "User " + username + " does not exist");
+            securityService.checkLoggedInStatus(model);
+            model.addAttribute("msg", "Invalid credentials");
             CLogger.warn("/login", "failed for username: " + username, SecurityContextHolder.getContext());
 
-            return "user/fail";
+            return "user/login";
         }
+
     }
 
     private static boolean hasAdminRole(User user){

@@ -15,7 +15,8 @@
     <jsp:include page="../nav.jsp"/>
 
     <div class="container" style="text-align: center">
-        <form method="GET" action="/secureLogin" class="form-signin">
+        <p style="color: red; text-align: center"><c:out value="${msg}"/></p>
+        <form method="POST" action="/secureLogin" class="form-signin">
             <h2 class="form-heading">Log in</h2>
 
             <div class="form-group ${error != null ? 'has-error' : ''}">

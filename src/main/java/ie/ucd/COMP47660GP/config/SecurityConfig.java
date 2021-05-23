@@ -50,8 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
             .formLogin().loginPage("/login")
-                .loginProcessingUrl("/secureLogin").usernameParameter("username").passwordParameter("password").and()
-            .logout()
+            //    .loginProcessingUrl("/secureLogin").usernameParameter("username").passwordParameter("password").and()
+            .and().logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/logoutSuccess")
                 .invalidateHttpSession(true)
