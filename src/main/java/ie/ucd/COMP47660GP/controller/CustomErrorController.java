@@ -13,8 +13,8 @@ public class CustomErrorController implements ErrorController {
 
     @RequestMapping("/error")
     @ResponseBody
-    public String handleError(Model model){
-        return "Oops, you did something wrong. Click back!";
+    public String handleError(Model model) {
+        return "error";
     }
 
     @Override
