@@ -57,7 +57,7 @@
                 </tr>
 
                 <tr>
-                    <td>Password:</td>
+                    <td>Enter password to change details:</td>
                     <td>
                         <form:input type="password" path="password" class="form-control" placeholder=""></form:input>
                         <form:errors path="password"></form:errors>

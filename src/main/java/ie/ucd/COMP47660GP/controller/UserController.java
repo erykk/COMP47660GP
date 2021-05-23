@@ -77,6 +77,9 @@ public class UserController {
         SecurityContext context = SecurityContextHolder.getContext();
         User currentUser = userRepository.findByUsername(context.getAuthentication().getName());
 
+        user2.setPassword("");
+        currentUser.setPassword("");
+
         model.addAttribute("user2", user2);
         model.addAttribute("user", currentUser);
         CLogger.info("/user", "access", SecurityContextHolder.getContext());
