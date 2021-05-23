@@ -175,6 +175,10 @@ public class UserController {
                                 BindingResult bindingResult, Model model, @PathVariable("username") String username) {
         securityService.checkLoggedInStatus(model);
 
+        SecurityContext context = SecurityContextHolder.getContext();
+        User user = userRepository.findByUsername(context.getAuthentication().getName());
+        cardCredentials.setUser(user);
+        cardValidator.validate(cardCredentials, bindingResult);
         if (bindingResult.hasErrors()) {
             CLogger.warn("/creditCard", "failed to add card for user: " + username, SecurityContextHolder.getContext());
             for (ObjectError error : bindingResult.getAllErrors()){
@@ -183,10 +187,6 @@ public class UserController {
             return "user/cardRegistration";
         }
 
-        SecurityContext context = SecurityContextHolder.getContext();
-        User user = userRepository.findByUsername(context.getAuthentication().getName());
-        cardCredentials.setUser(user);
-        cardValidator.validate(cardCredentials, bindingResult);
         cardService.save(cardCredentials);
         List<CreditCard> creditCards = creditCardRepository.findAllByUser(user);
 
