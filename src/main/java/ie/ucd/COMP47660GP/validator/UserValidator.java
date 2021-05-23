@@ -47,7 +47,7 @@ public class UserValidator implements Validator {
             errors.rejectValue("password", "userCredentials.password", "Password must contain 1 lowercase, 1 uppercase, 1 numeric character and 1 symbol");
         }
 
-        if (!user.getPasswordConfirm().equals(user.getPassword())) {
+        if (!user.getVerifyPassword().equals(user.getPassword())) {
             errors.rejectValue("password", "userCredentials.password", "Passwords do not match");
         }
     }

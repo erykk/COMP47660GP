@@ -30,9 +30,7 @@ public class User {
     @Transient
     private String verifyPassword;
 
-    // Assignment 3
-    @Transient
-    private String passwordConfirm;
+
     // Assignment 3
     private String username;
     private String userRole;
@@ -47,7 +45,7 @@ public class User {
     private Collection<Role> roles;
 
 
-    public User(String firstName, String lastName, String email, String address, String phoneNum, String username, String password, String passwordConfirm) {
+    public User(String firstName, String lastName, String email, String address, String phoneNum, String username, String password, String verifyPassword) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -55,7 +53,7 @@ public class User {
         this.phoneNum = phoneNum;
         this.username = username;
         this.password = password;
-        this.passwordConfirm = passwordConfirm;
+        this.verifyPassword = verifyPassword;
     }
 
     public User() { }
@@ -153,13 +151,5 @@ public class User {
 
     public void setUsername(String username){
         this.username = username;
-    }
-
-    public String getPasswordConfirm() {
-        return passwordConfirm;
-    }
-
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
     }
 }

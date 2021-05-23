@@ -117,10 +117,10 @@
                     <td>
                         <div class="form-group ${status.error ? 'has-error' : ''}">
 
-                            <form:input type="password" path="passwordConfirm" class="form-control" placeholder="Confirm your password" onkeydown="clear()"></form:input>
+                            <form:input type="password" path="verifyPassword" class="form-control" placeholder="Confirm your password" onkeydown="clear()"></form:input>
                             <br>
 
-                            <form:errors path="passwordConfirm" id="perrors"></form:errors>
+                            <form:errors path="verifyPassword" id="perrors"></form:errors>
 
                         </div>
                     </td>
