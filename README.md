@@ -79,3 +79,6 @@ configuration files, replacing VALUE_TO_BE_ENCRYPTED with the secret:
 ### Note:
 You may want to add the certificate to the browser's keystore.
 If so, add the keystore/solarwinds.p12 file to browser keystore.
+
+### Logging:
+The application log is written under "application.log" in the main directory. It contains app initialisation logs as well as logs performed over the course of application functioning.
