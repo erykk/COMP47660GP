@@ -155,7 +155,6 @@ public class ReservationController {
             savedUsers.add(user);
         }
 
-        //if (booking.getSavedCard() == null || booking.getSavedCard().equals("") || booking.getSavedCard().equals("NONE")) {
         if (saveCard) {
             DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").
                     parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
@@ -170,11 +169,10 @@ public class ReservationController {
                 }
             } catch (NoSuchCreditCardException e) {
                 creditCard = booking.getCreditCard();
+                creditCard.setUser(savedUsers.get(0));
+                creditCard.setExpiryDate(expiry.atStartOfDay().toString());
+                creditCardRepository.save(creditCard);
             }
-
-            creditCard.setUser(savedUsers.get(0));
-            creditCard.setExpiryDate(expiry.atStartOfDay().toString());
-            creditCardRepository.save(creditCard);
         }
 
         Flight flight = flightRepository.findById(booking.getFlightID()).
