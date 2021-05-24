@@ -11,7 +11,8 @@
 
 <body>
     <jsp:include page="nav.jsp"/>
-    <h2>You are not authorised to view this page.</h2>
-
+    <h3 style="text-align: center">An application error has occurred.</h3>
+    <p style="text-align: center"><c:out value="${err}"/></p>
+    <p style="text-align: center"><c:out value="${error}"/></p>
 </body>
 </html>

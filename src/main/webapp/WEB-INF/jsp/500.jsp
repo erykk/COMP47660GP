@@ -13,5 +13,6 @@
     <jsp:include page="nav.jsp"/>
     <h3 style="text-align: center">500 - An internal server error has occurred.</h3>
     <p style="text-align: center"><c:out value="${err}"/></p>
+    <p style="text-align: center"><c:out value="${error}"/></p>
 </body>
 </html>
