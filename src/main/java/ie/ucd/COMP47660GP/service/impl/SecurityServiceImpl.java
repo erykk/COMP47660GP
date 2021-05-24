@@ -1,6 +1,10 @@
 package ie.ucd.COMP47660GP.service.impl;
 
 import ie.ucd.COMP47660GP.CLogger;
+import ie.ucd.COMP47660GP.service.LoginAttemptDenialService;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +17,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 @Service
-public class SecurityServiceImpl implements SecurityService{
+public class SecurityServiceImpl implements SecurityService {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private LoginAttemptDenialService loginAttemptDenialService;
+    @Autowired
+    private HttpServletRequest request;
 
     private static final Logger logger = LoggerFactory.getLogger(SecurityServiceImpl.class);
 
@@ -25,7 +33,7 @@ public class SecurityServiceImpl implements SecurityService{
     public String findLoggedInEmail() {
         Object userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
         if (userDetails instanceof UserDetails) {
-            return ((UserDetails)userDetails).getUsername();
+            return ((UserDetails) userDetails).getUsername();
         }
 
         return null;
@@ -34,7 +42,8 @@ public class SecurityServiceImpl implements SecurityService{
     @Override
     public void autoLogin(String username, String password) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+                userDetails, password, userDetails.getAuthorities());
         authenticationManager.authenticate(usernamePasswordAuthenticationToken);
         if (usernamePasswordAuthenticationToken.isAuthenticated()) {
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
@@ -46,7 +55,7 @@ public class SecurityServiceImpl implements SecurityService{
     public String findLoggedInUsername() {
         Object userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
         if (userDetails instanceof UserDetails) {
-            return ((UserDetails)userDetails).getUsername();
+            return ((UserDetails) userDetails).getUsername();
         }
 
         return null;
@@ -55,7 +64,7 @@ public class SecurityServiceImpl implements SecurityService{
     public boolean checkLoggedInStatus(Model model) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication != null && !authentication.getName().equals("anonymousUser")){
+        if (authentication != null && !authentication.getName().equals("anonymousUser")) {
             model.addAttribute("logged_in", true);
             return true;
         } else {
@@ -64,7 +73,7 @@ public class SecurityServiceImpl implements SecurityService{
         }
     }
 
-    public void forceLogout (Model model) {
+    public void forceLogout(Model model) {
         SecurityContextHolder.clearContext();
         model.addAttribute("logged_in", false);
     }
