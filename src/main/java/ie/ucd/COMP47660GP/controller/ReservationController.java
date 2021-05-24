@@ -128,13 +128,15 @@ public class ReservationController {
         User user = null;
         List<User> savedUsers = new LinkedList<>();
 
-        String errorCode = bookingValidator.validateAll(booking);
+        if (booking.getSavedCard() == null || booking.getSavedCard().equals("") || booking.getSavedCard().equals("NONE")){
+            String errorCode = bookingValidator.validateAll(booking);
 
-        if (!errorCode.contains("ok")){
-            CLogger.error("/create-reservation", "error: " + errorCode, SecurityContextHolder.getContext());
-            model.addAttribute("msg", errorCode);
-            model.addAttribute("flightID", booking.getFlightID());
-            return "user/fail";
+            if (!errorCode.contains("ok")){
+                CLogger.error("/create-reservation", "error: " + errorCode, SecurityContextHolder.getContext());
+                model.addAttribute("msg", errorCode);
+                model.addAttribute("flightID", booking.getFlightID());
+                return "user/fail";
+            }
         }
 
         for (User receivedUser: users) {
