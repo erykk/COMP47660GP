@@ -6,12 +6,12 @@
 
 <html>
 <head>
-    <title>Error</title>
+    <title>500 Error - Internal Server Error</title>
 </head>
 
 <body>
     <jsp:include page="nav.jsp"/>
-    <h2>You are not authorised to view this page.</h2>
-
+    <h3 style="text-align: center">500 - An internal server error has occurred.</h3>
+    <p style="text-align: center"><c:out value="${err}"/></p>
 </body>
 </html>

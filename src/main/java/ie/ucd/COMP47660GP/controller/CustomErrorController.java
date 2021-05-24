@@ -1,5 +1,7 @@
 package ie.ucd.COMP47660GP.controller;
 
+import ie.ucd.COMP47660GP.service.impl.SecurityService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -13,17 +15,17 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class CustomErrorController implements ErrorController {
 
-    @RequestMapping("/error")
-    public String handleError(HttpServletRequest request) {
-        // get error status
-        Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+    @Autowired
+    SecurityService securityService;
 
-        // TODO: log error details here
+    @RequestMapping("/error")
+    public String handleError(HttpServletRequest request, Model model) {
+        securityService.checkLoggedInStatus(model);
+        Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
 
         if (status != null) {
             int statusCode = Integer.parseInt(status.toString());
 
-            // display specific error page
             if (statusCode == HttpStatus.NOT_FOUND.value()) {
                 return "404";
             } else if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
@@ -32,8 +34,6 @@ public class CustomErrorController implements ErrorController {
                 return "403";
             }
         }
-
-        // display generic error
         return "error";
     }
 
