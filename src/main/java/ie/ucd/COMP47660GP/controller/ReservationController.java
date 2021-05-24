@@ -105,6 +105,10 @@ public class ReservationController {
 
             List<CreditCard> creditcards = creditCardRepository.findAllByUser(user);
 
+            for (CreditCard c : creditcards) {
+                c.setStringRepresentation(c.toString());
+            }
+
             if (creditcards != null && !creditcards.isEmpty()) {
                 model.addAttribute("creditcards", creditcards);
             }

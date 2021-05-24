@@ -25,7 +25,7 @@
                 <tbody>
                     <tr>
                         <td><c:out value="${creditcard.name}"/></td>
-                        <td><c:out value="${creditcard.cardNum}"/></td>
+                        <td><c:out value="${creditcard.stringRepresentation}"/></td>
                         <td><c:out value="${creditcard.expiryDate}"/></td>
                         <td><a href="/editCreditCardDetails/${creditcard.user.username}/${creditcard.id}">Edit</a></td>
                         <td><a href="/editCreditCardDetails/${creditcard.user.username}/${creditcard.id}/delete">Delete</a></td>

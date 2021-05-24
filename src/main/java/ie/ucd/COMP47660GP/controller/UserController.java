@@ -69,7 +69,7 @@ public class UserController {
      *           USER Requests
      **************************************/
 
-//    @PreAuthorize("#username == authentication.name")
+    @PreAuthorize("#username == authentication.name")
     @GetMapping("/user")
     public String user(@ModelAttribute("user2") User user2, BindingResult br, Model model) {
 
@@ -77,8 +77,10 @@ public class UserController {
         SecurityContext context = SecurityContextHolder.getContext();
         User currentUser = userRepository.findByUsername(context.getAuthentication().getName());
 
-        user2.setPassword("");
-        currentUser.setPassword("");
+        if (user2 != null || currentUser != null){
+            user2.setPassword("");
+            currentUser.setPassword("");
+        }
 
         model.addAttribute("user2", user2);
         model.addAttribute("user", currentUser);
@@ -193,6 +195,10 @@ public class UserController {
         cardService.save(cardCredentials);
         List<CreditCard> creditCards = creditCardRepository.findAllByUser(user);
 
+        for (CreditCard c : creditCards) {
+            c.setStringRepresentation(c.toString());
+        }
+
         model.addAttribute("cardCredentials", cardCredentials);
         model.addAttribute("msg", "Successfully added card " + cardCredentials.getCardNum() + ".");
         model.addAttribute("creditCards", creditCards);
@@ -209,6 +215,10 @@ public class UserController {
         SecurityContext context = SecurityContextHolder.getContext();
         User user = userRepository.findByUsername(context.getAuthentication().getName());
         List<CreditCard> creditCards = creditCardRepository.findAllByUser(user);
+
+        for (CreditCard c : creditCards) {
+            c.setStringRepresentation(c.toString());
+        }
 
         model.addAttribute("user", user);
         model.addAttribute("creditCards", creditCards);

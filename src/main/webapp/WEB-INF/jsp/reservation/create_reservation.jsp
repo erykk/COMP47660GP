@@ -91,7 +91,7 @@
                     <td>
                         <form:select path="savedCard">
                             <form:option value="NONE" label="--- Select ---"/>
-                            <form:options items="${creditcards}" itemLabel="cardNum"/>
+                            <form:options items="${creditcards}" itemLabel="stringRepresentation"/>
                         </form:select>
                     </td>
                 </tr>
