@@ -349,44 +349,44 @@ public class UserController {
         if (loginAttemptDenialService.isBlocked(ip)) {
             model.addAttribute("msg", "User " + username + " account is blocked.");
             return "user/fail";
-        } else {
-            User user = userService.findByUsername(username);
-            if (user == null) {
+        }
+
+        User user = userService.findByUsername(username);
+        if (user == null) {
+            model.addAttribute("msg", "Invalid credentials");
+            CLogger.warn("/login", "no user found for username: " + username, SecurityContextHolder.getContext());
+            return "user/login";
+        }
+
+        CLogger.info("/secureLogin", "login called", SecurityContextHolder.getContext());
+
+        if (!user.getExec()) {
+            CLogger.warn("/login", "no executive account found for user: " + username,
+                    SecurityContextHolder.getContext());
+            if (!hasAdminRole(user)) {
                 model.addAttribute("msg", "Invalid credentials");
-                CLogger.warn("/login", "no user found for username: " + username, SecurityContextHolder.getContext());
-                return "user/login";
-            }
-
-            CLogger.info("/secureLogin", "login called", SecurityContextHolder.getContext());
-
-            if (!user.getExec()) {
-                CLogger.warn("/login", "no executive account found for user: " + username,
+                CLogger.warn("/login", "no executive or admin account found for user: " + username,
                         SecurityContextHolder.getContext());
-                if (!hasAdminRole(user)) {
-                    model.addAttribute("msg", "Invalid credentials");
-                    CLogger.warn("/login", "no executive or admin account found for user: " + username,
-                            SecurityContextHolder.getContext());
-                    return "user/login";
-                }
-            }
-
-            try {
-                securityService.autoLogin(username, password);
-                securityService.checkLoggedInStatus(model);
-                model.addAttribute("msg",
-                        "Logged in successfully as " + userRepository.findByUsername(username).getUsername());
-                model.addAttribute("user", userRepository.findByUsername(username));
-                CLogger.info("/login", "successful for username: " + username, SecurityContextHolder.getContext());
-
-                return "user/user";
-
-            } catch (NoSuchUserException e) {
-                securityService.checkLoggedInStatus(model);
-                model.addAttribute("msg", "Invalid credentials");
-                CLogger.warn("/login", "failed for username: " + username, SecurityContextHolder.getContext());
-
                 return "user/login";
             }
+        }
+
+        try {
+            securityService.autoLogin(username, password);
+            securityService.checkLoggedInStatus(model);
+            model.addAttribute("msg",
+                    "Logged in successfully as " + userRepository.findByUsername(username).getUsername());
+            model.addAttribute("user", userRepository.findByUsername(username));
+            CLogger.info("/login", "successful for username: " + username, SecurityContextHolder.getContext());
+
+            return "user/user";
+
+        } catch (NoSuchUserException e) {
+            securityService.checkLoggedInStatus(model);
+            model.addAttribute("msg", "Invalid credentials");
+            CLogger.warn("/login", "failed for username: " + username, SecurityContextHolder.getContext());
+
+            return "user/login";
         }
     }
 

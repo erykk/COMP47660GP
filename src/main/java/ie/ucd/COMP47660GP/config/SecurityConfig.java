@@ -13,6 +13,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -49,7 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/deleteReservation/{id}", "/addFlight", "/deleteFlight", "/findFlight", "/editFlight").access("hasAuthority('ADMIN')")
 
                 .and()
-            .formLogin().loginPage("/login")
+            .formLogin()
+                .loginPage("/login")
             //    .loginProcessingUrl("/secureLogin").usernameParameter("username").passwordParameter("password").and()
             .and().logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
@@ -83,6 +87,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public UserDetailsService userDetailsService() {
         return new UserDetailsServiceImpl();
+    }
+
+    @Bean AuthenticationFailureHandler authenticationFailureHandler() {
+        return new ie.ucd.COMP47660GP.Authentication.AuthenticationFailureHandler();
     }
 
     @Autowired
