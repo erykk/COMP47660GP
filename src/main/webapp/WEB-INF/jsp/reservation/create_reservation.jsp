@@ -79,8 +79,15 @@
                 <td>Expiry Date:</td>
                 <td><form:input type="month" path="dateStr"/></td>
             </tr>
+            <tr>
+                <td>Tick box to save card to account</td>
+                <td>
+                    <form:checkbox path="save"/>
+                </td>
+            </tr>
             <c:if test="${not empty creditcards}">
                 <tr>
+                    <td>Select saved card: </td>
                     <td>
                         <form:select path="savedCard">
                             <form:option value="NONE" label="--- Select ---"/>

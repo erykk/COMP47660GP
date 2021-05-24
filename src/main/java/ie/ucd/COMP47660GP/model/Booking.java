@@ -13,6 +13,7 @@ public class Booking {
     String dateStr;
     String savedCard;
     String execUsername;
+    boolean save;
 
     public Booking() {
         users = new LinkedList<>();
@@ -70,6 +71,10 @@ public class Booking {
     public String getExecUsername(){ return this.execUsername; }
 
     public void setExecUsername(String execUsername){ this.execUsername = execUsername;}
+
+    public boolean getSave() {        return save;    }
+
+    public void setSave(boolean save) {        this.save = save;    }
 
     public String toString() {
         String op = "";

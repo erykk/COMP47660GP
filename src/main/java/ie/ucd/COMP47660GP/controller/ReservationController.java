@@ -121,7 +121,7 @@ public class ReservationController {
 
     @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")
     @PostMapping(value = "/create-reservation/{username}", consumes = "application/x-www-form-urlencoded")
-    public String addReservation(@PathVariable("username") @NotNull String username,@ModelAttribute("booking") Booking booking, Model model, BindingResult bindingResult) {
+    public String addReservation(@PathVariable("username") @NotNull String username,@ModelAttribute("booking") Booking booking, @RequestParam(value="save", required = false) boolean saveCard, Model model, BindingResult bindingResult) {
 
         securityService.checkLoggedInStatus(model);
         List<User> users = booking.getUsers();
@@ -155,7 +155,8 @@ public class ReservationController {
             savedUsers.add(user);
         }
 
-        if (booking.getSavedCard() == null || booking.getSavedCard().equals("")) {
+        //if (booking.getSavedCard() == null || booking.getSavedCard().equals("") || booking.getSavedCard().equals("NONE")) {
+        if (saveCard) {
             DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").
                     parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
 
