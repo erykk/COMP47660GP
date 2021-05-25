@@ -282,7 +282,14 @@ public class UserController {
     public String deleteCreditCard(@PathVariable("username") String username, @PathVariable("id") int id, Model model) {
         SecurityContext context = SecurityContextHolder.getContext();
         User user = userRepository.findByUsername(context.getAuthentication().getName());
-        CreditCard card = creditCardRepository.findById(id).orElseThrow(() -> new NoSuchCreditCardException());
+        CreditCard card;
+
+        try {
+            card = creditCardRepository.findByIdAndUser(id,user);
+        } catch (NoSuchCreditCardException e){
+            model.addAttribute("msg", "Could not remove credit card");
+            return "user/fail";
+        }
 
         if (user.getId() != card.getUser().getId()) {
             CLogger.warn("/editCreditCardDetails",
@@ -291,14 +298,13 @@ public class UserController {
             throw new UnauthorisedUserException();
         }
 
-        
         creditCardRepository.deleteById(card.getId());
 
         model.addAttribute("msg", "Successfully removed credit card");
         model.addAttribute("cardCredentials", card);
         CLogger.info("/editCreditCardDetails", "deleted card for id: " + id, SecurityContextHolder.getContext());
 
-        return "user/user";
+        return "user/success";
     }
 
     /**************************************
