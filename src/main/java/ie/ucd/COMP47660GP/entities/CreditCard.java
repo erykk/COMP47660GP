@@ -30,6 +30,8 @@ public class CreditCard {
     @Column(name = "cvv")
     @Convert(converter = AttributeEncryptor.class)
     private String securityCode;
+    @Transient
+    private String stringRepresentation;
 
     public CreditCard(int id, User user, String cardNum, String name, String expiryDate, String securityCode) {
         // ID auto gen
@@ -90,6 +92,10 @@ public class CreditCard {
     public void setSecurityCode(String securityCode) {
         this.securityCode = securityCode;
     }
+
+    public String getStringRepresentation() {        return stringRepresentation;    }
+
+    public void setStringRepresentation(String stringRepresentation) {        this.stringRepresentation = stringRepresentation;    }
 
     public String toString(){
         return "************" + (cardNum.length() >= 15 ? cardNum.substring(11,15) : "****");

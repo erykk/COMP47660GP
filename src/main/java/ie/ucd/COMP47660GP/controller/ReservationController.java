@@ -105,6 +105,10 @@ public class ReservationController {
 
             List<CreditCard> creditcards = creditCardRepository.findAllByUser(user);
 
+            for (CreditCard c : creditcards) {
+                c.setStringRepresentation(c.toString());
+            }
+
             if (creditcards != null && !creditcards.isEmpty()) {
                 model.addAttribute("creditcards", creditcards);
             }
@@ -121,20 +125,22 @@ public class ReservationController {
 
     @PreAuthorize("#username == authentication.name or hasAuthority('ADMIN')")
     @PostMapping(value = "/create-reservation/{username}", consumes = "application/x-www-form-urlencoded")
-    public String addReservation(@PathVariable("username") @NotNull String username,@ModelAttribute("booking") Booking booking, Model model, BindingResult bindingResult) {
+    public String addReservation(@PathVariable("username") @NotNull String username,@ModelAttribute("booking") Booking booking, @RequestParam(value="save", required = false) boolean saveCard, Model model, BindingResult bindingResult) {
 
         securityService.checkLoggedInStatus(model);
         List<User> users = booking.getUsers();
         User user = null;
         List<User> savedUsers = new LinkedList<>();
 
-        String errorCode = bookingValidator.validateAll(booking);
+        if (booking.getSavedCard() == null || booking.getSavedCard().equals("") || booking.getSavedCard().equals("NONE")){
+            String errorCode = bookingValidator.validateAll(booking);
 
-        if (!errorCode.contains("ok")){
-            CLogger.error("/create-reservation", "error: " + errorCode, SecurityContextHolder.getContext());
-            model.addAttribute("msg", errorCode);
-            model.addAttribute("flightID", booking.getFlightID());
-            return "user/fail";
+            if (!errorCode.contains("ok")){
+                CLogger.error("/create-reservation", "error: " + errorCode, SecurityContextHolder.getContext());
+                model.addAttribute("msg", errorCode);
+                model.addAttribute("flightID", booking.getFlightID());
+                return "user/fail";
+            }
         }
 
         for (User receivedUser: users) {
@@ -153,7 +159,7 @@ public class ReservationController {
             savedUsers.add(user);
         }
 
-        if (booking.getSavedCard() == null || booking.getSavedCard().equals("")) {
+        if (saveCard) {
             DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendPattern("yyyy-MM").
                     parseDefaulting(ChronoField.DAY_OF_MONTH, 1).toFormatter();
 
@@ -167,11 +173,10 @@ public class ReservationController {
                 }
             } catch (NoSuchCreditCardException e) {
                 creditCard = booking.getCreditCard();
+                creditCard.setUser(savedUsers.get(0));
+                creditCard.setExpiryDate(expiry.atStartOfDay().toString());
+                creditCardRepository.save(creditCard);
             }
-
-            creditCard.setUser(savedUsers.get(0));
-            creditCard.setExpiryDate(expiry.atStartOfDay().toString());
-            creditCardRepository.save(creditCard);
         }
 
         Flight flight = flightRepository.findById(booking.getFlightID()).
