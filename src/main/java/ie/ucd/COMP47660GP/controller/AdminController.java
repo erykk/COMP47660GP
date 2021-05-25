@@ -187,6 +187,10 @@ public class AdminController {
         CLogger.info("/admin/deleteFlight", "for id: " + flight.getId(), SecurityContextHolder.getContext());
         securityService.checkLoggedInStatus(model);
         List<Flight> flights = flightRepository.findFlightByFlightNum(flight.getFlightNum());
+        if(flights.size() == 0){
+            model.addAttribute("error", "Flight not found.");
+            return "flight/deleteFlight";
+        }
         flightRepository.delete(flights.get(0));
         return "admin";
     }

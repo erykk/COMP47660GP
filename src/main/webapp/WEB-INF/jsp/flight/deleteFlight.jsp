@@ -16,6 +16,7 @@
 
 
     <form:form method="POST" action="${contexPath}/deleteFlight" modelAttribute="flight" >
+    <p style="color: red; text-align: center"><c:out value="${error}"/></p>
         <h2>Delete Flight</h2>
         <table>
             <tr>
