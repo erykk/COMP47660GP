@@ -91,7 +91,7 @@ public class UserController {
         SecurityContext context = SecurityContextHolder.getContext();
         User currentUser = userRepository.findByUsername(context.getAuthentication().getName());
 
-        if (user2 != null || currentUser != null){
+        if (user2 != null || currentUser != null) {
             user2.setPassword("");
             currentUser.setPassword("");
         }
@@ -365,12 +365,12 @@ public class UserController {
         securityService.checkLoggedInStatus(model);
 
         if (loginAttemptDenialServiceAccount.isBlocked(username)) {
-            model.addAttribute("msg", "Account " + username + " is blocked.");
+            model.addAttribute("msg", "Access to this account has been blocked.");
             return "user/fail";
         }
         String ip = getIP();
         if (loginAttemptDenialServiceIP.isBlocked(ip)) {
-            model.addAttribute("msg", "Account " + username + " is blocked.");
+            model.addAttribute("msg", "Access to this account has been blocked.");
             return "user/fail";
         }
 
