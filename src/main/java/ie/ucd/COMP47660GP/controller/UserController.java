@@ -365,12 +365,12 @@ public class UserController {
         securityService.checkLoggedInStatus(model);
 
         if (loginAttemptDenialServiceAccount.isBlocked(username)) {
-            model.addAttribute("msg", "Access to this account has been blocked.");
+            model.addAttribute("msg", "Access to this account has been temporarily blocked.");
             return "user/fail";
         }
         String ip = getIP();
         if (loginAttemptDenialServiceIP.isBlocked(ip)) {
-            model.addAttribute("msg", "Access to this account has been blocked.");
+            model.addAttribute("msg", "Your IP address has been temporarily blocked due too many login attempts.");
             return "user/fail";
         }
 
