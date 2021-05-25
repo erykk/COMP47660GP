@@ -27,8 +27,6 @@ public class SecurityServiceImpl implements SecurityService {
     @Autowired
     private HttpServletRequest request;
 
-    private static final Logger logger = LoggerFactory.getLogger(SecurityServiceImpl.class);
-
     @Override
     public String findLoggedInEmail() {
         Object userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
