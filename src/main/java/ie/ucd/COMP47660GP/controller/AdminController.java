@@ -9,6 +9,7 @@ import ie.ucd.COMP47660GP.repositories.FlightRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
 import ie.ucd.COMP47660GP.service.impl.SecurityServiceImpl;
+import ie.ucd.COMP47660GP.validator.AdminFlightValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,6 +34,8 @@ public class AdminController {
     private UserRepository userRepository;
     @Autowired
     private FlightRepository flightRepository;
+    @Autowired
+    private AdminFlightValidator adminFlightValidator;
 
     /**************************************
      *
@@ -164,6 +167,7 @@ public class AdminController {
                                BindingResult bindingResult, Model model) {
         CLogger.info("/admin/addFlight", "new flight", SecurityContextHolder.getContext());
         securityService.checkLoggedInStatus(model);
+        adminFlightValidator.validate(flight, bindingResult);
         String dateAndTime = flight.getDate() + " " + flight.getTime();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime dateTime = LocalDateTime.parse(dateAndTime, formatter);
