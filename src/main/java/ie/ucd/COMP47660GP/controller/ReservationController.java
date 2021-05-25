@@ -83,15 +83,20 @@ public class ReservationController {
 
     @GetMapping(value = "/create-reservation/{id}", params = {"num_passengers"})
     public String addReservation(
-        @PathVariable("id") int id, @RequestParam(value = "num_passengers")
+        @PathVariable("id") int id, @RequestParam(value = "num_passengers", required = false)
         @Min(value=1, message="Need at least 1 passenger to book")
         @Max(value=30, message="Cannot make booking for more than 30 passengers")
-        @NotNull int numPassengers,
+        @NotNull Integer numPassengers,
         Model model
     )
     {
         Flight flight = flightRepository.findById(id).
                 orElseThrow(() -> new NoSuchFlightException(id));
+
+        if (numPassengers == null){
+            model.addAttribute("error", "Invalid number of passengers");
+            return "reservation/num_passengers";
+        }
 
         Booking booking = new Booking(numPassengers);
 
