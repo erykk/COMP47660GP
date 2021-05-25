@@ -1,6 +1,6 @@
 ## COMP47660 Group Project
 
-###  Checklist:
+###  Startup Checklist:
 1. Update MySQL credentials in application.properties
 2. After first startup, comment out _spring.datasource.initialization-mode=always in application.properties_
 3. After first startup, change _create_ to _update_ to make database storage persistent: _spring.jpa.hibernate.ddl-auto=create_
@@ -10,7 +10,7 @@
 The service requires for a MySQL server to be running prior to start up. One way to do this is to start a MySQL instance on port 3306 using XAMPP: https://www.apachefriends.org/index.html
 
 The DBMS username and password **MUST** be updated in the application.properties file with credentials usable with your local MySQL server.
-It is advised to encrypt the DB user's password rather store it in plaintext in a config file, but it will work encrypted or in plaintext.
+It is advised to encrypt the DB user's password rather than store it in plaintext in a config file, but it will work encrypted **or** in plaintext.
 If encrypting the DB user's password, it should be encrypted using the steps below and added to application.properties as:
 ```
     spring.datasource.password=ENC(CIPHER_TEXT)
@@ -39,7 +39,7 @@ commented out to prevent attempts of adding data when the DB data is persistent:
 ```
     spring.datasource.initialization-mode=always
 ```
-The following line should be changed from _create_ to _update_:
+The following line should be changed from _create_ to _update_ to enable persistent data storage:
 ```
     spring.jpa.hibernate.ddl-auto=create
 ```
