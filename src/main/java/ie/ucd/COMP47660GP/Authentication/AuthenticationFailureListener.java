@@ -19,6 +19,9 @@ public class AuthenticationFailureListener implements ApplicationListener<Authen
     @Autowired
     private LoginAttemptDenialService loginAttemptDenialService;
 
+    @Autowired
+    private LoginAttemptDenialService loginAttemptDenialServiceAccount;
+
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
@@ -30,5 +33,7 @@ public class AuthenticationFailureListener implements ApplicationListener<Authen
         } else {
             loginAttemptDenialService.loginFailed(xfHeader.split(",")[0]);
         }
+        String username = (String) e.getAuthentication().getPrincipal();
+        loginAttemptDenialServiceAccount.loginFailed(username);
     }
 }

@@ -15,6 +15,7 @@ import ie.ucd.COMP47660GP.service.LoginAttemptDenialService;
 import ie.ucd.COMP47660GP.service.LoginService;
 import ie.ucd.COMP47660GP.service.impl.CreditCardService;
 import ie.ucd.COMP47660GP.service.impl.SecurityServiceImpl;
+import ie.ucd.COMP47660GP.service.impl.UserDetailsServiceImpl;
 import ie.ucd.COMP47660GP.service.impl.UserService;
 import ie.ucd.COMP47660GP.validator.CreditCardValidator;
 import ie.ucd.COMP47660GP.validator.LoginValidator;
@@ -57,10 +58,16 @@ public class UserController {
     @Autowired
     SecurityServiceImpl securityService;
     @Autowired
-    private LoginAttemptDenialService loginAttemptDenialService;
+    private LoginAttemptDenialService loginAttemptDenialServiceIP;
+
+    @Autowired
+    private LoginAttemptDenialService loginAttemptDenialServiceAccount;
 
     @Autowired
     private HttpServletRequest request;
+
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
 
     @Autowired
     CreditCardRepository creditCardRepository;
@@ -345,15 +352,22 @@ public class UserController {
     public String login(@RequestParam("username") @NotNull String username, @RequestParam("password") String password,
             Model model) {
         securityService.checkLoggedInStatus(model);
+
+        if (loginAttemptDenialServiceAccount.isBlocked(username)) {
+            model.addAttribute("msg", "Account " + username + " is blocked.");
+            return "user/fail";
+        }
         String ip = getIP();
-        if (loginAttemptDenialService.isBlocked(ip)) {
-            model.addAttribute("msg", "User " + username + " account is blocked.");
+        if (loginAttemptDenialServiceIP.isBlocked(ip)) {
+            model.addAttribute("msg", "Account " + username + " is blocked.");
             return "user/fail";
         }
 
         User user = userService.findByUsername(username);
         if (user == null) {
             model.addAttribute("msg", "Invalid credentials");
+            loginAttemptDenialServiceIP.loginFailed(ip);
+            loginAttemptDenialServiceAccount.loginFailed(username);
             CLogger.warn("/login", "no user found for username: " + username, SecurityContextHolder.getContext());
             return "user/login";
         }
@@ -365,6 +379,8 @@ public class UserController {
                     SecurityContextHolder.getContext());
             if (!hasAdminRole(user)) {
                 model.addAttribute("msg", "Invalid credentials");
+                loginAttemptDenialServiceIP.loginFailed(ip);
+                loginAttemptDenialServiceAccount.loginFailed(username);
                 CLogger.warn("/login", "no executive or admin account found for user: " + username,
                         SecurityContextHolder.getContext());
                 return "user/login";
@@ -384,6 +400,8 @@ public class UserController {
         } catch (NoSuchUserException e) {
             securityService.checkLoggedInStatus(model);
             model.addAttribute("msg", "Invalid credentials");
+            loginAttemptDenialServiceIP.loginFailed(ip);
+            loginAttemptDenialServiceAccount.loginFailed(username);
             CLogger.warn("/login", "failed for username: " + username, SecurityContextHolder.getContext());
 
             return "user/login";
