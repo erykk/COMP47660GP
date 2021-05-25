@@ -158,7 +158,7 @@ public class AdminController {
         CLogger.info("/admin/addFlight", "access", SecurityContextHolder.getContext());
         securityService.checkLoggedInStatus(model);
         model.addAttribute("flight", new Flight());
-        return  "flight/addFlight";
+        return "flight/addFlight";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -168,6 +168,9 @@ public class AdminController {
         CLogger.info("/admin/addFlight", "new flight", SecurityContextHolder.getContext());
         securityService.checkLoggedInStatus(model);
         adminFlightValidator.validate(flight, bindingResult);
+        if (bindingResult.hasErrors()){
+            return "flight/addFlight";
+        }
         String dateAndTime = flight.getDate() + " " + flight.getTime();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime dateTime = LocalDateTime.parse(dateAndTime, formatter);
