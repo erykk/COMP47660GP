@@ -34,12 +34,12 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.constraints.NotNull;
 import java.util.LinkedList;
 import java.util.List;
 
-//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-//@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
 @Controller
 public class UserController {
@@ -401,6 +401,10 @@ public class UserController {
         try {
             securityService.autoLogin(username, password);
             securityService.checkLoggedInStatus(model);
+
+            // Session Fixation Prevention
+            request.changeSessionId();
+
             model.addAttribute("msg",
                     "Logged in successfully as " + userRepository.findByUsername(username).getUsername());
             model.addAttribute("user", userRepository.findByUsername(username));

@@ -54,7 +54,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
             .formLogin()
                 .loginPage("/login")
-            //    .loginProcessingUrl("/secureLogin").usernameParameter("username").passwordParameter("password").and()
             .and().logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/logoutSuccess")
@@ -65,13 +64,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .sessionFixation().newSession()
                 .invalidSessionUrl("/login");
-
-//        .httpBasic()
-////
-
-//         .antMatchers(", "/reservation", "/mem/{id}", "/creditCard", "/creditCard/{cardNum}", "/editCreditCardDetails",
-//                "/registerCard", "/editPersonalDetails", "/flight", "/flights", "/create-reservation", "/createMember",
-//                "/create-reservation/*", "/deleteAccount", "/success", "/fail", "/guestReservation", "/user/deleteGuestReservation/*")
     }
 
     @Bean

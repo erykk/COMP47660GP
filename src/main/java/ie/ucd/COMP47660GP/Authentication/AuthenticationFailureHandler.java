@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Locale;
 
-//@Component("authenticationFailureHandler")
 public class AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
     @Autowired

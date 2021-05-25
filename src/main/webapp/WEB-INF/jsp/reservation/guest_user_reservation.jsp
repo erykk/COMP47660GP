@@ -74,7 +74,6 @@
         function cancelReservation(id) {
             <%--id = ${reservation.reservation_id}--%>
 
-            // fetch(window.location.protocol + '://' + window.location.hostname + ':' + window.location.port + '/reservation/' + id, {
             fetch(window.location.protocol + 'reservation/' + id, {
                 method: 'PATCH',
                 body: JSON.stringify({
