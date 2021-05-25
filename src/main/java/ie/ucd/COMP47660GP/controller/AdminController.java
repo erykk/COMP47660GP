@@ -9,6 +9,7 @@ import ie.ucd.COMP47660GP.repositories.FlightRepository;
 import ie.ucd.COMP47660GP.repositories.ReservationRepository;
 import ie.ucd.COMP47660GP.repositories.UserRepository;
 import ie.ucd.COMP47660GP.service.impl.SecurityServiceImpl;
+import ie.ucd.COMP47660GP.validator.AdminFlightValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,6 +34,8 @@ public class AdminController {
     private UserRepository userRepository;
     @Autowired
     private FlightRepository flightRepository;
+    @Autowired
+    private AdminFlightValidator adminFlightValidator;
 
     /**************************************
      *
@@ -155,7 +158,7 @@ public class AdminController {
         CLogger.info("/admin/addFlight", "access", SecurityContextHolder.getContext());
         securityService.checkLoggedInStatus(model);
         model.addAttribute("flight", new Flight());
-        return  "flight/addFlight";
+        return "flight/addFlight";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -164,6 +167,10 @@ public class AdminController {
                                BindingResult bindingResult, Model model) {
         CLogger.info("/admin/addFlight", "new flight", SecurityContextHolder.getContext());
         securityService.checkLoggedInStatus(model);
+        adminFlightValidator.validate(flight, bindingResult);
+        if (bindingResult.hasErrors()){
+            return "flight/addFlight";
+        }
         String dateAndTime = flight.getDate() + " " + flight.getTime();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime dateTime = LocalDateTime.parse(dateAndTime, formatter);
@@ -187,6 +194,10 @@ public class AdminController {
         CLogger.info("/admin/deleteFlight", "for id: " + flight.getId(), SecurityContextHolder.getContext());
         securityService.checkLoggedInStatus(model);
         List<Flight> flights = flightRepository.findFlightByFlightNum(flight.getFlightNum());
+        if(flights.size() == 0){
+            model.addAttribute("error", "Flight not found.");
+            return "flight/deleteFlight";
+        }
         flightRepository.delete(flights.get(0));
         return "admin";
     }

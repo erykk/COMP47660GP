@@ -29,6 +29,7 @@
     </table>
     <%--@elvariable id="flight" type="ie.ucd.COMP47660GP.entities.Flight"--%>
     <form:form method="get" modelAttribute="flight" action="/create-reservation/${flight.id}">
+    <p style="color: red; text-align: center"><c:out value="${error}"/></p>
         <table style="margin-left: auto; margin-right: auto">
             <tr>
                 <td>Number of passengers: </td>
