@@ -291,12 +291,14 @@ public class UserController {
             throw new UnauthorisedUserException();
         }
 
+        
         creditCardRepository.deleteById(card.getId());
 
+        model.addAttribute("msg", "Successfully removed credit card");
         model.addAttribute("cardCredentials", card);
         CLogger.info("/editCreditCardDetails", "deleted card for id: " + id, SecurityContextHolder.getContext());
 
-        return "user/viewCards";
+        return "user/user";
     }
 
     /**************************************
